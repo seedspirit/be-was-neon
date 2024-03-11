@@ -1,9 +1,6 @@
 package webserver;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 
 import org.slf4j.Logger;
@@ -13,6 +10,7 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private final String BASE_URL = "./src/main/resources/static";
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -23,7 +21,11 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String httpRequestMessage = readTargetFile(br);
+
+            String url = extractURL(httpRequestMessage);
+
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = "<h1>Hello World</h1>".getBytes();
             response200Header(dos, body.length);
@@ -31,6 +33,23 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private String extractURL(String httpRequestMessage) {
+        String requestLine = httpRequestMessage.split(System.lineSeparator())[0];
+        return BASE_URL + requestLine.split(" ")[1];
+    }
+
+    private String readTargetFile(BufferedReader br) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        String line;
+        while((line = br.readLine()) != null){
+            if (line.isEmpty()){
+                break;
+            }
+            builder.append(line).append(System.lineSeparator());
+        }
+        return builder.toString();
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
