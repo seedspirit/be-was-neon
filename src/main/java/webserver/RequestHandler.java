@@ -23,11 +23,12 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String httpRequestMessage = readTargetFile(br);
-
             String url = extractURL(httpRequestMessage);
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "<h1>Hello World</h1>".getBytes();
+            String bodyString = readTargetFile(new BufferedReader(new FileReader(url)));
+            byte[] body = bodyString.getBytes();
+
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
