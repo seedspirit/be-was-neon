@@ -24,10 +24,10 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String httpRequestMessage = readTargetFile(br);
             logHttpRequest(httpRequestMessage);
-            String url = extractURL(httpRequestMessage);
+            String path = extractPath(httpRequestMessage);
 
             DataOutputStream dos = new DataOutputStream(out);
-            String bodyString = readTargetFile(new BufferedReader(new FileReader(url)));
+            String bodyString = readTargetFile(new BufferedReader(new FileReader(path)));
             byte[] body = bodyString.getBytes();
 
             response200Header(dos, body.length);
@@ -41,7 +41,7 @@ public class RequestHandler implements Runnable {
         logger.debug(httpRequestMessage);
     }
 
-    private String extractURL(String httpRequestMessage) {
+    private String extractPath(String httpRequestMessage) {
         String requestLine = httpRequestMessage.split(System.lineSeparator())[0];
         return BASE_URL + requestLine.split(" ")[1];
     }
