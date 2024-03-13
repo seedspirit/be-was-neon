@@ -28,8 +28,12 @@ public class RequestHandler implements Runnable {
 
             String targetHandler = extractTargetHandler(httpRequestMessage);
             Optional<byte[]> body = Optional.empty();
-            // 이후 확장을 위해 switch로 작성
             switch (targetHandler) {
+                case "create" -> {
+                    UserCreateHandler userCreateHandler = new UserCreateHandler(httpRequestMessage);
+                    userCreateHandler.addUserInDatabase();
+                    break;
+                }
                 default -> {
                     DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequestMessage);
                     body = Optional.of(defaultFileHandler.serialize());
