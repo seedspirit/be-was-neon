@@ -22,10 +22,13 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+            // HTTP 요청을 String으로 변환
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String httpRequestMessage = util.Reader.bufferedReaderToString(br);
+
             logHttpRequest(httpRequestMessage);
 
+            // HTTP 헤더에서 requestTarget 추출, 알맞는 핸들러 호출
             String targetHandler = extractTargetHandler(httpRequestMessage);
             Optional<byte[]> body = Optional.empty();
             switch (targetHandler) {
@@ -40,8 +43,8 @@ public class RequestHandler implements Runnable {
                 }
             }
 
+            // 처리 결과를 바탕으로 HTTP 응답 메시지를 만들어 클라이언트에 전송
             DataOutputStream dos = new DataOutputStream(out);
-
             if (body.isPresent()){
                 byte[] b = body.get();
                 response200Header(dos, b.length);
