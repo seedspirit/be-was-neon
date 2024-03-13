@@ -2,6 +2,7 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,16 +23,26 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String httpRequestMessage = readTargetFile(br);
+            String httpRequestMessage = util.Reader.bufferedReaderToString(br);
             logHttpRequest(httpRequestMessage);
-            String path = extractPath(httpRequestMessage);
+
+            String targetHandler = extractTargetHandler(httpRequestMessage);
+            Optional<byte[]> body = Optional.empty();
+            // 이후 확장을 위해 switch로 작성
+            switch (targetHandler) {
+                default -> {
+                    DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequestMessage);
+                    body = Optional.of(defaultFileHandler.serialize());
+                }
+            }
 
             DataOutputStream dos = new DataOutputStream(out);
-            String bodyString = readTargetFile(new BufferedReader(new FileReader(path)));
-            byte[] body = bodyString.getBytes();
 
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            if (body.isPresent()){
+                byte[] b = body.get();
+                response200Header(dos, b.length);
+                responseBody(dos, b);
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -41,21 +52,10 @@ public class RequestHandler implements Runnable {
         logger.debug(httpRequestMessage);
     }
 
-    private String extractPath(String httpRequestMessage) {
+    private String extractTargetHandler(String httpRequestMessage) {
         String requestLine = httpRequestMessage.split(System.lineSeparator())[0];
-        return BASE_URL + requestLine.split(" ")[1];
-    }
-
-    private String readTargetFile(BufferedReader br) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        String line;
-        while((line = br.readLine()) != null){
-            if (line.isEmpty()){
-                break;
-            }
-            builder.append(line).append(System.lineSeparator());
-        }
-        return builder.toString();
+        String requestTarget = requestLine.split("\\?")[0];
+        return requestTarget.split("/")[1];
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
