@@ -46,9 +46,8 @@ public class RequestHandler implements Runnable {
             // 처리 결과를 바탕으로 HTTP 응답 메시지를 만들어 클라이언트에 전송
             DataOutputStream dos = new DataOutputStream(out);
             if (body.isPresent()){
-                byte[] b = body.get();
-                response200Header(dos, b.length);
-                responseBody(dos, b);
+                HttpResponseMsg responseMsg = new HttpResponseMsg();
+                responseMsg.send(dos, body.get());
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -63,25 +62,5 @@ public class RequestHandler implements Runnable {
         String requestLine = httpRequestMessage.split(System.lineSeparator())[0];
         String requestTarget = requestLine.split("\\?")[0];
         return requestTarget.split("/")[1];
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
     }
 }
