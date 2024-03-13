@@ -11,7 +11,6 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
-    private final String BASE_URL = "./src/main/resources/static";
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -22,23 +21,19 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // HTTP 요청을 String으로 변환
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String httpRequestMessage = util.Reader.bufferedReaderToString(br);
-
-            logHttpRequest(httpRequestMessage);
+            HttpRequestMsg requestMsg = new HttpRequestMsg(in);
 
             // HTTP 헤더에서 requestTarget 추출, 알맞는 핸들러 호출
-            String targetHandler = extractTargetHandler(httpRequestMessage);
+            String targetHandler = extractTargetHandler(requestMsg.getRequestTarget());
             Optional<byte[]> body = Optional.empty();
             switch (targetHandler) {
                 case "create" -> {
-                    UserCreateHandler userCreateHandler = new UserCreateHandler(httpRequestMessage);
+                    UserCreateHandler userCreateHandler = new UserCreateHandler(requestMsg.getRequestTarget());
                     userCreateHandler.addUserInDatabase();
                     break;
                 }
                 default -> {
-                    DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequestMessage);
+                    DefaultFileHandler defaultFileHandler = new DefaultFileHandler(requestMsg);
                     body = Optional.of(defaultFileHandler.serialize());
                 }
             }
@@ -54,13 +49,7 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void logHttpRequest(String httpRequestMessage) {
-        logger.debug(httpRequestMessage);
-    }
-
-    private String extractTargetHandler(String httpRequestMessage) {
-        String requestLine = httpRequestMessage.split(System.lineSeparator())[0];
-        String requestTarget = requestLine.split("\\?")[0];
+    private String extractTargetHandler(String requestTarget) {
         return requestTarget.split("/")[1];
     }
 }

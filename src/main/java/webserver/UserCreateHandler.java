@@ -14,14 +14,14 @@ public class UserCreateHandler {
     private List<String> userInfo;
     private final String PARAM_MATCHING_PATTER = "(?<=userId=)[^&\\s]*|(?<=password=)[^&\\s]*|(?<=name=)[^&\\s]*|(?<=email=)[^&\\s]*";
 
-    public UserCreateHandler(String httpRequestMessage) {
+    public UserCreateHandler(String requestTarget) {
         this.userInfo = new ArrayList<>();
-        parseMsg(httpRequestMessage);
+        parseMsg(requestTarget);
     }
 
-    private void parseMsg(String httpRequestMessage) {
+    public void parseMsg(String requestTarget) {
         Pattern pattern = Pattern.compile(PARAM_MATCHING_PATTER);
-        Matcher matcher = pattern.matcher(httpRequestMessage);
+        Matcher matcher = pattern.matcher(requestTarget);
         while (matcher.find()) {
             userInfo.add(matcher.group());
         }

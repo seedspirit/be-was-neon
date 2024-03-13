@@ -8,16 +8,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DefaultFileHandler {
-    String httpRequestMessage;
+    private final HttpRequestMsg httpRequestMessage;
     private final String BASE_URL = "./src/main/resources/static";
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    public DefaultFileHandler(String httpRequestMessage) {
+    public DefaultFileHandler(HttpRequestMsg httpRequestMessage) {
         this.httpRequestMessage = httpRequestMessage;
     }
 
     public byte[] serialize() throws IOException {
-        String path = extractPath(httpRequestMessage);
+        String path = extractPath(httpRequestMessage.getRequestTarget());
         String data = loadResource(path);
         return data.getBytes();
     }
@@ -33,11 +33,10 @@ public class DefaultFileHandler {
         throw new IOException("요청하는 파일이 존재하지 않습니다");
     }
 
-    private String extractPath(String httpRequestMessage) {
-        String requestLine = httpRequestMessage.split(System.lineSeparator())[0];
-        if (requestLine.contains("register")){
-            return BASE_URL + "/registration" + requestLine.split(" ")[1];
+    private String extractPath(String requestTarget) {
+        if (requestTarget.contains("register")){
+            return BASE_URL + "/registration" + requestTarget;
         }
-        return BASE_URL + requestLine.split(" ")[1];
+        return BASE_URL + requestTarget;
     }
 }
