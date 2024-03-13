@@ -21,22 +21,11 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequestMsg requestMsg = new HttpRequestMsg(in);
+            HttpRequestMsg httpRequestMsg = new HttpRequestMsg(in);
 
-            // HTTP 헤더에서 requestTarget 추출, 알맞는 핸들러 호출
-            String targetHandler = extractTargetHandler(requestMsg.getRequestTarget());
-            Optional<byte[]> body = Optional.empty();
-            switch (targetHandler) {
-                case "create" -> {
-                    UserCreateHandler userCreateHandler = new UserCreateHandler(requestMsg.getRequestTarget());
-                    userCreateHandler.addUserInDatabase();
-                    break;
-                }
-                default -> {
-                    DefaultFileHandler defaultFileHandler = new DefaultFileHandler(requestMsg);
-                    body = Optional.of(defaultFileHandler.serialize());
-                }
-            }
+            // HTTP 헤더에서 requestTarget 추출, 알맞는 핸들러 호출 후 결과 반환
+            Router router = new Router();
+            Optional<byte[]> body = router.route(httpRequestMsg);
 
             // 처리 결과를 바탕으로 HTTP 응답 메시지를 만들어 클라이언트에 전송
             DataOutputStream dos = new DataOutputStream(out);
