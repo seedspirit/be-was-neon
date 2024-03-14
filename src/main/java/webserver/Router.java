@@ -18,7 +18,7 @@ public class Router {
                     userCreateHandler.addUserInDatabase();
                     return new HttpResponseMsg(200, "OK");
                 }
-                case "/index.html", "/register.html" -> {
+                case "/index.html", "/register.html", "/registration" -> {
                     DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequestMsg);
                     return new HttpResponseMsg(200, "OK", defaultFileHandler.serialize());
                 }
