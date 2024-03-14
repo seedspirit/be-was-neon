@@ -11,7 +11,7 @@ public class HttpResponseMsg {
 
     private final int statusCode;
     private final String reasonPhrase;
-    private byte[] body;
+    private final byte[] body;
 
     public HttpResponseMsg(int statusCode, String reasonPhrase, byte[] body){
         this.statusCode = statusCode;
@@ -22,6 +22,7 @@ public class HttpResponseMsg {
     public HttpResponseMsg(int statusCode, String reasonPhrase){
         this.statusCode = statusCode;
         this.reasonPhrase = reasonPhrase;
+        this.body = new byte[0];
     }
 
     public void send(DataOutputStream dos) {
