@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.Reader;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -21,7 +22,9 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequestMsg httpRequestMsg = new HttpRequestMsg(in);
+            BufferedReader br = Reader.inputStreamToBufferedReader(in);
+            String msg = Reader.bufferedReaderToString(br);
+            HttpRequestMsg httpRequestMsg = new HttpRequestMsg(msg);
 
             // HTTP 헤더에서 requestTarget 추출, 알맞는 핸들러 호출 후 결과 반환
             Router router = new Router();

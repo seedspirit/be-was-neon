@@ -15,8 +15,8 @@ public class HttpRequestMsg {
     private String headers;
     private String body;
 
-    public HttpRequestMsg(InputStream in){
-        parseMsg(in);
+    public HttpRequestMsg(String msg){
+        parseMsg(msg);
     }
 
     public String getMethod() {
@@ -35,16 +35,11 @@ public class HttpRequestMsg {
         return body;
     }
 
-    private void parseMsg(InputStream in) {
-        try {
-            String msg = inputStreamStringConversion(in);
-            logger.debug(msg);
-            splitHeaderBody(msg);
-            String requestLine = msg.split(System.lineSeparator())[0];
-            parseRequestLine(requestLine);
-        } catch (IOException e){
-            logger.error(e.getMessage());
-        }
+    private void parseMsg(String msg) {
+        logger.debug(msg);
+        splitHeaderBody(msg);
+        String requestLine = msg.split(System.lineSeparator())[0];
+        parseRequestLine(requestLine);
     }
 
     private void splitHeaderBody(String str){
@@ -60,11 +55,5 @@ public class HttpRequestMsg {
     private void parseRequestLine(String requestLine) {
         this.method = requestLine.split(" ")[0];
         this.requestTarget = requestLine.split(" ")[1];
-    }
-
-    private String inputStreamStringConversion(InputStream in) throws IOException {
-        InputStreamReader isr = new InputStreamReader(in);
-        BufferedReader br = new BufferedReader(isr);
-        return util.Reader.bufferedReaderToString(br);
     }
 }
