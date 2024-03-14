@@ -17,9 +17,10 @@ public class UserCreateHandler {
     public UserCreateHandler(String requestTarget) {
         this.userInfo = new ArrayList<>();
         parseMsg(requestTarget);
+        addUserInDatabase();
     }
 
-    public void parseMsg(String requestTarget) {
+    private void parseMsg(String requestTarget) {
         Pattern pattern = Pattern.compile(PARAM_MATCHING_PATTER);
         Matcher matcher = pattern.matcher(requestTarget);
         while (matcher.find()) {
@@ -27,7 +28,7 @@ public class UserCreateHandler {
         }
     }
 
-    public void addUserInDatabase(){
+    private void addUserInDatabase(){
         String userID = userInfo.get(0);
         String password = userInfo.get(2);
         String name =  URLDecoder.decode(userInfo.get(1), StandardCharsets.UTF_8);
