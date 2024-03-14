@@ -7,6 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Router {
+    private final String INITIAL_PATH_SEGMENT_EXTRACTION_PATTERN = "^\\/[^\\/\\?]+";
+
     public HttpResponseMsg route(HttpRequestMsg httpRequestMsg) {
         try{
             String targetHandler = extractTargetHandler(httpRequestMsg);
@@ -16,7 +18,7 @@ public class Router {
                     userCreateHandler.addUserInDatabase();
                     return new HttpResponseMsg(200, "OK");
                 }
-                case "/index.html" -> {
+                case "/index.html", "/register.html" -> {
                     DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequestMsg);
                     return new HttpResponseMsg(200, "OK", defaultFileHandler.serialize());
                 }
@@ -33,7 +35,7 @@ public class Router {
 
     private String extractTargetHandler(HttpRequestMsg httpRequestMsg) throws UrlFormatException {
         String requestTarget = httpRequestMsg.getRequestTarget();
-        Pattern pattern = Pattern.compile("\\/[^\\/]+");
+        Pattern pattern = Pattern.compile(INITIAL_PATH_SEGMENT_EXTRACTION_PATTERN);
         Matcher matcher = pattern.matcher(requestTarget);
         if (matcher.find()) {
             return matcher.group();
