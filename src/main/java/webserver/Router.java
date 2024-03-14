@@ -15,7 +15,6 @@ public class Router {
             switch (targetHandler) {
                 case "/create" -> {
                     UserCreateHandler userCreateHandler = new UserCreateHandler(httpRequestMsg.getRequestTarget());
-                    userCreateHandler.addUserInDatabase();
                     return new HttpResponseMsg(200, "OK");
                 }
                 case "/index.html", "/register.html", "/registration" -> {
@@ -41,7 +40,7 @@ public class Router {
             return matcher.group();
         }
         else {
-            throw new UrlFormatException("잘못된 형식의 URL입니다.");
+            throw new UrlFormatException("잘못된 형식의 URL입니다");
         }
     }
 }

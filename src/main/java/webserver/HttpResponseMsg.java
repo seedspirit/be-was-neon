@@ -49,4 +49,15 @@ public class HttpResponseMsg {
             logger.error(e.getMessage());
         }
     }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public String getReasonPhrase() {
+        return reasonPhrase;
+    }
+    public byte[] getBody() {
+        return body;
+    }
 }
