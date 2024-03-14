@@ -19,6 +19,8 @@ public class HttpResponseMsg {
         this.body = body;
     }
 
+    // 별도의 body 내용 없이 메시지를 보내는 경우 사용
+
     public HttpResponseMsg(int statusCode, String reasonPhrase){
         this.statusCode = statusCode;
         this.reasonPhrase = reasonPhrase;

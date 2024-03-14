@@ -14,6 +14,7 @@ public class UserCreateHandler {
     private List<String> userInfo;
     private final String PARAM_MATCHING_PATTER = "(?<=userId=)[^&\\s]*|(?<=password=)[^&\\s]*|(?<=name=)[^&\\s]*|(?<=email=)[^&\\s]*";
 
+    // HTTP 요청 메시지의 requestTarget을 바탕으로 필요한 정보를 추출, User 객체를 생성하여 DB에 저장한다
     public UserCreateHandler(String requestTarget) {
         this.userInfo = new ArrayList<>();
         parseMsg(requestTarget);

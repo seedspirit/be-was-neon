@@ -10,6 +10,7 @@ public class Router {
     private final String INITIAL_PATH_SEGMENT_EXTRACTION_PATTERN = "^\\/[^\\/\\?]+";
 
     public HttpResponseMsg route(HttpRequestMsg httpRequestMsg) {
+        // HTTP 요청 메시지 정보를 바탕으로 적절한 핸들러 객체를 생성 호출하고, 해당 객체의 결과를 바탕으로 응답 메시지를 작성한다
         try{
             String targetHandler = extractTargetHandler(httpRequestMsg);
             switch (targetHandler) {
@@ -25,6 +26,7 @@ public class Router {
                     return new HttpResponseMsg(404, "Not Found: 요청한 리소스를 찾을 수 없습니다");
                 }
             }
+            // 핸들러 객체 등에서 에러가 발생하는 경우, 에러를 잡고 그 에러를 바탕으로 응답 메시지를 반환한다
         } catch (UrlFormatException e) {
             return new HttpResponseMsg(400, "Bad Request: " + e.getMessage());
         } catch (ResourceNotFoundException e) {
