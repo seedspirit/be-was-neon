@@ -11,11 +11,13 @@ class HttpRequestMsgTest {
     HttpRequestMsg msg;
 
     private String msgExample =
-            "GET /index.html HTTP/1.1\n" +
-            "Host: localhost:8080\n" +
-            "Connection: keep-alive\n" +
-            "Accept: */*\n" +
-            "\n";
+            """
+                    GET /index.html HTTP/1.1
+                    Host: localhost:8080
+                    Connection: keep-alive
+                    Accept: */*
+
+                    """;
 
     @BeforeEach
     void setMsg(){
@@ -25,29 +27,30 @@ class HttpRequestMsgTest {
     @Test
     @DisplayName("예시 http요청 메시지 중 method인 GET을 추출한다")
     void getMethodTest() {
-        assertThat("GET").isEqualTo(msg.getMethod());
+        assertThat(msg.getMethod()).isEqualTo("GET");
     }
 
     @Test
     @DisplayName("예시 http요청 메시지 중 request target인 \"/index.html\"을 추출한다")
     void getRequestTargetTest() {
-        assertThat("/index.html").isEqualTo(msg.getRequestTarget());
+        assertThat(msg.getRequestTarget()).isEqualTo("/index.html");
     }
 
     @Test
     @DisplayName("예시 http요청 메시지 중 header를 추출한다")
     void getHeadersTest() {
-        String answer = "GET /index.html HTTP/1.1\n" +
-                "Host: localhost:8080\n" +
-                "Connection: keep-alive\n" +
-                "Accept: */*";
-        assertThat(answer).isEqualTo(msg.getHeaders());
+        String answer = """
+                GET /index.html HTTP/1.1
+                Host: localhost:8080
+                Connection: keep-alive
+                Accept: */*""";
+        assertThat(msg.getHeaders()).isEqualTo(answer);
     }
 
     @Test
     @DisplayName("예시 http요청 메시지 중 body 부분을 추출한다")
     void getBodyTest() {
         String answer = "";
-        assertThat(answer).isEqualTo(msg.getBody());
+        assertThat(msg.getBody()).isEqualTo(answer);
     }
 }
