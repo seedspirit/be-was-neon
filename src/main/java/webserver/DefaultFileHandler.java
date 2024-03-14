@@ -6,31 +6,30 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.exceptions.ResourceNotFoundException;
 
 public class DefaultFileHandler {
     private final HttpRequestMsg httpRequestMessage;
     private final String BASE_URL = "./src/main/resources/static";
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     public DefaultFileHandler(HttpRequestMsg httpRequestMessage) {
         this.httpRequestMessage = httpRequestMessage;
     }
 
-    public byte[] serialize() throws IOException {
+    public byte[] serialize() throws ResourceNotFoundException {
         String path = extractPath(httpRequestMessage.getRequestTarget());
         String data = loadResource(path);
         return data.getBytes();
     }
 
-    private String loadResource(String path) throws IOException {
+    private String loadResource(String path) throws ResourceNotFoundException{
         try {
             FileReader fileReader = new FileReader(path);
             BufferedReader br = new BufferedReader(fileReader);
             return util.Reader.bufferedReaderToString(br);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            throw new ResourceNotFoundException("요청한 %s 리소스가 존재하지 않습니다", path);
         }
-        throw new IOException("요청하는 파일이 존재하지 않습니다");
     }
 
     private String extractPath(String requestTarget) {

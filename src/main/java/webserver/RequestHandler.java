@@ -25,20 +25,13 @@ public class RequestHandler implements Runnable {
 
             // HTTP 헤더에서 requestTarget 추출, 알맞는 핸들러 호출 후 결과 반환
             Router router = new Router();
-            Optional<byte[]> body = router.route(httpRequestMsg);
+            HttpResponseMsg httpResponseMsg = router.route(httpRequestMsg);
 
             // 처리 결과를 바탕으로 HTTP 응답 메시지를 만들어 클라이언트에 전송
             DataOutputStream dos = new DataOutputStream(out);
-            if (body.isPresent()){
-                HttpResponseMsg responseMsg = new HttpResponseMsg();
-                responseMsg.send(dos, body.get());
-            }
+            httpResponseMsg.send(dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private String extractTargetHandler(String requestTarget) {
-        return requestTarget.split("/")[1];
     }
 }

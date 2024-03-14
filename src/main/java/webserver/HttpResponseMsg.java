@@ -9,23 +9,38 @@ import org.slf4j.LoggerFactory;
 public class HttpResponseMsg {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    public void send(DataOutputStream dos, byte[] body) {
-        response200Header(dos, body.length);
-        responseBody(dos, body);
+    private final int statusCode;
+    private final String reasonPhrase;
+    private byte[] body;
+
+    public HttpResponseMsg(int statusCode, String reasonPhrase, byte[] body){
+        this.statusCode = statusCode;
+        this.reasonPhrase = reasonPhrase;
+        this.body = body;
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    public HttpResponseMsg(int statusCode, String reasonPhrase){
+        this.statusCode = statusCode;
+        this.reasonPhrase = reasonPhrase;
+    }
+
+    public void send(DataOutputStream dos) {
+        writeResponseHeader(dos);
+        writeResponseBody(dos);
+    }
+
+    private void writeResponseHeader(DataOutputStream dos) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+            dos.writeBytes("HTTP/1.1 " + statusCode + reasonPhrase + " \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("Content-Length: " + body.length + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
+    private void writeResponseBody(DataOutputStream dos) {
         try {
             dos.write(body, 0, body.length);
             dos.flush();

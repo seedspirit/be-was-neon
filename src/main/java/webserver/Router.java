@@ -1,31 +1,45 @@
 package webserver;
 
-import java.util.Optional;
+import webserver.exceptions.ResourceNotFoundException;
+import webserver.exceptions.UrlFormatException;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Router {
-    public Optional<byte[]> route(HttpRequestMsg httpRequestMsg) {
-        String targetHandler = extractTargetHandler(httpRequestMsg);
-        Optional<byte[]> body = Optional.empty();
+    public HttpResponseMsg route(HttpRequestMsg httpRequestMsg) {
         try{
+            String targetHandler = extractTargetHandler(httpRequestMsg);
             switch (targetHandler) {
-                case "create" -> {
+                case "/create" -> {
                     UserCreateHandler userCreateHandler = new UserCreateHandler(httpRequestMsg.getRequestTarget());
                     userCreateHandler.addUserInDatabase();
-                    break;
+                    return new HttpResponseMsg(200, "OK");
+                }
+                case "/index.html" -> {
+                    DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequestMsg);
+                    return new HttpResponseMsg(200, "OK", defaultFileHandler.serialize());
                 }
                 default -> {
-                    DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequestMsg);
-                    body = Optional.of(defaultFileHandler.serialize());
+                    return new HttpResponseMsg(404, "Not Found: 요청한 리소스를 찾을 수 없습니다");
                 }
             }
-        } catch (Exception e) {
-            e.getStackTrace();
+        } catch (UrlFormatException e) {
+            return new HttpResponseMsg(400, "Bad Request: " + e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            return new HttpResponseMsg(404, "Not Found: " + e.getMessage());
         }
-        return body;
     }
 
-    private String extractTargetHandler(HttpRequestMsg httpRequestMsg) {
+    private String extractTargetHandler(HttpRequestMsg httpRequestMsg) throws UrlFormatException {
         String requestTarget = httpRequestMsg.getRequestTarget();
-        return requestTarget.split("/")[1];
+        Pattern pattern = Pattern.compile("\\/[^\\/]+");
+        Matcher matcher = pattern.matcher(requestTarget);
+        if (matcher.find()) {
+            return matcher.group();
+        }
+        else {
+            throw new UrlFormatException("잘못된 형식의 URL입니다.");
+        }
     }
 }
