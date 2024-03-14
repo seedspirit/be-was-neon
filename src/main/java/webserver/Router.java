@@ -15,7 +15,8 @@ public class Router {
             String targetHandler = extractTargetHandler(httpRequestMsg);
             switch (targetHandler) {
                 case "/create" -> {
-                    UserCreateHandler userCreateHandler = new UserCreateHandler(httpRequestMsg.getRequestTarget());
+                    UserCreateHandler userCreateHandler = new UserCreateHandler();
+                    userCreateHandler.addUserInDatabase(httpRequestMsg.getRequestTarget());
                     return new HttpResponseMsg(200, "OK");
                 }
                 case "/index.html", "/register.html", "/registration" -> {
