@@ -7,6 +7,7 @@ public class HttpRequestMsg {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private String method;
     private String requestTarget;
+    private ContentType contentType;
     private String headers;
     private String body;
 
@@ -22,12 +23,20 @@ public class HttpRequestMsg {
         return requestTarget;
     }
 
+    public ContentType getContentType() {
+        return contentType;
+    }
+
     public String getHeaders() {
         return headers;
     }
 
     public String getBody() {
         return body;
+    }
+
+    public boolean requireStaticFile() {
+        return !contentType.equals(ContentType.NONE);
     }
 
     private void parseMsg(String msg) {
@@ -50,5 +59,6 @@ public class HttpRequestMsg {
     private void parseRequestLine(String requestLine) {
         this.method = requestLine.split(" ")[0];
         this.requestTarget = requestLine.split(" ")[1];
+        this.contentType = ContentType.findMatchingContentType(requestTarget);
     }
 }
