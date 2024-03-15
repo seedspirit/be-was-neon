@@ -9,6 +9,13 @@ import org.slf4j.LoggerFactory;
 public class HttpResponseMsg {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
+    private static final String BLANK = " ";
+    private static final String SEMICOLON = ";";
+    private static final String HTTP_VERSION_HEADER = "HTTP/";
+    private final String HTTP_VERSION = "1.1";
+    private static final String CONTENT_TYPE_HEADER = "Content-Type:";
+    private static final String CONTENT_LENGTH_HEADER = "Content-Length:";
+    private static final String CRLF = "\r\n";
     private final int statusCode;
     private final String reasonPhrase;
     private final ContentType contentType;
@@ -37,28 +44,23 @@ public class HttpResponseMsg {
     }
 
     public void send(DataOutputStream dos) {
-        writeResponseHeader(dos);
-        writeResponseBody(dos);
-    }
-
-    private void writeResponseHeader(DataOutputStream dos) {
+        String header = makeHeader();
         try {
-            dos.writeBytes("HTTP/1.1 " + statusCode + " " + reasonPhrase + " \r\n");
-            dos.writeBytes("Content-Type:" + contentType.getMimetype() + ";charset=utf-8 \r\n");
-            dos.writeBytes("Content-Length: " + body.length + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void writeResponseBody(DataOutputStream dos) {
-        try {
+            dos.writeBytes(header);
             dos.write(body, 0, body.length);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private String makeHeader() {
+        StringBuilder headerBuilder = new StringBuilder();
+        headerBuilder.append(HTTP_VERSION_HEADER + HTTP_VERSION + statusCode + BLANK + reasonPhrase + BLANK + CRLF);
+        headerBuilder.append(CONTENT_TYPE_HEADER + BLANK + contentType.getMimetype() + SEMICOLON + "charset=utf-8" + BLANK + CRLF);
+        headerBuilder.append(CONTENT_LENGTH_HEADER + BLANK + body.length + CRLF);
+        headerBuilder.append(CRLF);
+        return headerBuilder.toString();
     }
 
     public int getStatusCode() {
