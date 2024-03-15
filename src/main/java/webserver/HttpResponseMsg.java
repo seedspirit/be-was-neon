@@ -11,19 +11,28 @@ public class HttpResponseMsg {
 
     private final int statusCode;
     private final String reasonPhrase;
+    private final ContentType contentType;
     private final byte[] body;
+
+    public HttpResponseMsg(int statusCode, String reasonPhrase, ContentType contentType, byte[] body){
+        this.statusCode = statusCode;
+        this.reasonPhrase = reasonPhrase;
+        this.contentType = contentType;
+        this.body = body;
+    }
 
     public HttpResponseMsg(int statusCode, String reasonPhrase, byte[] body){
         this.statusCode = statusCode;
         this.reasonPhrase = reasonPhrase;
+        this.contentType = ContentType.NONE;
         this.body = body;
     }
 
     // 별도의 body 내용 없이 메시지를 보내는 경우 사용
-
     public HttpResponseMsg(int statusCode, String reasonPhrase){
         this.statusCode = statusCode;
         this.reasonPhrase = reasonPhrase;
+        this.contentType = ContentType.NONE;
         this.body = new byte[0];
     }
 
@@ -34,8 +43,8 @@ public class HttpResponseMsg {
 
     private void writeResponseHeader(DataOutputStream dos) {
         try {
-            dos.writeBytes("HTTP/1.1 " + statusCode + reasonPhrase + " \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("HTTP/1.1 " + statusCode + " " + reasonPhrase + " \r\n");
+            dos.writeBytes("Content-Type:" + contentType.getMimetype() + ";charset=utf-8 \r\n");
             dos.writeBytes("Content-Length: " + body.length + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
@@ -59,6 +68,7 @@ public class HttpResponseMsg {
     public String getReasonPhrase() {
         return reasonPhrase;
     }
+
     public byte[] getBody() {
         return body;
     }
