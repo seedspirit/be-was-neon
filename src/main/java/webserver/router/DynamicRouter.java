@@ -13,20 +13,19 @@ public class DynamicRouter {
                 case "/create" -> {
                     UserCreateHandler userCreateHandler = new UserCreateHandler();
                     userCreateHandler.addUserInDatabase(httpRequest.getRequestTarget());
-                    return new HttpResponse(200, "OK");
+                    return new HttpResponse(HttpStatus.OK.getStatusCode(), HttpStatus.OK.getReasonPhrase());
                 }
                 case "/registration" -> {
                     DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequest);
-                    return new HttpResponse(200, "OK", defaultFileHandler.serialize());
+                    return new HttpResponse(HttpStatus.OK.getStatusCode(), HttpStatus.OK.getReasonPhrase(), defaultFileHandler.serialize());
                 }
                 default -> {
-                    return new HttpResponse(404, "Not Found: 요청한 리소스를 찾을 수 없습니다");
+                    return new HttpResponse(HttpStatus.NOT_FOUND.getStatusCode()
+                            , HttpStatus.NOT_FOUND.getReasonPhrase() + "요청한 리소스를 찾을 수 없습니다");
                 }
             }
-        } catch (UrlFormatException e) {
-            return new HttpResponse(400, "Bad Request: " + e.getMessage());
-        } catch (ResourceNotFoundException e) {
-            return new HttpResponse(404, "Not Found: " + e.getMessage());
+        } catch (UrlFormatException | ResourceNotFoundException e) {
+            return new HttpResponse(HttpStatus.BAD_REQUEST.getStatusCode(), HttpStatus.BAD_REQUEST.getReasonPhrase() + e.getMessage());
         }
     }
 }
