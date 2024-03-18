@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class HttpRequestMsgTest {
+class HttpRequestTest {
 
-    HttpRequestMsg msg;
+    HttpRequest msg;
 
     private String msgExample =
             """
@@ -21,7 +21,7 @@ class HttpRequestMsgTest {
 
     @BeforeEach
     void setMsg(){
-        msg = new HttpRequestMsg(msgExample);
+        msg = new HttpRequest(msgExample);
     }
 
     @Test
@@ -37,7 +37,7 @@ class HttpRequestMsgTest {
     }
 
     @Test
-    @DisplayName("예시 http요청 메시지 중 header를 추출한다")
+    @DisplayName("예시 http요청 메시지 중 Request Line과 header를 추출한다")
     void getHeadersTest() {
         String answer = """
                 GET /index.html HTTP/1.1

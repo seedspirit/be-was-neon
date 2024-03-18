@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 
 public class TargetHandlerExtractor {
     private final String INITIAL_PATH_SEGMENT_EXTRACTION_PATTERN = "^\\/[^\\/\\?]+";
-    public String extractTargetHandler(HttpRequestMsg httpRequestMsg) throws UrlFormatException {
-        String requestTarget = httpRequestMsg.getRequestTarget();
+    public String extractTargetHandler(HttpRequest httpRequest) throws UrlFormatException {
+        String requestTarget = httpRequest.getRequestTarget();
         Pattern pattern = Pattern.compile(INITIAL_PATH_SEGMENT_EXTRACTION_PATTERN);
         Matcher matcher = pattern.matcher(requestTarget);
         if (matcher.find()) {

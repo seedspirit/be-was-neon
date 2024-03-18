@@ -24,15 +24,15 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = Reader.inputStreamToBufferedReader(in);
             String msg = Reader.bufferedReaderToString(br);
-            HttpRequestMsg httpRequestMsg = new HttpRequestMsg(msg);
+            HttpRequest httpRequest = new HttpRequest(msg);
 
             // HTTP 헤더에서 requestTarget 추출, 알맞는 핸들러 호출 후 결과 반환
             Router router = new Router();
-            HttpResponseMsg httpResponseMsg = router.route(httpRequestMsg);
+            HttpResponse httpResponse = router.route(httpRequest);
 
             // 처리 결과를 바탕으로 HTTP 응답 메시지를 만들어 클라이언트에 전송
             DataOutputStream dos = new DataOutputStream(out);
-            httpResponseMsg.send(dos);
+            httpResponse.send(dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
