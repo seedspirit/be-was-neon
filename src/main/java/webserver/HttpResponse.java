@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HttpResponseMsg {
+public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private static final String BLANK = " ";
@@ -21,14 +21,14 @@ public class HttpResponseMsg {
     private final ContentType contentType;
     private final byte[] body;
 
-    public HttpResponseMsg(int statusCode, String reasonPhrase, ContentType contentType, byte[] body){
+    public HttpResponse(int statusCode, String reasonPhrase, ContentType contentType, byte[] body){
         this.statusCode = statusCode;
         this.reasonPhrase = reasonPhrase;
         this.contentType = contentType;
         this.body = body;
     }
 
-    public HttpResponseMsg(int statusCode, String reasonPhrase, byte[] body){
+    public HttpResponse(int statusCode, String reasonPhrase, byte[] body){
         this.statusCode = statusCode;
         this.reasonPhrase = reasonPhrase;
         this.contentType = ContentType.NONE;
@@ -36,7 +36,7 @@ public class HttpResponseMsg {
     }
 
     // 별도의 body 내용 없이 메시지를 보내는 경우 사용
-    public HttpResponseMsg(int statusCode, String reasonPhrase){
+    public HttpResponse(int statusCode, String reasonPhrase){
         this.statusCode = statusCode;
         this.reasonPhrase = reasonPhrase;
         this.contentType = ContentType.NONE;

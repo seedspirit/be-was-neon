@@ -37,10 +37,10 @@ class RouterTest {
                 """;
 
         String requestExample = String.format(requestTemplate, requestPath);
-        HttpRequestMsg httpRequestMsg = new HttpRequestMsg(requestExample);
+        HttpRequest httpRequest = new HttpRequest(requestExample);
 
-        HttpResponseMsg actualResponseMsg = router.route(httpRequestMsg);
-        HttpResponseMsg expectedResponseMsg = new HttpResponseMsg(expectedStatusCode, expectedReasonPhrase);
+        HttpResponse actualResponseMsg = router.route(httpRequest);
+        HttpResponse expectedResponseMsg = new HttpResponse(expectedStatusCode, expectedReasonPhrase);
 
         assertThat(actualResponseMsg.getStatusCode()).isEqualTo(expectedResponseMsg.getStatusCode());
         assertThat(actualResponseMsg.getReasonPhrase()).isEqualTo(expectedResponseMsg.getReasonPhrase());

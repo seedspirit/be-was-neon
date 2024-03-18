@@ -3,7 +3,7 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HttpRequestMsg {
+public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private String method;
     private String requestTarget;
@@ -11,7 +11,7 @@ public class HttpRequestMsg {
     private String headers;
     private String body;
 
-    public HttpRequestMsg(String msg){
+    public HttpRequest(String msg){
         parseMsg(msg);
     }
 

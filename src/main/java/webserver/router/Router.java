@@ -1,16 +1,16 @@
 package webserver.router;
 
 
-import webserver.HttpRequestMsg;
-import webserver.HttpResponseMsg;
+import webserver.HttpRequest;
+import webserver.HttpResponse;
 
 public class Router {
 
-    public HttpResponseMsg route(HttpRequestMsg httpRequestMsg) {
-        if (httpRequestMsg.requireStaticFile()) {
-            return new StaticRouter().route(httpRequestMsg);
+    public HttpResponse route(HttpRequest httpRequest) {
+        if (httpRequest.requireStaticFile()) {
+            return new StaticRouter().route(httpRequest);
         } else {
-            return new DynamicRouter().route(httpRequestMsg);
+            return new DynamicRouter().route(httpRequest);
         }
     }
 }
