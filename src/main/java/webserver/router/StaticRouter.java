@@ -1,9 +1,6 @@
 package webserver.router;
 
-import webserver.DefaultFileHandler;
-import webserver.HttpRequest;
-import webserver.HttpResponse;
-import webserver.TargetHandlerExtractor;
+import webserver.*;
 import webserver.exceptions.ResourceNotFoundException;
 import webserver.exceptions.UrlFormatException;
 
@@ -14,11 +11,11 @@ public class StaticRouter {
             String targetHandler = extractor.extractTargetHandler(httpRequest);
             DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequest);
             byte[] body = defaultFileHandler.serialize();
-            return new HttpResponse(200, "OK", httpRequest.getContentType(), body);
+            return new HttpResponse(HttpStatus.OK.getStatusCode(), HttpStatus.OK.getReasonPhrase(), httpRequest.getContentType(), body);
         } catch (UrlFormatException e) {
-            return new HttpResponse(400, "Bad Request: " + e.getMessage());
+            return new HttpResponse(HttpStatus.BAD_REQUEST.getStatusCode(), HttpStatus.BAD_REQUEST.getReasonPhrase() + e.getMessage());
         } catch (ResourceNotFoundException e) {
-            return new HttpResponse(404, "Not Found: " + e.getMessage());
+            return new HttpResponse(HttpStatus.NOT_FOUND.getStatusCode(), HttpStatus.NOT_FOUND.getReasonPhrase() + e.getMessage());
         }
     }
 }
