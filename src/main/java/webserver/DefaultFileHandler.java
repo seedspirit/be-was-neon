@@ -16,7 +16,6 @@ public class DefaultFileHandler {
         String requestTarget = httpRequestMessage.getRequestTarget();
 
         String path = redirector.makeRedirection(requestTarget);
-        String data = loader.load(path);
-        return data.getBytes();
+        return loader.load(path);
     }
 }
