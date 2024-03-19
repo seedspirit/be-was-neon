@@ -3,6 +3,9 @@ package webserver.router;
 import webserver.*;
 import webserver.exceptions.ResourceNotFoundException;
 import webserver.exceptions.UrlFormatException;
+import webserver.httpMessage.HttpRequest;
+import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.HttpStatus;
 
 public class StaticRouter {
     public HttpResponse route(HttpRequest httpRequest) {

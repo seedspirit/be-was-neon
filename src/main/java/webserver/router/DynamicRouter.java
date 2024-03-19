@@ -3,6 +3,9 @@ package webserver.router;
 import webserver.*;
 import webserver.exceptions.ResourceNotFoundException;
 import webserver.exceptions.UrlFormatException;
+import webserver.httpMessage.HttpRequest;
+import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.HttpStatus;
 
 public class DynamicRouter {
     public HttpResponse route(HttpRequest httpRequest) {

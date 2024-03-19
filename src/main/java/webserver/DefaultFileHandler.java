@@ -1,6 +1,7 @@
 package webserver;
 
 import webserver.exceptions.ResourceNotFoundException;
+import webserver.httpMessage.HttpRequest;
 
 public class DefaultFileHandler {
     private final HttpRequest httpRequestMessage;

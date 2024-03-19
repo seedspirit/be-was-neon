@@ -1,6 +1,7 @@
 package webserver;
 
 import webserver.exceptions.UrlFormatException;
+import webserver.httpMessage.HttpRequest;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -1,8 +1,8 @@
 package webserver.router;
 
 
-import webserver.HttpRequest;
-import webserver.HttpResponse;
+import webserver.httpMessage.HttpRequest;
+import webserver.httpMessage.HttpResponse;
 
 public class Router {
 

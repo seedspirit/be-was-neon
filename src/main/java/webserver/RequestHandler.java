@@ -6,6 +6,8 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.Reader;
+import webserver.httpMessage.HttpRequest;
+import webserver.httpMessage.HttpResponse;
 import webserver.router.Router;
 
 public class RequestHandler implements Runnable {
