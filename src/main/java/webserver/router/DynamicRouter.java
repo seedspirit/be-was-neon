@@ -21,7 +21,7 @@ public class DynamicRouter {
                 }
                 default -> {
                     return new HttpResponse(HttpStatus.NOT_FOUND.getStatusCode()
-                            , HttpStatus.NOT_FOUND.getReasonPhrase() + "요청한 리소스를 찾을 수 없습니다");
+                            , HttpStatus.NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다");
                 }
             }
         } catch (UrlFormatException | ResourceNotFoundException e) {
