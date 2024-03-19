@@ -7,6 +7,7 @@ import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
 import webserver.httpMessage.HttpStatus;
 
+import static webserver.httpMessage.HttpConstants.LOCATION;
 import static webserver.httpMessage.HttpStatus.*;
 
 public class DynamicRouter {
@@ -18,7 +19,10 @@ public class DynamicRouter {
                 case "/create" -> {
                     UserCreateHandler userCreateHandler = new UserCreateHandler();
                     userCreateHandler.addUserInDatabase(httpRequest.getBody());
-                    return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase()).build();
+                    final String redirectLocation = "http://localhost:8080/index.html";
+                    return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
+                            .addHeaderComponent(LOCATION, redirectLocation)
+                            .build();
                 }
                 case "/registration" -> {
                     DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequest);

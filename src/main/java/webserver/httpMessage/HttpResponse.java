@@ -16,7 +16,7 @@ public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private final String HTTP_VERSION_NUMBER = "1.1";
     private final String UTF_8 = "utf-8";
-    private final Map<String, String> requestLine;
+    private final Map<String, String> statusLine;
     private final Map<String, String> header;
     private final ContentType contentType;
     private final byte[] body;
@@ -24,7 +24,7 @@ public class HttpResponse {
     public static class Builder {
         private final String HTTP_VERSION_NUMBER = "1.1";
         // 필수 매개변수
-        private final Map<String, String> requestLine;
+        private final Map<String, String> statusLine;
         private final Map<String, String> header;
 
         // 선택 매개변수 - 기본값으로 초기화
@@ -32,7 +32,7 @@ public class HttpResponse {
         private byte[] body = new byte[0];
 
         public Builder(int statusCode, String reasonPhrase) {
-            this.requestLine = new HashMap<>();
+            this.statusLine = new HashMap<>();
             initRequestLine(statusCode, reasonPhrase);
 
             this.header = new HashMap<>();
@@ -40,9 +40,9 @@ public class HttpResponse {
         }
 
         private void initRequestLine(int statusCode, String reasonPhrase){
-            requestLine.put(HEADER_HTTP_VERSION, HTTP_VERSION_NUMBER);
-            requestLine.put(STATUS_CODE_KEY, String.valueOf(statusCode));
-            requestLine.put(REASON_PHRASE, reasonPhrase);
+            statusLine.put(HTTP_VERSION_KEY, HTTP_VERSION_NUMBER);
+            statusLine.put(STATUS_CODE_KEY, String.valueOf(statusCode));
+            statusLine.put(REASON_PHRASE, reasonPhrase);
         }
 
         private void initHeader() {
@@ -52,7 +52,6 @@ public class HttpResponse {
 
         public Builder contentType(ContentType val) {
             contentType = val;
-            header.put(CONTENT_TYPE, contentType.getMimetype());
             return this;
         }
 
@@ -73,7 +72,7 @@ public class HttpResponse {
     }
 
     private HttpResponse(Builder builder) {
-        this.requestLine = builder.requestLine;
+        this.statusLine = builder.statusLine;
         this.contentType = builder.contentType;
         this.header = builder.header;
         this.body = builder.body;
@@ -92,19 +91,34 @@ public class HttpResponse {
 
     private String makeHeader() {
         StringBuilder headerBuilder = new StringBuilder();
-        headerBuilder.append(HEADER_HTTP_VERSION + HTTP_VERSION_NUMBER + getStatusCode() + BLANK + getReasonPhrase() + BLANK + CRLF);
+        headerBuilder.append(generateResponseLine());
         headerBuilder.append(CONTENT_TYPE + COLON + BLANK + contentType.getMimetype() + SEMICOLON + MIME_TYPE_PARAMETER_CHARSET + EQUAL_SIGN + UTF_8 + BLANK + CRLF);
-        headerBuilder.append(CONTENT_LENGTH + COLON + BLANK + body.length + CRLF);
+        for(Map.Entry<String, String> entry : header.entrySet()){
+            headerBuilder.append(generateHeaderOneLine(entry.getKey(), entry.getValue()));
+        }
         headerBuilder.append(CRLF);
         return headerBuilder.toString();
     }
 
+    private String generateHeaderOneLine(String headerName, String headerValue) {
+        return headerName + COLON + BLANK + headerValue + CRLF;
+    }
+
+    private String generateResponseLine() {
+        String template = "HTTP/%s %s %s %s";
+        return String.format(template,
+                statusLine.get(HTTP_VERSION_KEY),
+                statusLine.get(STATUS_CODE_KEY),
+                statusLine.get(REASON_PHRASE),
+                CRLF);
+    }
+
     public int getStatusCode() {
-        return Integer.parseInt(requestLine.get(STATUS_CODE_KEY));
+        return Integer.parseInt(statusLine.get(STATUS_CODE_KEY));
     }
 
     public String getReasonPhrase() {
-        return requestLine.get(REASON_PHRASE);
+        return statusLine.get(REASON_PHRASE);
     }
 
     public Map<String, String> getHeader() {
