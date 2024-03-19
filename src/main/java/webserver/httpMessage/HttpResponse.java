@@ -54,6 +54,11 @@ public class HttpResponse {
             return this;
         }
 
+        public Builder addHeaderComponent(String key, String value) {
+            header.put(key, value);
+            return this;
+        }
+
         public HttpResponse build() {
             return new HttpResponse(this);
         }
@@ -92,6 +97,10 @@ public class HttpResponse {
 
     public String getReasonPhrase() {
         return requestLine.get(REASON_PHRASE);
+    }
+
+    public Map<String, String> getHeader() {
+        return header;
     }
 
     public byte[] getBody() {
