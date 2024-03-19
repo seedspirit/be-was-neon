@@ -38,7 +38,7 @@ public class HttpRequest {
             String requestLineString = br.readLine();
             requestLine.put(METHOD, requestLineString.split(BLANK)[0]);
             requestLine.put(REQUEST_TARGET, requestLineString.split(BLANK)[1]);
-            requestLine.put(HTTP_VERSION_HEADER, requestLineString.split(BLANK)[2]);
+            requestLine.put(HTTP_VERSION_KEY, requestLineString.split(BLANK)[2]);
             this.contentType = ContentType.findMatchingContentType(getRequestTarget());
         } catch (IOException e) {
             logger.error(e.getMessage());
