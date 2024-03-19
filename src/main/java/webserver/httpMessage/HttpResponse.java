@@ -33,11 +33,19 @@ public class HttpResponse {
 
         public Builder(int statusCode, String reasonPhrase) {
             this.requestLine = new HashMap<>();
+            initRequestLine(statusCode, reasonPhrase);
+
+            this.header = new HashMap<>();
+            initHeader();
+        }
+
+        private void initRequestLine(int statusCode, String reasonPhrase){
             requestLine.put(HEADER_HTTP_VERSION, HTTP_VERSION_NUMBER);
             requestLine.put(STATUS_CODE_KEY, String.valueOf(statusCode));
             requestLine.put(REASON_PHRASE, reasonPhrase);
+        }
 
-            this.header = new HashMap<>();
+        private void initHeader() {
             header.put(CONTENT_TYPE, contentType.getMimetype());
             header.put(CONTENT_LENGTH, String.valueOf(body.length));
         }
