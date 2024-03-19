@@ -6,16 +6,14 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
-import webserver.httpMessage.ContentType;
 
 import static util.constants.Delimiter.*;
+import static webserver.httpMessage.HttpConstants.*;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final String HTTP_VERSION_HEADER = "HTTP/";
-    private final String HTTP_VERSION = "1.1";
-    private static final String CONTENT_TYPE_HEADER = "Content-Type:";
-    private static final String CONTENT_LENGTH_HEADER = "Content-Length:";
+    private final String HTTP_VERSION_NUMBER = "1.1";
+    private final String UTF_8 = "utf-8";
     private final int statusCode;
     private final String reasonPhrase;
     private final ContentType contentType;
@@ -56,9 +54,9 @@ public class HttpResponse {
 
     private String makeHeader() {
         StringBuilder headerBuilder = new StringBuilder();
-        headerBuilder.append(HTTP_VERSION_HEADER + HTTP_VERSION + statusCode + BLANK + reasonPhrase + BLANK + CRLF);
-        headerBuilder.append(CONTENT_TYPE_HEADER + BLANK + contentType.getMimetype() + SEMICOLON + "charset=utf-8" + BLANK + CRLF);
-        headerBuilder.append(CONTENT_LENGTH_HEADER + BLANK + body.length + CRLF);
+        headerBuilder.append(HTTP_VERSION_HEADER + HTTP_VERSION_NUMBER + statusCode + BLANK + reasonPhrase + BLANK + CRLF);
+        headerBuilder.append(CONTENT_TYPE + COLON + BLANK + contentType.getMimetype() + SEMICOLON + MIME_TYPE_PARAMETER_CHARSET + EQUAL_SIGN + UTF_8 + BLANK + CRLF);
+        headerBuilder.append(CONTENT_LENGTH + COLON + BLANK + body.length + CRLF);
         headerBuilder.append(CRLF);
         return headerBuilder.toString();
     }

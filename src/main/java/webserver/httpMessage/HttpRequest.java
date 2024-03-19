@@ -3,7 +3,6 @@ package webserver.httpMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
-import webserver.httpMessage.ContentType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,13 +12,10 @@ import java.util.List;
 import java.util.Map;
 
 import static util.constants.Delimiter.*;
+import static webserver.httpMessage.HttpConstants.*;
 
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private final String METHOD = "method";
-    private final String REQUEST_TARGET = "requestTarget";
-    private final String HTTP_VERSION = "httpVersion";
-    private final String CONTENT_LENGTH = "Content-Length";
     private final Map<String, String> requestLine;
     private final Map<String, List<String>> headers;
     private ContentType contentType;
@@ -42,7 +38,7 @@ public class HttpRequest {
             String requestLineString = br.readLine();
             requestLine.put(METHOD, requestLineString.split(BLANK)[0]);
             requestLine.put(REQUEST_TARGET, requestLineString.split(BLANK)[1]);
-            requestLine.put(HTTP_VERSION, requestLineString.split(BLANK)[2]);
+            requestLine.put(HTTP_VERSION_HEADER, requestLineString.split(BLANK)[2]);
             this.contentType = ContentType.findMatchingContentType(getRequestTarget());
         } catch (IOException e) {
             logger.error(e.getMessage());
