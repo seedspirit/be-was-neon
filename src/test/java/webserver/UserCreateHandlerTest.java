@@ -12,9 +12,9 @@ class UserCreateHandlerTest {
     @DisplayName("요청에 맞는 정보를 지닌 User 객체가 DB에 저장되는 것을 확인")
     @Test
     void addUserInDatabaseTest() {
-        String request = "/create?username=javajigi&nickname=%EB%B0%95%EC%9E%AC%EC%84%B1&password=password&email=javajigi%40slipp.net";
+        String body = "username=javajigi&nickname=%EB%B0%95%EC%9E%AC%EC%84%B1&password=password&email=javajigi%40slipp.net";
         UserCreateHandler handler = new UserCreateHandler();
-        handler.addUserInDatabase(request);
+        handler.addUserInDatabase(body);
         User actualUser = Database.findUserById("javajigi");
         User expectedUser = new User("javajigi", "password", "박재성", "javajigi@slipp.net");
         assertThat(actualUser.toString()).isEqualTo(expectedUser.toString());

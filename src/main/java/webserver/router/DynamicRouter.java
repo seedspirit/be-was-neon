@@ -15,7 +15,7 @@ public class DynamicRouter {
             switch (targetHandler) {
                 case "/create" -> {
                     UserCreateHandler userCreateHandler = new UserCreateHandler();
-                    userCreateHandler.addUserInDatabase(httpRequest.getRequestTarget());
+                    userCreateHandler.addUserInDatabase(httpRequest.getBody());
                     return new HttpResponse(HttpStatus.OK.getStatusCode(), HttpStatus.OK.getReasonPhrase());
                 }
                 case "/registration" -> {
