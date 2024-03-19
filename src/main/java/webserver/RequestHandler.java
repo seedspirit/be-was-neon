@@ -23,8 +23,7 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = Reader.inputStreamToBufferedReader(in);
-            String msg = Reader.bufferedReaderToString(br);
-            HttpRequest httpRequest = new HttpRequest(msg);
+            HttpRequest httpRequest = new HttpRequest(br);
 
             // HTTP 헤더에서 requestTarget 추출, 알맞는 핸들러 호출 후 결과 반환
             Router router = new Router();

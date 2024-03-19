@@ -4,7 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import util.Reader;
 import webserver.router.Router;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,11 +38,13 @@ class RouterTest {
                 GET %s HTTP/1.1
                 Host: localhost:8080
                 Connection: keep-alive
-                Accept: */*
+                Accept:
                 """;
 
         String requestExample = String.format(requestTemplate, requestPath);
-        HttpRequest httpRequest = new HttpRequest(requestExample);
+        InputStream is = new ByteArrayInputStream(requestExample.getBytes());
+        BufferedReader br = Reader.inputStreamToBufferedReader(is);
+        HttpRequest httpRequest = new HttpRequest(br);
 
         HttpResponse actualResponseMsg = router.route(httpRequest);
         HttpResponse expectedResponseMsg = new HttpResponse(expectedStatusCode, expectedReasonPhrase);
