@@ -2,6 +2,8 @@ package webserver.httpMessage;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,26 +21,40 @@ public class HttpResponse {
     private final ContentType contentType;
     private final byte[] body;
 
-    public HttpResponse(int statusCode, String reasonPhrase, ContentType contentType, byte[] body){
-        this.statusCode = statusCode;
-        this.reasonPhrase = reasonPhrase;
-        this.contentType = contentType;
-        this.body = body;
+    public static class Builder {
+        // 필수 매개변수
+        private int statusCode;
+        private String reasonPhrase;
+
+        // 선택 매개변수 - 기본값으로 초기화
+        private ContentType contentType = ContentType.NONE;
+        private byte[] body = new byte[0];
+
+        public Builder(int statusCode, String reasonPhrase) {
+            this.statusCode = statusCode;
+            this.reasonPhrase = reasonPhrase;
+        }
+
+        public Builder contentType(ContentType val) {
+            contentType = val;
+            return this;
+        }
+
+        public Builder body(byte[] val) {
+            body = val;
+            return this;
+        }
+
+        public HttpResponse build() {
+            return new HttpResponse(this);
+        }
     }
 
-    public HttpResponse(int statusCode, String reasonPhrase, byte[] body){
-        this.statusCode = statusCode;
-        this.reasonPhrase = reasonPhrase;
-        this.contentType = ContentType.NONE;
-        this.body = body;
-    }
-
-    // 별도의 body 내용 없이 메시지를 보내는 경우 사용
-    public HttpResponse(int statusCode, String reasonPhrase){
-        this.statusCode = statusCode;
-        this.reasonPhrase = reasonPhrase;
-        this.contentType = ContentType.NONE;
-        this.body = new byte[0];
+    private HttpResponse(Builder builder) {
+        this.statusCode = builder.statusCode;
+        this.reasonPhrase = builder.reasonPhrase;
+        this.contentType = builder.contentType;
+        this.body = builder.body;
     }
 
     public void send(DataOutputStream dos) {

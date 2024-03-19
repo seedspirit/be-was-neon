@@ -5,7 +5,8 @@ import webserver.exceptions.ResourceNotFoundException;
 import webserver.exceptions.UrlFormatException;
 import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
-import webserver.httpMessage.HttpStatus;
+
+import static webserver.httpMessage.HttpStatus.*;
 
 public class StaticRouter {
     public HttpResponse route(HttpRequest httpRequest) {
@@ -14,11 +15,14 @@ public class StaticRouter {
             String targetHandler = extractor.extractTargetHandler(httpRequest);
             DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequest);
             byte[] body = defaultFileHandler.serialize();
-            return new HttpResponse(HttpStatus.OK.getStatusCode(), HttpStatus.OK.getReasonPhrase(), httpRequest.getContentType(), body);
+            return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
+                    .contentType(httpRequest.getContentType())
+                    .body(body)
+                    .build();
         } catch (UrlFormatException e) {
-            return new HttpResponse(HttpStatus.BAD_REQUEST.getStatusCode(), HttpStatus.BAD_REQUEST.getReasonPhrase() + e.getMessage());
+            return new HttpResponse.Builder(BAD_REQUEST.getStatusCode(), BAD_REQUEST.getReasonPhrase() + e.getMessage()).build();
         } catch (ResourceNotFoundException e) {
-            return new HttpResponse(HttpStatus.NOT_FOUND.getStatusCode(), HttpStatus.NOT_FOUND.getReasonPhrase() + e.getMessage());
+            return new HttpResponse.Builder(NOT_FOUND.getStatusCode(), NOT_FOUND.getReasonPhrase() + e.getMessage()).build();
         }
     }
 }

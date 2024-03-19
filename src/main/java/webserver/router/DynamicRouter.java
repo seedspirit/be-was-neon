@@ -7,6 +7,8 @@ import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
 import webserver.httpMessage.HttpStatus;
 
+import static webserver.httpMessage.HttpStatus.*;
+
 public class DynamicRouter {
     public HttpResponse route(HttpRequest httpRequest) {
         try {
@@ -16,19 +18,21 @@ public class DynamicRouter {
                 case "/create" -> {
                     UserCreateHandler userCreateHandler = new UserCreateHandler();
                     userCreateHandler.addUserInDatabase(httpRequest.getBody());
-                    return new HttpResponse(HttpStatus.OK.getStatusCode(), HttpStatus.OK.getReasonPhrase());
+                    return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase()).build();
                 }
                 case "/registration" -> {
                     DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequest);
-                    return new HttpResponse(HttpStatus.OK.getStatusCode(), HttpStatus.OK.getReasonPhrase(), defaultFileHandler.serialize());
+                    return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
+                            .body(defaultFileHandler.serialize())
+                            .build();
                 }
                 default -> {
-                    return new HttpResponse(HttpStatus.NOT_FOUND.getStatusCode()
-                            , HttpStatus.NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다");
+                    return new HttpResponse.Builder(NOT_FOUND.getStatusCode()
+                            , NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다").build();
                 }
             }
         } catch (UrlFormatException | ResourceNotFoundException e) {
-            return new HttpResponse(HttpStatus.BAD_REQUEST.getStatusCode(), HttpStatus.BAD_REQUEST.getReasonPhrase() + e.getMessage());
+            return new HttpResponse.Builder(BAD_REQUEST.getStatusCode(), BAD_REQUEST.getReasonPhrase() + e.getMessage()).build();
         }
     }
 }

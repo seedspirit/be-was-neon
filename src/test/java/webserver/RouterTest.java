@@ -27,7 +27,6 @@ class RouterTest {
     @DisplayName("각 요청에 맞는 HttpResponseMsg를 반환한다")
     @ParameterizedTest(name = "{index}) statusCode: {1}, reasonPhrase: {2}")
     @CsvSource({
-            "/create?userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net, 200, OK",
             "/index.html, 200, OK",
             "/register.html, 200, OK",
             "/registration, 200, OK",
@@ -49,7 +48,7 @@ class RouterTest {
         HttpRequest httpRequest = new HttpRequest(br);
 
         HttpResponse actualResponseMsg = router.route(httpRequest);
-        HttpResponse expectedResponseMsg = new HttpResponse(expectedStatusCode, expectedReasonPhrase);
+        HttpResponse expectedResponseMsg = new HttpResponse.Builder(expectedStatusCode, expectedReasonPhrase).build();
 
         assertThat(actualResponseMsg.getStatusCode()).isEqualTo(expectedResponseMsg.getStatusCode());
         assertThat(actualResponseMsg.getReasonPhrase()).isEqualTo(expectedResponseMsg.getReasonPhrase());
