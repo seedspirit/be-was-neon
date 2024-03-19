@@ -6,16 +6,14 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static util.constants.Delimiter.*;
+
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-
-    private static final String BLANK = " ";
-    private static final String SEMICOLON = ";";
     private static final String HTTP_VERSION_HEADER = "HTTP/";
     private final String HTTP_VERSION = "1.1";
     private static final String CONTENT_TYPE_HEADER = "Content-Type:";
     private static final String CONTENT_LENGTH_HEADER = "Content-Length:";
-    private static final String CRLF = "\r\n";
     private final int statusCode;
     private final String reasonPhrase;
     private final ContentType contentType;

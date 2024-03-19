@@ -10,11 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static util.constants.Delimiter.*;
+
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final String BLANK = " ";
-    private static final String COLON = ":";
-    private static final String COMMA = ",";
     private final String METHOD = "method";
     private final String REQUEST_TARGET = "requestTarget";
     private final String HTTP_VERSION = "httpVersion";
@@ -32,7 +31,7 @@ public class HttpRequest {
         if (headers.containsKey(CONTENT_LENGTH)){
             parseBody(br);
         } else {
-            this.body = "";
+            this.body = EMPTY;
         }
     }
 
