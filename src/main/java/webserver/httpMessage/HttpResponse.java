@@ -92,15 +92,26 @@ public class HttpResponse {
     private String makeHeader() {
         StringBuilder headerBuilder = new StringBuilder();
         headerBuilder.append(generateResponseLine());
-        headerBuilder.append(CONTENT_TYPE + COLON + BLANK + contentType.getMimetype() + SEMICOLON + MIME_TYPE_PARAMETER_CHARSET + EQUAL_SIGN + UTF_8 + BLANK + CRLF);
+        buildContentTypeHeaderLine(headerBuilder);
         for(Map.Entry<String, String> entry : header.entrySet()){
-            headerBuilder.append(generateHeaderOneLine(entry.getKey(), entry.getValue()));
+            headerBuilder.append(generateOneHeaderLine(entry.getKey(), entry.getValue()));
         }
         headerBuilder.append(CRLF);
         return headerBuilder.toString();
     }
 
-    private String generateHeaderOneLine(String headerName, String headerValue) {
+    private void buildContentTypeHeaderLine(StringBuilder headerBuilder) {
+        if(!contentType.equals(ContentType.NONE)){
+            if(contentType.getMimetype().contains("text")){
+                headerBuilder.append(generateOneHeaderLine(CONTENT_TYPE,
+                        contentType.getMimetype() + SEMICOLON + MIME_TYPE_PARAMETER_CHARSET + EQUAL_SIGN + UTF_8));
+            } else {
+                headerBuilder.append(generateOneHeaderLine(CONTENT_TYPE, contentType.getMimetype()));
+            }
+        }
+    }
+
+    private String generateOneHeaderLine(String headerName, String headerValue) {
         return headerName + COLON + BLANK + headerValue + CRLF;
     }
 
