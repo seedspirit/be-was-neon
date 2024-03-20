@@ -18,16 +18,16 @@ public class UserCreateHandler {
         this.userInfo = new ArrayList<>();
     }
 
-    private void parseBody(String requestTarget) {
+    private void parseBody(String body) {
         Pattern pattern = Pattern.compile(PARAM_MATCHING_PATTER);
-        Matcher matcher = pattern.matcher(requestTarget);
+        Matcher matcher = pattern.matcher(body);
         while (matcher.find()) {
             userInfo.add(matcher.group());
         }
     }
 
-    public void addUserInDatabase(String requestTarget){
-        parseBody(requestTarget);
+    public void addUserInDatabase(String body){
+        parseBody(body);
         String userID = userInfo.get(0);
         String password = userInfo.get(2);
         String name =  URLDecoder.decode(userInfo.get(1), StandardCharsets.UTF_8);
