@@ -13,8 +13,8 @@ public class StaticRouter {
         try {
             TargetHandlerExtractor extractor = new TargetHandlerExtractor();
             String targetHandler = extractor.extractTargetHandler(httpRequest);
-            DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequest);
-            byte[] body = defaultFileHandler.serialize();
+            FileDataRetrievalHandler fileDataRetrievalHandler = new FileDataRetrievalHandler(httpRequest);
+            byte[] body = fileDataRetrievalHandler.serialize();
             return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
                     .contentType(httpRequest.getContentType())
                     .body(body)

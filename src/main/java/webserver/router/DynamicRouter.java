@@ -25,9 +25,9 @@ public class DynamicRouter {
                             .build();
                 }
                 case "/registration" -> {
-                    DefaultFileHandler defaultFileHandler = new DefaultFileHandler(httpRequest);
+                    FileDataRetrievalHandler fileDataRetrievalHandler = new FileDataRetrievalHandler(httpRequest);
                     return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
-                            .body(defaultFileHandler.serialize())
+                            .body(fileDataRetrievalHandler.serialize())
                             .build();
                 }
                 default -> {

@@ -3,10 +3,10 @@ package webserver;
 import webserver.exceptions.ResourceNotFoundException;
 import webserver.httpMessage.HttpRequest;
 
-public class DefaultFileHandler {
+public class FileDataRetrievalHandler {
     private final HttpRequest httpRequestMessage;
 
-    public DefaultFileHandler(HttpRequest httpRequestMessage) {
+    public FileDataRetrievalHandler(HttpRequest httpRequestMessage) {
         this.httpRequestMessage = httpRequestMessage;
     }
 
