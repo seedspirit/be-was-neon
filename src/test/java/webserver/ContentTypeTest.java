@@ -24,6 +24,6 @@ class ContentTypeTest {
     @ParameterizedTest
     @MethodSource("requestLineAndContentType")
     void findMatchingContentTypeTest(String requestLine, ContentType contentType) {
-        assertThat(ContentType.findMatchingContentType(requestLine)).isEqualTo(contentType);
+        assertThat(ContentType.of(requestLine)).isEqualTo(contentType);
     }
 }

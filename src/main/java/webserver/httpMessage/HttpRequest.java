@@ -18,7 +18,6 @@ public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private final Map<String, String> requestLine;
     private final Map<String, List<String>> headers;
-    private ContentType contentType;
     private String body;
 
     public HttpRequest(BufferedReader br){
@@ -39,7 +38,6 @@ public class HttpRequest {
             requestLine.put(METHOD, requestLineString.split(BLANK)[0]);
             requestLine.put(REQUEST_TARGET, requestLineString.split(BLANK)[1]);
             requestLine.put(HTTP_VERSION_KEY, requestLineString.split(BLANK)[2]);
-            this.contentType = ContentType.findMatchingContentType(getRequestTarget());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -78,10 +76,6 @@ public class HttpRequest {
         return requestLine.get(REQUEST_TARGET);
     }
 
-    public ContentType getContentType() {
-        return contentType;
-    }
-
     public Map<String, List<String>> getHeaders() {
         return headers;
     }
@@ -92,9 +86,5 @@ public class HttpRequest {
 
     public String getBody() {
         return body;
-    }
-
-    public boolean requireStaticFile() {
-        return !contentType.equals(ContentType.NONE);
     }
 }

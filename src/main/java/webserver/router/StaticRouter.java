@@ -3,6 +3,7 @@ package webserver.router;
 import webserver.*;
 import webserver.exceptions.ResourceNotFoundException;
 import webserver.exceptions.UrlFormatException;
+import webserver.httpMessage.ContentType;
 import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
 
@@ -16,7 +17,7 @@ public class StaticRouter {
             FileDataRetrievalHandler fileDataRetrievalHandler = new FileDataRetrievalHandler(httpRequest);
             byte[] body = fileDataRetrievalHandler.serialize();
             return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
-                    .contentType(httpRequest.getContentType())
+                    .contentType(ContentType.of(httpRequest.getRequestTarget()))
                     .body(body)
                     .build();
         } catch (UrlFormatException e) {
