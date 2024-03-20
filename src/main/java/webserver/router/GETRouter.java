@@ -1,29 +1,34 @@
 package webserver.router;
 
-import webserver.*;
+import webserver.ResourceLoader;
 import webserver.exceptions.ResourceNotFoundException;
-import webserver.exceptions.UrlFormatException;
 import webserver.httpMessage.ContentType;
 import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
 
 import static webserver.httpMessage.HttpStatus.*;
+import static webserver.httpMessage.HttpStatus.NOT_FOUND;
 
-public class StaticRouter {
+public class GETRouter implements Router {
+    private final String INDEX_PAGE = "/index.html";
     public HttpResponse route(HttpRequest httpRequest) {
+        String requestTarget = httpRequest.getRequestTarget();
+        if(isNotStaticResourceRequest(requestTarget)){
+            requestTarget += INDEX_PAGE;
+        }
         try {
-            TargetHandlerExtractor extractor = new TargetHandlerExtractor();
-            String targetHandler = extractor.extractTargetHandler(httpRequest);
-            FileDataRetrievalHandler fileDataRetrievalHandler = new FileDataRetrievalHandler(httpRequest);
-            byte[] body = fileDataRetrievalHandler.serialize();
+            ResourceLoader loader = new ResourceLoader();
+            byte[] body = loader.load(requestTarget);
             return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
                     .contentType(ContentType.of(httpRequest.getRequestTarget()))
                     .body(body)
                     .build();
-        } catch (UrlFormatException e) {
-            return new HttpResponse.Builder(BAD_REQUEST.getStatusCode(), BAD_REQUEST.getReasonPhrase() + e.getMessage()).build();
         } catch (ResourceNotFoundException e) {
             return new HttpResponse.Builder(NOT_FOUND.getStatusCode(), NOT_FOUND.getReasonPhrase() + e.getMessage()).build();
         }
+    }
+
+    private boolean isNotStaticResourceRequest(String requestTarget){
+        return ContentType.of(requestTarget).equals(ContentType.NONE);
     }
 }

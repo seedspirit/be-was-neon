@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import util.Reader;
 import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
-import webserver.router.Router;
+import webserver.router.FrontRouter;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -15,20 +15,20 @@ import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RouterTest {
+class FrontRouterTest {
 
-    private Router router;
+    private FrontRouter frontRouter;
 
     @BeforeEach
     void setRouter(){
-        this.router = new Router();
+        this.frontRouter = new FrontRouter();
     }
 
     @DisplayName("각 요청에 맞는 HttpResponseMsg를 반환한다")
     @ParameterizedTest(name = "{index}) statusCode: {1}, reasonPhrase: {2}")
     @CsvSource({
             "/index.html, 200, OK",
-            "/register.html, 200, OK",
+            "/index.html, 200, OK",
             "/registration, 200, OK",
             "/mission, 404, Not Found: 요청한 리소스를 찾을 수 없습니다",
             "\\dkjwn.dj, 400, Bad Request: 잘못된 형식의 URL입니다"
@@ -47,7 +47,7 @@ class RouterTest {
         BufferedReader br = Reader.inputStreamToBufferedReader(is);
         HttpRequest httpRequest = new HttpRequest(br);
 
-        HttpResponse actualResponseMsg = router.route(httpRequest);
+        HttpResponse actualResponseMsg = frontRouter.route(httpRequest);
         HttpResponse expectedResponseMsg = new HttpResponse.Builder(expectedStatusCode, expectedReasonPhrase).build();
 
         assertThat(actualResponseMsg.getStatusCode()).isEqualTo(expectedResponseMsg.getStatusCode());

@@ -1,16 +1,16 @@
 package webserver.router;
 
-import webserver.*;
-import webserver.exceptions.ResourceNotFoundException;
+import webserver.TargetHandlerExtractor;
+import webserver.UserCreateHandler;
 import webserver.exceptions.UrlFormatException;
 import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
-import webserver.httpMessage.HttpStatus;
 
 import static webserver.httpMessage.HttpConstants.LOCATION;
 import static webserver.httpMessage.HttpStatus.*;
+import static webserver.httpMessage.HttpStatus.BAD_REQUEST;
 
-public class DynamicRouter {
+public class POSTRouter implements Router {
     public HttpResponse route(HttpRequest httpRequest) {
         try {
             TargetHandlerExtractor extractor = new TargetHandlerExtractor();
@@ -24,18 +24,12 @@ public class DynamicRouter {
                             .addHeaderComponent(LOCATION, redirectLocation)
                             .build();
                 }
-                case "/registration" -> {
-                    FileDataRetrievalHandler fileDataRetrievalHandler = new FileDataRetrievalHandler(httpRequest);
-                    return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
-                            .body(fileDataRetrievalHandler.serialize())
-                            .build();
-                }
                 default -> {
                     return new HttpResponse.Builder(NOT_FOUND.getStatusCode()
                             , NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다").build();
                 }
             }
-        } catch (UrlFormatException | ResourceNotFoundException e) {
+        } catch (UrlFormatException e) {
             return new HttpResponse.Builder(BAD_REQUEST.getStatusCode(), BAD_REQUEST.getReasonPhrase() + e.getMessage()).build();
         }
     }
