@@ -14,7 +14,7 @@ public class POSTRouter implements Router {
     public HttpResponse route(HttpRequest httpRequest) {
         try {
             TargetHandlerExtractor extractor = new TargetHandlerExtractor();
-            String targetHandler = extractor.extractTargetHandler(httpRequest);
+            String targetHandler = extractor.extractTargetHandler(httpRequest.getRequestTarget());
             switch (targetHandler) {
                 case "/create" -> {
                     UserCreateHandler userCreateHandler = new UserCreateHandler();
