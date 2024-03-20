@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import util.Reader;
 import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.ResponseTransmitter;
 import webserver.router.Router;
 
 public class RequestHandler implements Runnable {
@@ -32,8 +33,8 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = router.route(httpRequest);
 
             // 처리 결과를 바탕으로 HTTP 응답 메시지를 만들어 클라이언트에 전송
-            DataOutputStream dos = new DataOutputStream(out);
-            httpResponse.send(dos);
+            ResponseTransmitter responseTransmitter = new ResponseTransmitter();
+            responseTransmitter.transmit(httpResponse, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

@@ -13,9 +13,6 @@ import static util.constants.Delimiter.*;
 import static webserver.httpMessage.HttpConstants.*;
 
 public class HttpResponse {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private final String HTTP_VERSION_NUMBER = "1.1";
-    private final String UTF_8 = "utf-8";
     private final Map<String, String> statusLine;
     private final Map<String, String> header;
     private final ContentType contentType;
@@ -78,50 +75,12 @@ public class HttpResponse {
         this.body = builder.body;
     }
 
-    public void send(DataOutputStream dos) {
-        String header = makeHeader();
-        try {
-            dos.writeBytes(header);
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    public Map<String, String> getStatusLine () {
+        return statusLine;
     }
 
-    private String makeHeader() {
-        StringBuilder headerBuilder = new StringBuilder();
-        headerBuilder.append(generateResponseLine());
-        buildContentTypeHeaderLine(headerBuilder);
-        for(Map.Entry<String, String> entry : header.entrySet()){
-            headerBuilder.append(generateOneHeaderLine(entry.getKey(), entry.getValue()));
-        }
-        headerBuilder.append(CRLF);
-        return headerBuilder.toString();
-    }
-
-    private void buildContentTypeHeaderLine(StringBuilder headerBuilder) {
-        if(!contentType.equals(ContentType.NONE)){
-            if(contentType.getMimetype().contains("text")){
-                headerBuilder.append(generateOneHeaderLine(CONTENT_TYPE,
-                        contentType.getMimetype() + SEMICOLON + MIME_TYPE_PARAMETER_CHARSET + EQUAL_SIGN + UTF_8));
-            } else {
-                headerBuilder.append(generateOneHeaderLine(CONTENT_TYPE, contentType.getMimetype()));
-            }
-        }
-    }
-
-    private String generateOneHeaderLine(String headerName, String headerValue) {
-        return headerName + COLON + BLANK + headerValue + CRLF;
-    }
-
-    private String generateResponseLine() {
-        String template = "HTTP/%s %s %s %s";
-        return String.format(template,
-                statusLine.get(HTTP_VERSION_KEY),
-                statusLine.get(STATUS_CODE_KEY),
-                statusLine.get(REASON_PHRASE),
-                CRLF);
+    public ContentType getContentType() {
+        return contentType;
     }
 
     public int getStatusCode() {
