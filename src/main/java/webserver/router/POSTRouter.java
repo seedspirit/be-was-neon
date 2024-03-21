@@ -29,7 +29,7 @@ public class POSTRouter implements Router {
                             , NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다").build();
                 }
             }
-        } catch (UrlFormatException e) {
+        } catch (UrlFormatException | IllegalArgumentException e) {
             return new HttpResponse.Builder(BAD_REQUEST.getStatusCode(), BAD_REQUEST.getReasonPhrase() + e.getMessage()).build();
         }
     }
