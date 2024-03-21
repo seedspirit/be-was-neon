@@ -18,7 +18,11 @@ import static webserver.httpMessage.HttpStatus.NOT_FOUND;
 import static webserver.httpMessage.HttpStatus.BAD_REQUEST;
 
 public class POSTRouter implements Router {
-    private final String redirectLocation = "http://localhost:8080/index.html";
+    private final String DEFAULT_INDEX_PAGE = "/index.html";
+    private final String LOGIN_FAILED_PAGE = "/login/login_failed.html";
+    private final String LOGIN_USER_DEFAULT_INDEX_PAGE = "/user/index.html";
+    private final String REGISTER_FAILED_PAGE = "/registration/register_failed.html";
+
     public HttpResponse route(HttpRequest httpRequest) {
         try {
             TargetHandlerExtractor extractor = new TargetHandlerExtractor();
@@ -29,7 +33,7 @@ public class POSTRouter implements Router {
                     userCreateHandler.addUserInDatabase(httpRequest.getBody());
                     return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
                             .contentType(ContentType.HTML)
-                            .addHeaderComponent(LOCATION, redirectLocation)
+                            .addHeaderComponent(LOCATION, DEFAULT_INDEX_PAGE)
                             .build();
                 }
                 case "/login" -> {
@@ -38,7 +42,7 @@ public class POSTRouter implements Router {
                     return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
                             .contentType(ContentType.HTML)
                             .addHeaderComponent(COOKIE, session.toString())
-                            .addHeaderComponent(LOCATION, redirectLocation)
+                            .addHeaderComponent(LOCATION, LOGIN_USER_DEFAULT_INDEX_PAGE)
                             .build();
                 }
                 default -> {
@@ -46,10 +50,16 @@ public class POSTRouter implements Router {
                             , NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다").build();
                 }
             }
-        } catch (UrlFormatException | IllegalArgumentException e) {
+        } catch (UrlFormatException e) {
             return new HttpResponse.Builder(BAD_REQUEST.getStatusCode(), BAD_REQUEST.getReasonPhrase() + e.getMessage()).build();
+        } catch (IllegalArgumentException e) {
+            return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase() + e.getMessage())
+                    .addHeaderComponent(LOCATION, REGISTER_FAILED_PAGE)
+                    .build();
         } catch (NoSuchElementException e) {
-            return new HttpResponse.Builder(NOT_FOUND.getStatusCode(), NOT_FOUND.getReasonPhrase() + e.getMessage()).build();
+            return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase() + e.getMessage())
+                    .addHeaderComponent(LOCATION, LOGIN_FAILED_PAGE)
+                    .build();
         }
     }
 }
