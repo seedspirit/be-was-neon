@@ -5,7 +5,7 @@ import db.SessionDatabase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.Session;
+import webserver.session.Session;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;

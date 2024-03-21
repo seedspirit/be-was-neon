@@ -1,7 +1,7 @@
 package webserver.router;
 
 import webserver.handler.LoginHandler;
-import webserver.Session;
+import webserver.session.Session;
 import webserver.handler.TargetHandlerExtractor;
 import webserver.handler.UserCreateHandler;
 import webserver.exceptions.UrlFormatException;

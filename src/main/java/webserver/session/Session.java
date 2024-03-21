@@ -1,4 +1,4 @@
-package webserver;
+package webserver.session;
 
 public class Session {
     private final String sessionId;
