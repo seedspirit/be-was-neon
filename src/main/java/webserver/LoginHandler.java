@@ -28,4 +28,12 @@ public class LoginHandler {
             params.put(key, value);
         }
     }
+
+    private User findUserByUserID(String userID) throws NoSuchElementException {
+        Optional<User> userOptional = Optional.ofNullable(Database.findUserById(userID));
+        if (userOptional.isEmpty()){
+            throw new NoSuchElementException(": 존재하지 않는 회원입니다");
+        }
+        return userOptional.get();
+    }
 }
