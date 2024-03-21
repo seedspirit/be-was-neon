@@ -7,7 +7,7 @@ import webserver.Session;
 import java.util.*;
 
 public class SessionDatabase {
-    private static Map<String, Pair<Session, User>> sessions = new HashMap<>();
+    private static final Map<String, Pair<Session, User>> sessions = new HashMap<>();
 
     public static void addSession(Session session, User user) {
         Pair<Session, User> sessionPair = Pair.of(session, user);
