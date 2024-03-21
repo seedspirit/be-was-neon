@@ -10,18 +10,13 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import static util.constants.Delimiter.AMPERSAND;
 import static util.constants.Delimiter.EQUAL_SIGN;
 
 public class LoginHandler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private Map<String, String> params;
-
-    public LoginHandler(){
-        this.params = new HashMap<>();
-    }
-
     public Session issueSession(String body) throws NoSuchElementException {
-        parseBody(body);
+        Map<String, String> params = parseBodyToMap(body);
         User user = findUserByUserId(params.get("username"));
         Session session = new Session();
         registerSessionUserPair(session, user);
@@ -29,14 +24,16 @@ public class LoginHandler {
         return session;
     }
 
-    private void parseBody(String body) {
-        String[] parameters = body.split("&");
+    private Map<String, String> parseBodyToMap(String body) {
+        Map<String, String> params = new HashMap<>();
+        String[] parameters = body.split(AMPERSAND);
         for (String parameter : parameters) {
             String[] tmp = parameter.split(EQUAL_SIGN);
             String key = tmp[0];
             String value = URLDecoder.decode(tmp[1], StandardCharsets.UTF_8);
             params.put(key, value);
         }
+        return params;
     }
 
     private User findUserByUserId(String userID) throws NoSuchElementException {
