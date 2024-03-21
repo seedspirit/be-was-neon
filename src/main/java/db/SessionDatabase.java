@@ -2,7 +2,7 @@ package db;
 
 import model.User;
 import util.Pair;
-import webserver.Session;
+import webserver.session.Session;
 
 import java.util.*;
 
