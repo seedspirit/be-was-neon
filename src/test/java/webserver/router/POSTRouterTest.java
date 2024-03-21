@@ -37,7 +37,7 @@ class POSTRouterTest {
                 Content-Type: application/x-www-form-urlencoded
                 Accept: */*
                 
-                username=javajigi&password=password
+                username=java&password=password
                 """;
 
         HttpResponse actualResponseMsg = sendRequestAndGetResponse(requestExample);;
