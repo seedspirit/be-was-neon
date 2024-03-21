@@ -19,7 +19,11 @@ public class SessionDatabase {
         return sessionPair.value2();
     }
 
-    public static boolean isSessionIdAlreadyExists(String sessionId) {
+    public static boolean isSessionIdExists(String sessionId) {
         return sessions.containsKey(sessionId);
+    }
+
+    public static void removeRecordOf(String sessionId) {
+        sessions.remove(sessionId);
     }
 }

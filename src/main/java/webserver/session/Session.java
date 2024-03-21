@@ -13,7 +13,7 @@ public class Session {
 
     private String generateSessionId() {
         String sessionId = generateRandomId();
-        while (SessionDatabase.isSessionIdAlreadyExists(sessionId)){
+        while (SessionDatabase.isSessionIdExists(sessionId)){
             sessionId = generateRandomId();
         }
         return sessionId;
