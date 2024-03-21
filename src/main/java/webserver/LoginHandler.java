@@ -1,7 +1,7 @@
 package webserver;
 
 import db.Database;
-import db.SessionDataBase;
+import db.SessionDatabase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,13 +20,13 @@ public class LoginHandler {
         this.params = new HashMap<>();
     }
 
-    public String apply(String body) throws NoSuchElementException {
+    public Session issueSession(String body) throws NoSuchElementException {
         parseBody(body);
         User user = findUserByUserId(params.get("username"));
-        String sessionId = generateSessionId();
-        registerSessionId(sessionId, user);
-        logger.debug("로그인 성공! Name: {}, SessionId: {}", user.getName(), sessionId);
-        return sessionId;
+        Session session = new Session();
+        registerSessionUserPair(session, user);
+        logger.debug("로그인 성공! Name: {}, SessionId: {}", user.getName(), session.getSessionId());
+        return session;
     }
 
     private void parseBody(String body) {
@@ -47,12 +47,7 @@ public class LoginHandler {
         return userOptional.get();
     }
 
-    private String generateSessionId() {
-        long randomLong = (long) (Math.random() * 10000000000L) + 1;
-        return String.valueOf(randomLong);
-    }
-
-    private void registerSessionId(String sessionId, User user){
-        SessionDataBase.addSession(sessionId, user);
+    private void registerSessionUserPair(Session session, User user){
+        SessionDatabase.addSession(session, user);
     }
 }

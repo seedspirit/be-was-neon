@@ -1,6 +1,7 @@
 package webserver.router;
 
 import webserver.LoginHandler;
+import webserver.Session;
 import webserver.TargetHandlerExtractor;
 import webserver.UserCreateHandler;
 import webserver.exceptions.UrlFormatException;
@@ -12,7 +13,8 @@ import java.util.NoSuchElementException;
 
 import static webserver.httpMessage.HttpConstants.COOKIE;
 import static webserver.httpMessage.HttpConstants.LOCATION;
-import static webserver.httpMessage.HttpStatus.*;
+import static webserver.httpMessage.HttpStatus.FOUND;
+import static webserver.httpMessage.HttpStatus.NOT_FOUND;
 import static webserver.httpMessage.HttpStatus.BAD_REQUEST;
 
 public class POSTRouter implements Router {
@@ -32,10 +34,10 @@ public class POSTRouter implements Router {
                 }
                 case "/login" -> {
                     LoginHandler loginHandler = new LoginHandler();
-                    String sessionId = loginHandler.apply(httpRequest.getBody());
+                    Session session = loginHandler.issueSession(httpRequest.getBody());
                     return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
                             .contentType(ContentType.HTML)
-                            .addHeaderComponent(COOKIE, String.format("sid=%s; Path=/", sessionId))
+                            .addHeaderComponent(COOKIE, session.toString())
                             .addHeaderComponent(LOCATION, redirectLocation)
                             .build();
                 }
