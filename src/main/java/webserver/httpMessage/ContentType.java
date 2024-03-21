@@ -1,4 +1,6 @@
-package webserver;
+package webserver.httpMessage;
+
+import webserver.exceptions.ResourceNotFoundException;
 
 import java.util.Arrays;
 
@@ -28,9 +30,9 @@ public enum ContentType {
         return mimeType;
     }
 
-    public static ContentType findMatchingContentType(String requestLine){
+    public static ContentType of(String requestTarget){
         return Arrays.stream(values())
-                .filter(v -> requestLine.contains(v.getExtension()))
+                .filter(v -> requestTarget.contains(v.getExtension()))
                 .findFirst()
                 .orElse(NONE);
     }

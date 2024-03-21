@@ -6,7 +6,10 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.Reader;
-import webserver.router.Router;
+import webserver.httpMessage.HttpRequest;
+import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.ResponseTransmitter;
+import webserver.router.FrontRouter;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -23,16 +26,15 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = Reader.inputStreamToBufferedReader(in);
-            String msg = Reader.bufferedReaderToString(br);
-            HttpRequest httpRequest = new HttpRequest(msg);
+            HttpRequest httpRequest = new HttpRequest(br);
 
             // HTTP 헤더에서 requestTarget 추출, 알맞는 핸들러 호출 후 결과 반환
-            Router router = new Router();
-            HttpResponse httpResponse = router.route(httpRequest);
+            FrontRouter frontRouter = new FrontRouter();
+            HttpResponse httpResponse = frontRouter.route(httpRequest);
 
             // 처리 결과를 바탕으로 HTTP 응답 메시지를 만들어 클라이언트에 전송
-            DataOutputStream dos = new DataOutputStream(out);
-            httpResponse.send(dos);
+            ResponseTransmitter responseTransmitter = new ResponseTransmitter();
+            responseTransmitter.transmit(httpResponse, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
