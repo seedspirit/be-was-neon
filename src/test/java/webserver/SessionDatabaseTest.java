@@ -2,7 +2,6 @@ package webserver;
 
 import db.SessionDatabase;
 import model.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +9,7 @@ import java.lang.reflect.Field;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LoginHandlerTest {
+class SessionDatabaseTest {
 
     @DisplayName("세션 ID로 데이터베이스에서 특정 유저 객체를 찾을 수 있다")
     @Test
