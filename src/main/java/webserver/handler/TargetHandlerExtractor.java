@@ -1,4 +1,4 @@
-package webserver;
+package webserver.handler;
 
 import webserver.exceptions.UrlFormatException;
 import webserver.httpMessage.HttpRequest;

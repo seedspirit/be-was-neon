@@ -1,6 +1,6 @@
 package webserver.router;
 
-import webserver.ResourceLoader;
+import webserver.handler.ResourceLoadHandler;
 import webserver.exceptions.ResourceNotFoundException;
 import webserver.httpMessage.ContentType;
 import webserver.httpMessage.HttpRequest;
@@ -17,7 +17,7 @@ public class GETRouter implements Router {
             requestTarget += INDEX_PAGE;
         }
         try {
-            ResourceLoader loader = new ResourceLoader();
+            ResourceLoadHandler loader = new ResourceLoadHandler();
             byte[] body = loader.load(requestTarget);
             return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
                     .contentType(ContentType.of(httpRequest.getRequestTarget()))
