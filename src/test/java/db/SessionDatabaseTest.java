@@ -1,9 +1,10 @@
-package webserver;
+package db;
 
 import db.SessionDatabase;
 import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.Session;
 
 import java.lang.reflect.Field;
 

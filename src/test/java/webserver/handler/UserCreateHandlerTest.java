@@ -1,4 +1,4 @@
-package webserver;
+package webserver.handler;
 
 import db.UserDatabase;
 import model.User;
