@@ -1,6 +1,6 @@
 package webserver.handler;
 
-import db.Database;
+import db.UserDatabase;
 import db.SessionDatabase;
 import model.User;
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ public class LoginHandler {
     }
 
     private User findUserByUserId(String userID) throws NoSuchElementException {
-        Optional<User> userOptional = Optional.ofNullable(Database.findUserById(userID));
+        Optional<User> userOptional = Optional.ofNullable(UserDatabase.findUserById(userID));
         if (userOptional.isEmpty()){
             throw new NoSuchElementException(": 존재하지 않는 회원입니다");
         }

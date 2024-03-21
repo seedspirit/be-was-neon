@@ -1,10 +1,9 @@
 package webserver.handler;
 
-import db.Database;
+import db.UserDatabase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.handler.RequestHandler;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -45,7 +44,7 @@ public class UserCreateHandler {
             throw new IllegalArgumentException(": 잘못된 이메일 형식입니다");
         }
         User user = new User(userID, password, name, email);
-        Database.addUser(user);
+        UserDatabase.addUser(user);
         logger.debug("회원가입 성공! ID: {}, Name: {}", userID, name);
     }
 

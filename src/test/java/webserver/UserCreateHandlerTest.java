@@ -1,6 +1,6 @@
 package webserver;
 
-import db.Database;
+import db.UserDatabase;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,7 @@ class UserCreateHandlerTest {
     void addUserInDatabaseTest() {
         String body = "username=javajigi&nickname=%EB%B0%95%EC%9E%AC%EC%84%B1&password=password&email=javajigi%40slipp.net";
         handler.addUserInDatabase(body);
-        User actualUser = Database.findUserById("javajigi");
+        User actualUser = UserDatabase.findUserById("javajigi");
         User expectedUser = new User("javajigi", "password", "박재성", "javajigi@slipp.net");
         assertThat(actualUser.toString()).isEqualTo(expectedUser.toString());
     }
