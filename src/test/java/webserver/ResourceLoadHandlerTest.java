@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import webserver.exceptions.ResourceNotFoundException;
 import webserver.handler.ResourceLoadHandler;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ResourceLoadHandlerTest {
     private final String BASE_URL = "./src/main/resources/static";
