@@ -1,10 +1,10 @@
-package webserver;
+package webserver.handler;
 
 import webserver.exceptions.ResourceNotFoundException;
 
 import java.io.*;
 
-public class ResourceLoader {
+public class ResourceLoadHandler {
     private final String STATIC_DIR_PATH = "/static";
 
     public byte[] load(String path) throws ResourceNotFoundException {

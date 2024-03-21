@@ -1,15 +1,8 @@
 package webserver.httpMessage;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import webserver.RequestHandler;
-
-import static util.constants.Delimiter.*;
 import static webserver.httpMessage.HttpConstants.*;
 
 public class HttpResponse {

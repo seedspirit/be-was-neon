@@ -3,6 +3,7 @@ package webserver;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.exceptions.UrlFormatException;
+import webserver.handler.TargetHandlerExtractor;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
