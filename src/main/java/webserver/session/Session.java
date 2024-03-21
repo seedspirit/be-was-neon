@@ -1,5 +1,7 @@
 package webserver.session;
 
+import db.SessionDatabase;
+
 public class Session {
     private final String sessionId;
     private final String path;
@@ -10,6 +12,14 @@ public class Session {
     }
 
     private String generateSessionId() {
+        String sessionId = generateRandomId();
+        while (SessionDatabase.isSessionIdAlreadyExists(sessionId)){
+            sessionId = generateRandomId();
+        }
+        return sessionId;
+    }
+
+    private String generateRandomId(){
         long randomLong = (long) (Math.random() * 10000000000L) + 1;
         return String.valueOf(randomLong);
     }
