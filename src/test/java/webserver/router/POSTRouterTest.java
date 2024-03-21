@@ -1,8 +1,6 @@
 package webserver.router;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
 
@@ -16,6 +14,7 @@ import static webserver.httpMessage.HttpConstants.LOCATION;
 import static webserver.httpMessage.HttpStatus.FOUND;
 import static webserver.httpMessage.HttpStatus.NOT_FOUND;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class POSTRouterTest {
 
     private POSTRouter postRouter;
@@ -25,8 +24,32 @@ class POSTRouterTest {
         this.postRouter = new POSTRouter();
     }
 
+    @DisplayName("존재하지 않는 회원으로 로그인을 시도하는 경우 404 에러 응답을 반환한다")
+    @Test
+    @Order(1)
+    void loginWithNotRegisterdIdTest() {
+        String requestExample =
+                """
+                POST /login HTTP/1.1
+                Host: localhost:8080
+                Connection: keep-alive
+                Content-Length: 35
+                Content-Type: application/x-www-form-urlencoded
+                Accept: */*
+                
+                username=javajigi&password=password
+                """;
+
+        HttpResponse actualResponseMsg = sendRequestAndGetResponse(requestExample);;
+        HttpResponse expectedResponseMsg = generateExpectedResponse(NOT_FOUND.getStatusCode(),
+                NOT_FOUND.getReasonPhrase() + ": 존재하지 않는 회원입니다");
+
+        verify(actualResponseMsg, expectedResponseMsg);
+    }
+
     @DisplayName("회원가입이 성공한 경우 http://localhost:8080/index.html로 리다이렉트하는 응답을 반환한다")
     @Test
+    @Order(2)
     void redirectTest() {
         String requestExample =
                 """
@@ -53,6 +76,7 @@ class POSTRouterTest {
 
     @DisplayName("지원하지 않는 url을 입력한 경우 404 에러 응답을 반환한다")
     @Test
+    @Order(3)
     void notFoundResponseTest() {
         String requestExample =
                 """
