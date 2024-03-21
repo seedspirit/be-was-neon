@@ -18,4 +18,8 @@ public class SessionDatabase {
         Pair<Session, User> sessionPair = sessions.get(sessionId);
         return sessionPair.value2();
     }
+
+    public static boolean isSessionIdAlreadyExists(String sessionId) {
+        return sessions.containsKey(sessionId);
+    }
 }
