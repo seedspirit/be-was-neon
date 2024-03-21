@@ -1,5 +1,6 @@
 package webserver.router;
 
+import db.SessionDatabase;
 import webserver.handler.LoginHandler;
 import webserver.session.Session;
 import webserver.handler.TargetHandlerExtractor;
@@ -11,8 +12,7 @@ import webserver.httpMessage.HttpResponse;
 
 import java.util.NoSuchElementException;
 
-import static webserver.httpMessage.HttpConstants.COOKIE;
-import static webserver.httpMessage.HttpConstants.LOCATION;
+import static webserver.httpMessage.HttpConstants.*;
 import static webserver.httpMessage.HttpStatus.FOUND;
 import static webserver.httpMessage.HttpStatus.NOT_FOUND;
 import static webserver.httpMessage.HttpStatus.BAD_REQUEST;
@@ -41,13 +41,13 @@ public class POSTRouter implements Router {
                     Session session = loginHandler.issueSession(httpRequest.getBody());
                     return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
                             .contentType(ContentType.HTML)
-                            .addHeaderComponent(COOKIE, session.toString())
+                            .addHeaderComponent(SET_COOKIE, session.toString())
                             .addHeaderComponent(LOCATION, LOGIN_USER_DEFAULT_INDEX_PAGE)
                             .build();
                 }
                 default -> {
-                    return new HttpResponse.Builder(NOT_FOUND.getStatusCode()
-                            , NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다").build();
+                    return new HttpResponse.Builder(NOT_FOUND.getStatusCode(),
+                            NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다").build();
                 }
             }
         } catch (UrlFormatException e) {

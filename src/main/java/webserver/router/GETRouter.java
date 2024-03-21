@@ -1,22 +1,35 @@
 package webserver.router;
 
+import db.SessionDatabase;
 import webserver.handler.ResourceLoadHandler;
 import webserver.exceptions.ResourceNotFoundException;
 import webserver.httpMessage.ContentType;
 import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
 
+import java.util.Optional;
+
+import static webserver.httpMessage.HttpConstants.LOCATION;
 import static webserver.httpMessage.HttpStatus.*;
 import static webserver.httpMessage.HttpStatus.NOT_FOUND;
 
 public class GETRouter implements Router {
     private final String INDEX_PAGE = "/index.html";
+
     public HttpResponse route(HttpRequest httpRequest) {
-        String requestTarget = httpRequest.getRequestTarget();
-        if(isNotStaticResourceRequest(requestTarget)){
-            requestTarget += INDEX_PAGE;
-        }
         try {
+            String requestTarget = httpRequest.getRequestTarget();
+            if(requestTarget.equals("/logout")){
+                Optional<String> loginCookie = httpRequest.getLoginCookie();
+                loginCookie.ifPresent(SessionDatabase::removeRecordOf);
+                return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
+                        .contentType(ContentType.HTML)
+                        .addHeaderComponent(LOCATION, INDEX_PAGE)
+                        .build();
+            }
+            if(isNotStaticResourceRequest(requestTarget)){
+                requestTarget += INDEX_PAGE;
+            }
             ResourceLoadHandler loader = new ResourceLoadHandler();
             byte[] body = loader.load(requestTarget);
             return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())

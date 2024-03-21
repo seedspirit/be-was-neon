@@ -6,10 +6,7 @@ import webserver.handler.RequestHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static util.constants.Delimiter.*;
 import static webserver.httpMessage.HttpConstants.*;
@@ -49,12 +46,21 @@ public class HttpRequest {
             while((line = br.readLine()) != null && !line.isEmpty()) {
                 String[] headerParts = line.split(COLON, 2);
                 String key = headerParts[0];
-                List<String> values = Arrays.stream(headerParts[1].split(COMMA)).map(String::trim).toList();
+                List<String> values;
+                if (key.equals(COOKIE)){
+                    values = parseCookie(headerParts[1]);
+                } else {
+                    values = Arrays.stream(headerParts[1].split(COMMA)).map(String::trim).toList();
+                }
                 headers.put(key, values);
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private List<String> parseCookie(String values) {
+        return Arrays.stream(values.split(SEMICOLON)).map(String::trim).toList();
     }
 
     private void parseBody(BufferedReader br) {
@@ -86,5 +92,12 @@ public class HttpRequest {
 
     public String getBody() {
         return body;
+    }
+
+    public Optional<String> getLoginCookie(){
+        return headers.get(COOKIE).stream()
+                .filter(cookie -> cookie.startsWith("sid="))
+                .findFirst()
+                .map(cookie -> cookie.substring(4));
     }
 }
