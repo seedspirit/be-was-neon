@@ -141,3 +141,10 @@
   color: #ffffff;
   cursor: hover;
 }
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 20px;
+  text-align: center;
+}
