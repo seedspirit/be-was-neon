@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import webserver.httpMessage.ContentType;
 import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
-import webserver.session.Session;
+import webserver.session.Cookie;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -23,7 +23,7 @@ import static webserver.httpMessage.HttpStatus.FOUND;
 public class LoginHandler implements Handler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Session session;
+    private Cookie cookie;
     private final String LOGIN_USER_DEFAULT_INDEX_PAGE = "/main/index.html";
     private final String LOGIN_FAILED_PAGE = "/login/login_failed.html";
 
@@ -31,7 +31,7 @@ public class LoginHandler implements Handler {
         if(isSessionIssuingSucceed(httpRequest.getBody())){
             return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
                     .contentType(ContentType.HTML)
-                    .addHeaderComponent(SET_COOKIE, session.toString())
+                    .addHeaderComponent(SET_COOKIE, cookie.toString())
                     .addHeaderComponent(LOCATION, LOGIN_USER_DEFAULT_INDEX_PAGE)
                     .build();
         }
@@ -44,9 +44,9 @@ public class LoginHandler implements Handler {
         Map<String, String> params = parseBodyToMap(body);
         try {
             User user = findUserByUserId(params.get("username"));
-            this.session = new Session();
-            registerSessionUserPair(session, user);
-            logger.debug("로그인 성공! Name: {}, SessionId: {}", user.getName(), session.getSessionId());
+            this.cookie = new Cookie();
+            registerCookieUserPair(cookie, user);
+            logger.debug("로그인 성공! Name: {}, SessionId: {}", user.getName(), cookie.getSessionId());
             return true;
         } catch (NoSuchElementException e){
             return false;
@@ -73,7 +73,7 @@ public class LoginHandler implements Handler {
         return userOptional.get();
     }
 
-    private void registerSessionUserPair(Session session, User user){
-        SessionDatabase.addSession(session, user);
+    private void registerCookieUserPair(Cookie cookie, User user){
+        SessionDatabase.addCookie(cookie, user);
     }
 }

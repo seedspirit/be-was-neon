@@ -2,11 +2,11 @@ package webserver.session;
 
 import db.SessionDatabase;
 
-public class Session {
+public class Cookie {
     private final String sessionId;
     private final String path;
 
-    public Session() {
+    public Cookie() {
         this.sessionId = generateSessionId();
         this.path = "/";
     }
