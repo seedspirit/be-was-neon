@@ -1,5 +1,6 @@
 package webserver.handler;
 
+import webserver.exceptions.UnsupportedMethodException;
 import webserver.exceptions.UrlFormatException;
 import webserver.httpMessage.HttpResponse;
 import webserver.httpMessage.HttpStatus;
@@ -18,6 +19,7 @@ public class ExceptionHandler {
         this.exceptions = new HashMap<>();
         exceptions.put(UrlFormatException.class, BAD_REQUEST);
         exceptions.put(NoSuchElementException.class, NOT_FOUND);
+        exceptions.put(UnsupportedMethodException.class, METHOD_NOT_ALLOWED);
     }
 
     public HttpResponse handleException(Exception exception){
