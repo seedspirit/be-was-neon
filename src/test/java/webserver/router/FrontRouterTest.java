@@ -35,7 +35,7 @@ class FrontRouterTest {
             "/index.html, 200, OK",
             "/registration, 200, OK",
             "/mission, 404, Not Found: 요청한 리소스를 찾을 수 없습니다",
-            "\\dkjwn.dj, 400, Bad Request: 잘못된 형식의 URL입니다"
+            "\\dkjwn.dj, 400, Bad Request"
     })
     void routeTest(String requestPath, int expectedStatusCode, String expectedReasonPhrase) {
         String requestTemplate =
