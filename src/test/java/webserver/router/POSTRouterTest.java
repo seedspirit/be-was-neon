@@ -24,7 +24,7 @@ class POSTRouterTest {
         this.postRouter = new POSTRouter();
     }
 
-    @DisplayName("존재하지 않는 회원으로 로그인을 시도하는 경우 404 에러 응답을 반환한다")
+    @DisplayName("존재하지 않는 회원으로 로그인을 시도하는 경우 302 응답을 반환한다")
     @Test
     @Order(1)
     void loginWithNotRegisterdIdTest() {
@@ -41,8 +41,8 @@ class POSTRouterTest {
                 """;
 
         HttpResponse actualResponseMsg = sendRequestAndGetResponse(requestExample);;
-        HttpResponse expectedResponseMsg = generateExpectedResponse(NOT_FOUND.getStatusCode(),
-                NOT_FOUND.getReasonPhrase() + ": 존재하지 않는 회원입니다");
+        HttpResponse expectedResponseMsg = generateExpectedResponse(FOUND.getStatusCode(),
+                FOUND.getReasonPhrase());
 
         verify(actualResponseMsg, expectedResponseMsg);
     }

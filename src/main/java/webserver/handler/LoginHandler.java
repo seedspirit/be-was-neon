@@ -5,6 +5,9 @@ import db.SessionDatabase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.httpMessage.ContentType;
+import webserver.httpMessage.HttpRequest;
+import webserver.httpMessage.HttpResponse;
 import webserver.session.Session;
 
 import java.net.URLDecoder;
@@ -13,16 +16,41 @@ import java.util.*;
 
 import static util.constants.Delimiter.AMPERSAND;
 import static util.constants.Delimiter.EQUAL_SIGN;
+import static webserver.httpMessage.HttpConstants.LOCATION;
+import static webserver.httpMessage.HttpConstants.SET_COOKIE;
+import static webserver.httpMessage.HttpStatus.FOUND;
 
-public class LoginHandler {
+public class LoginHandler implements Handler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    public Session issueSession(String body) throws NoSuchElementException {
+
+    private Session session;
+    private final String LOGIN_USER_DEFAULT_INDEX_PAGE = "/main/index.html";
+    private final String LOGIN_FAILED_PAGE = "/login/login_failed.html";
+
+    public HttpResponse handleRequest(HttpRequest httpRequest){
+        if(isSessionIssuingSucceed(httpRequest.getBody())){
+            return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
+                    .contentType(ContentType.HTML)
+                    .addHeaderComponent(SET_COOKIE, session.toString())
+                    .addHeaderComponent(LOCATION, LOGIN_USER_DEFAULT_INDEX_PAGE)
+                    .build();
+        }
+        return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
+                .addHeaderComponent(LOCATION, LOGIN_FAILED_PAGE)
+                .build();
+    }
+
+    private boolean isSessionIssuingSucceed(String body) {
         Map<String, String> params = parseBodyToMap(body);
-        User user = findUserByUserId(params.get("username"));
-        Session session = new Session();
-        registerSessionUserPair(session, user);
-        logger.debug("로그인 성공! Name: {}, SessionId: {}", user.getName(), session.getSessionId());
-        return session;
+        try {
+            User user = findUserByUserId(params.get("username"));
+            this.session = new Session();
+            registerSessionUserPair(session, user);
+            logger.debug("로그인 성공! Name: {}, SessionId: {}", user.getName(), session.getSessionId());
+            return true;
+        } catch (NoSuchElementException e){
+            return false;
+        }
     }
 
     private Map<String, String> parseBodyToMap(String body) {
@@ -40,7 +68,7 @@ public class LoginHandler {
     private User findUserByUserId(String userID) throws NoSuchElementException {
         Optional<User> userOptional = Optional.ofNullable(UserDatabase.findUserById(userID));
         if (userOptional.isEmpty()){
-            throw new NoSuchElementException(": 존재하지 않는 회원입니다");
+            throw new NoSuchElementException();
         }
         return userOptional.get();
     }
