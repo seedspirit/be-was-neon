@@ -2,6 +2,7 @@ package webserver.router;
 
 import db.SessionDatabase;
 import webserver.handler.LoginHandler;
+import webserver.handler.LogoutHandler;
 import webserver.session.Session;
 import webserver.handler.TargetHandlerExtractor;
 import webserver.handler.UserCreateHandler;
@@ -11,6 +12,7 @@ import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static webserver.httpMessage.HttpConstants.*;
 import static webserver.httpMessage.HttpStatus.FOUND;
@@ -20,7 +22,7 @@ import static webserver.httpMessage.HttpStatus.BAD_REQUEST;
 public class POSTRouter implements Router {
     private final String DEFAULT_INDEX_PAGE = "/index.html";
     private final String LOGIN_FAILED_PAGE = "/login/login_failed.html";
-    private final String LOGIN_USER_DEFAULT_INDEX_PAGE = "/user/index.html";
+    private final String LOGIN_USER_DEFAULT_INDEX_PAGE = "/main/index.html";
     private final String REGISTER_FAILED_PAGE = "/registration/register_failed.html";
 
     public HttpResponse route(HttpRequest httpRequest) {
@@ -44,6 +46,14 @@ public class POSTRouter implements Router {
                             .addHeaderComponent(SET_COOKIE, session.toString())
                             .addHeaderComponent(LOCATION, LOGIN_USER_DEFAULT_INDEX_PAGE)
                             .build();
+                }
+                case "/logout" -> {
+                        LogoutHandler logoutHandler = new LogoutHandler();
+                        logoutHandler.logout(httpRequest);
+                        return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
+                                .contentType(ContentType.HTML)
+                                .addHeaderComponent(LOCATION, DEFAULT_INDEX_PAGE)
+                                .build();
                 }
                 default -> {
                     return new HttpResponse.Builder(NOT_FOUND.getStatusCode(),
