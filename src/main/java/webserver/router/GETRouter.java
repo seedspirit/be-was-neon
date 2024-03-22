@@ -19,14 +19,6 @@ public class GETRouter implements Router {
     public HttpResponse route(HttpRequest httpRequest) {
         try {
             String requestTarget = httpRequest.getRequestTarget();
-            if(requestTarget.equals("/logout")){
-                Optional<String> loginCookie = httpRequest.getLoginCookie();
-                loginCookie.ifPresent(SessionDatabase::removeRecordOf);
-                return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
-                        .contentType(ContentType.HTML)
-                        .addHeaderComponent(LOCATION, INDEX_PAGE)
-                        .build();
-            }
             if(isNotStaticResourceRequest(requestTarget)){
                 requestTarget += INDEX_PAGE;
             }
