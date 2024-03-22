@@ -6,4 +6,6 @@ public class UrlFormatException extends Exception {
     public UrlFormatException(String message) {
         super(COLON + BLANK + message);
     }
+    public UrlFormatException(){
+    }
 }

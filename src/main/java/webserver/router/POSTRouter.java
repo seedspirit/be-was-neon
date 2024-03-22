@@ -4,39 +4,52 @@ import webserver.handler.*;
 import webserver.exceptions.UrlFormatException;
 import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static webserver.httpMessage.HttpStatus.NOT_FOUND;
-import static webserver.httpMessage.HttpStatus.BAD_REQUEST;
+import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class POSTRouter implements Router {
 
     private final Map<String, Handler> handlers;
+    private final ExceptionHandler exceptionHandler;
+    private final String INITIAL_PATH_SEGMENT_EXTRACTION_PATTERN = "^\\/[^\\/\\?]+";
+
     public POSTRouter(){
         this.handlers = new HashMap<>();
         handlers.put("/create", new UserCreateHandler());
         handlers.put("/login", new LoginHandler());
         handlers.put("/logout", new LogoutHandler());
+        this.exceptionHandler = new ExceptionHandler();
     }
 
     public HttpResponse route(HttpRequest httpRequest) {
         try {
-            TargetHandlerExtractor extractor = new TargetHandlerExtractor();
-            String targetHandler = extractor.extractTargetHandler(httpRequest.getRequestTarget());
-            if (handlers.containsKey(targetHandler)){
-                Handler handler = handlers.get(targetHandler);
-                return handler.handleRequest(httpRequest);
-            }
-            return generateNotFoundResponse();
-        } catch (UrlFormatException e) {
-            return new HttpResponse.Builder(BAD_REQUEST.getStatusCode(), BAD_REQUEST.getReasonPhrase() + e.getMessage()).build();
+            String targetHandler = extractTargetHandler(httpRequest.getRequestTarget());
+            checkRequestCanBeHandle(targetHandler);
+            Handler handler = handlers.get(targetHandler);
+            return handler.handleRequest(httpRequest);
+        } catch (Exception exception) {
+            return exceptionHandler.handleException(exception);
         }
     }
 
-    private HttpResponse generateNotFoundResponse(){
-        return new HttpResponse.Builder(NOT_FOUND.getStatusCode(),
-                NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다").build();
+    private void checkRequestCanBeHandle(String targetHandler) throws NoSuchElementException {
+        if (!handlers.containsKey(targetHandler)){
+            throw new NoSuchElementException();
+        }
+    }
+
+    private String extractTargetHandler(String requestTarget) throws UrlFormatException {
+        Pattern pattern = Pattern.compile(INITIAL_PATH_SEGMENT_EXTRACTION_PATTERN);
+        Matcher matcher = pattern.matcher(requestTarget);
+        if (matcher.find()) {
+            return matcher.group();
+        } else {
+            throw new UrlFormatException();
+        }
     }
 }
