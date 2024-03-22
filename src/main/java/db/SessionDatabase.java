@@ -2,20 +2,20 @@ package db;
 
 import model.User;
 import util.Pair;
-import webserver.session.Session;
+import webserver.session.Cookie;
 
 import java.util.*;
 
 public class SessionDatabase {
-    private static final Map<String, Pair<Session, User>> sessions = new HashMap<>();
+    private static final Map<String, Pair<Cookie, User>> sessions = new HashMap<>();
 
-    public static void addSession(Session session, User user) {
-        Pair<Session, User> sessionPair = Pair.of(session, user);
-        sessions.put(session.getSessionId(), sessionPair);
+    public static void addCookie(Cookie cookie, User user) {
+        Pair<Cookie, User> sessionPair = Pair.of(cookie, user);
+        sessions.put(cookie.getSessionId(), sessionPair);
     }
 
     public static User findUserBySessionId(String sessionId) {
-        Pair<Session, User> sessionPair = sessions.get(sessionId);
+        Pair<Cookie, User> sessionPair = sessions.get(sessionId);
         return sessionPair.value2();
     }
 
