@@ -1,75 +1,42 @@
 package webserver.router;
 
-import db.SessionDatabase;
-import webserver.handler.LoginHandler;
-import webserver.handler.LogoutHandler;
-import webserver.session.Session;
-import webserver.handler.TargetHandlerExtractor;
-import webserver.handler.UserCreateHandler;
+import webserver.handler.*;
 import webserver.exceptions.UrlFormatException;
-import webserver.httpMessage.ContentType;
 import webserver.httpMessage.HttpRequest;
 import webserver.httpMessage.HttpResponse;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
-import static webserver.httpMessage.HttpConstants.*;
-import static webserver.httpMessage.HttpStatus.FOUND;
 import static webserver.httpMessage.HttpStatus.NOT_FOUND;
 import static webserver.httpMessage.HttpStatus.BAD_REQUEST;
 
 public class POSTRouter implements Router {
-    private final String DEFAULT_INDEX_PAGE = "/index.html";
-    private final String LOGIN_FAILED_PAGE = "/login/login_failed.html";
-    private final String LOGIN_USER_DEFAULT_INDEX_PAGE = "/main/index.html";
-    private final String REGISTER_FAILED_PAGE = "/registration/register_failed.html";
+
+    private final Map<String, Handler> handlers;
+    public POSTRouter(){
+        this.handlers = new HashMap<>();
+        handlers.put("/create", new UserCreateHandler());
+        handlers.put("/login", new LoginHandler());
+        handlers.put("/logout", new LogoutHandler());
+    }
 
     public HttpResponse route(HttpRequest httpRequest) {
         try {
             TargetHandlerExtractor extractor = new TargetHandlerExtractor();
             String targetHandler = extractor.extractTargetHandler(httpRequest.getRequestTarget());
-            switch (targetHandler) {
-                case "/create" -> {
-                    UserCreateHandler userCreateHandler = new UserCreateHandler();
-                    userCreateHandler.addUserInDatabase(httpRequest.getBody());
-                    return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
-                            .contentType(ContentType.HTML)
-                            .addHeaderComponent(LOCATION, DEFAULT_INDEX_PAGE)
-                            .build();
-                }
-                case "/login" -> {
-                    LoginHandler loginHandler = new LoginHandler();
-                    Session session = loginHandler.issueSession(httpRequest.getBody());
-                    return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
-                            .contentType(ContentType.HTML)
-                            .addHeaderComponent(SET_COOKIE, session.toString())
-                            .addHeaderComponent(LOCATION, LOGIN_USER_DEFAULT_INDEX_PAGE)
-                            .build();
-                }
-                case "/logout" -> {
-                        LogoutHandler logoutHandler = new LogoutHandler();
-                        logoutHandler.logout(httpRequest);
-                        return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
-                                .contentType(ContentType.HTML)
-                                .addHeaderComponent(LOCATION, DEFAULT_INDEX_PAGE)
-                                .build();
-                }
-                default -> {
-                    return new HttpResponse.Builder(NOT_FOUND.getStatusCode(),
-                            NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다").build();
-                }
+            if (handlers.containsKey(targetHandler)){
+                Handler handler = handlers.get(targetHandler);
+                return handler.handleRequest(httpRequest);
             }
+            return generateNotFoundResponse();
         } catch (UrlFormatException e) {
             return new HttpResponse.Builder(BAD_REQUEST.getStatusCode(), BAD_REQUEST.getReasonPhrase() + e.getMessage()).build();
-        } catch (IllegalArgumentException e) {
-            return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase() + e.getMessage())
-                    .addHeaderComponent(LOCATION, REGISTER_FAILED_PAGE)
-                    .build();
-        } catch (NoSuchElementException e) {
-            return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase() + e.getMessage())
-                    .addHeaderComponent(LOCATION, LOGIN_FAILED_PAGE)
-                    .build();
         }
+    }
+
+    private HttpResponse generateNotFoundResponse(){
+        return new HttpResponse.Builder(NOT_FOUND.getStatusCode(),
+                NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다").build();
     }
 }
