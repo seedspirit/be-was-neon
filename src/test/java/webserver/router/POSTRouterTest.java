@@ -90,7 +90,7 @@ class POSTRouterTest {
 
         HttpResponse actualResponseMsg = sendRequestAndGetResponse(requestExample);;
         HttpResponse expectedResponseMsg = generateExpectedResponse(NOT_FOUND.getStatusCode(),
-                NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다");
+                NOT_FOUND.getReasonPhrase());
 
         verify(actualResponseMsg, expectedResponseMsg);
     }
