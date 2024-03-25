@@ -2,7 +2,7 @@ package webserver.handler;
 
 import webserver.exceptions.UnsupportedMethodException;
 import webserver.exceptions.UrlFormatException;
-import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.httpResponse.HttpResponse;
 import webserver.httpMessage.HttpStatus;
 
 import java.util.HashMap;

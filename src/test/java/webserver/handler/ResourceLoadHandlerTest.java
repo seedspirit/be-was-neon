@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.exceptions.ResourceNotFoundException;
 import webserver.httpMessage.htttpRequest.HttpRequest;
-import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.httpResponse.HttpResponse;
 import webserver.httpMessage.htttpRequest.RequestFactory;
 
 import java.io.ByteArrayInputStream;

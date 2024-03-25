@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import webserver.httpMessage.htttpRequest.HttpRequest;
-import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.httpResponse.HttpResponse;
 import webserver.httpMessage.htttpRequest.RequestFactory;
 
 import java.io.BufferedReader;

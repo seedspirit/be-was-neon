@@ -2,7 +2,7 @@ package webserver.router;
 
 import org.junit.jupiter.api.*;
 import webserver.httpMessage.htttpRequest.HttpRequest;
-import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.httpResponse.HttpResponse;
 import webserver.httpMessage.htttpRequest.RequestFactory;
 
 import java.io.BufferedReader;

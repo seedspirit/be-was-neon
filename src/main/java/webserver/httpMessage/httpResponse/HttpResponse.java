@@ -1,4 +1,6 @@
-package webserver.httpMessage;
+package webserver.httpMessage.httpResponse;
+
+import webserver.httpMessage.ContentType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,38 +8,33 @@ import java.util.Map;
 import static webserver.httpMessage.HttpConstants.*;
 
 public class HttpResponse {
-    private final Map<String, String> statusLine;
-    private final Map<String, String> header;
+    private final ResponseStatusLine statusLine;
+    private final ResponseHeaders headers;
     private final ContentType contentType;
-    private final byte[] body;
+    private ResponseBody body;
 
     public static class Builder {
         private final String HTTP_VERSION_NUMBER = "1.1";
         // 필수 매개변수
-        private final Map<String, String> statusLine;
-        private final Map<String, String> header;
+        private final ResponseStatusLine statusLine;
+        private final ResponseHeaders headers;
 
         // 선택 매개변수 - 기본값으로 초기화
         private ContentType contentType = ContentType.NONE;
-        private byte[] body = new byte[0];
+        private ResponseBody body = new ResponseBody();
 
         public Builder(int statusCode, String reasonPhrase) {
-            this.statusLine = new HashMap<>();
-            initRequestLine(statusCode, reasonPhrase);
-
-            this.header = new HashMap<>();
-            initHeader();
-        }
-
-        private void initRequestLine(int statusCode, String reasonPhrase){
+            Map<String, String> statusLine = new HashMap<>();
             statusLine.put(HTTP_VERSION_KEY, HTTP_VERSION_NUMBER);
             statusLine.put(STATUS_CODE_KEY, String.valueOf(statusCode));
             statusLine.put(REASON_PHRASE, reasonPhrase);
-        }
+            this.statusLine = new ResponseStatusLine(statusLine);
 
-        private void initHeader() {
-            header.put(CONTENT_TYPE, contentType.getMimetype());
-            header.put(CONTENT_LENGTH, String.valueOf(body.length));
+
+            Map<String, String> headers = new HashMap<>();
+            headers.put(CONTENT_TYPE, contentType.getMimetype());
+            headers.put(CONTENT_LENGTH, String.valueOf(body.getBodyLength()));
+            this.headers = new ResponseHeaders(headers);
         }
 
         public Builder contentType(ContentType val) {
@@ -46,13 +43,13 @@ public class HttpResponse {
         }
 
         public Builder body(byte[] val) {
-            body = val;
-            header.put(CONTENT_LENGTH, String.valueOf(body.length));
+            body = new ResponseBody(val);
+            headers.addHeader(CONTENT_LENGTH, String.valueOf(body.getBodyLength()));
             return this;
         }
 
         public Builder addHeaderComponent(String key, String value) {
-            header.put(key, value);
+            headers.addHeader(key, value);
             return this;
         }
 
@@ -64,12 +61,12 @@ public class HttpResponse {
     private HttpResponse(Builder builder) {
         this.statusLine = builder.statusLine;
         this.contentType = builder.contentType;
-        this.header = builder.header;
+        this.headers = builder.headers;
         this.body = builder.body;
     }
 
     public Map<String, String> getStatusLine () {
-        return statusLine;
+        return statusLine.getValues();
     }
 
     public ContentType getContentType() {
@@ -77,18 +74,18 @@ public class HttpResponse {
     }
 
     public int getStatusCode() {
-        return Integer.parseInt(statusLine.get(STATUS_CODE_KEY));
+        return Integer.parseInt(statusLine.getValueOf(STATUS_CODE_KEY));
     }
 
     public String getReasonPhrase() {
-        return statusLine.get(REASON_PHRASE);
+        return statusLine.getValueOf(REASON_PHRASE);
     }
 
     public Map<String, String> getHeader() {
-        return header;
+        return headers.getValues();
     }
 
     public byte[] getBody() {
-        return body;
+        return body.getValues();
     }
 }
