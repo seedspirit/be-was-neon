@@ -10,11 +10,11 @@ import webserver.httpMessage.httpResponse.HttpResponse;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.Map;
 
+import static util.constants.Delimiter.AMPERSAND;
+import static util.constants.Delimiter.EQUAL_SIGN;
 import static webserver.URLConstants.DEFAULT_INDEX_PAGE;
 import static webserver.URLConstants.REGISTRATION_FAILED_PAGE;
 import static webserver.httpMessage.HttpConstants.LOCATION;
@@ -22,14 +22,13 @@ import static webserver.httpMessage.HttpStatus.FOUND;
 
 public class UserCreateHandler implements Handler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private List<String> userInfo;
-    private final String PARAM_MATCHING_PATTER = "(?<=userId=)[^&\\s]*|(?<=password=)[^&\\s]*|(?<=name=)[^&\\s]*|(?<=email=)[^&\\s]*";
     private final String NAME_VALIDATION_REGEX = "^[가-힣a-zA-Z\\s]+$";
     private final String EMAIL_VALIDATION_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+    private final String USERID_PARAM = "username";
+    private final String PASSWORD_PARAM = "password";
+    private final String NAME_PARAM = "nickname";
+    private final String EMAIL_PARAM = "email";
 
-    public UserCreateHandler() {
-        this.userInfo = new ArrayList<>();
-    }
 
     public HttpResponse handleRequest(HttpRequest httpRequest){
         try{
@@ -45,29 +44,41 @@ public class UserCreateHandler implements Handler {
         }
     }
 
-    private void parseBody(String body) {
-        Pattern pattern = Pattern.compile(PARAM_MATCHING_PATTER);
-        Matcher matcher = pattern.matcher(body);
-        while (matcher.find()) {
-            userInfo.add(matcher.group());
-        }
-    }
-
     public void addUserInDatabase(String body) throws IllegalArgumentException {
-        parseBody(body);
-        String userID = userInfo.get(0);
-        String password = userInfo.get(2);
-        String name =  URLDecoder.decode(userInfo.get(1), StandardCharsets.UTF_8);
-        if (!isValidNameFormat(name)){
-            throw new IllegalArgumentException(": 잘못된 이름 형식입니다");
-        }
-        String email = URLDecoder.decode(userInfo.get(3), StandardCharsets.UTF_8);
-        if (!isValidEmailFormat(email)) {
-            throw new IllegalArgumentException(": 잘못된 이메일 형식입니다");
-        }
+        Map<String, String> userInfo = getUserInfoFromBody(body);
+        String userID = userInfo.get(USERID_PARAM);
+        String password = userInfo.get(PASSWORD_PARAM);
+        String name =  URLDecoder.decode(userInfo.get(NAME_PARAM), StandardCharsets.UTF_8);
+        checkNameFormat(name);
+        String email = URLDecoder.decode(userInfo.get(EMAIL_PARAM), StandardCharsets.UTF_8);
+        checkEmailFormat(email);
+
         User user = new User(userID, password, name, email);
         UserDatabase.addUser(user);
         logger.debug("회원가입 성공! ID: {}, Name: {}", userID, name);
+    }
+
+    private Map<String, String> getUserInfoFromBody(String body) {
+        Map<String, String> userInfo = new HashMap<>();
+        String[] bodyComponents = body.split(AMPERSAND);
+        for (String bodyComponent : bodyComponents) {
+            String param = bodyComponent.split(EQUAL_SIGN)[0];
+            String value = bodyComponent.split(EQUAL_SIGN)[1];
+            userInfo.put(param, value);
+        }
+        return userInfo;
+    }
+
+    private void checkNameFormat(String name) throws IllegalArgumentException {
+        if (!isValidNameFormat(name)){
+            throw new IllegalArgumentException(": 잘못된 이름 형식입니다");
+        }
+    }
+
+    private void checkEmailFormat(String email) throws IllegalArgumentException {
+        if (!isValidEmailFormat(email)) {
+            throw new IllegalArgumentException(": 잘못된 이메일 형식입니다");
+        }
     }
 
     private boolean isValidNameFormat(String name){
