@@ -3,10 +3,9 @@ package webserver.httpMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.Reader;
-import webserver.httpMessage.HttpRequest;
+import webserver.httpMessage.htttpRequest.HttpRequest;
+import webserver.httpMessage.htttpRequest.RequestFactory;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -30,9 +29,9 @@ class HttpRequestTest {
 
     @BeforeEach
     void setMsg(){
-        InputStream is = new ByteArrayInputStream(requestExample.getBytes());
-        BufferedReader br = Reader.inputStreamToBufferedReader(is);
-        httpRequest = new HttpRequest(br);
+        InputStream in = new ByteArrayInputStream(requestExample.getBytes());
+        RequestFactory requestFactory = new RequestFactory();
+        httpRequest = requestFactory.createHttpRequestFrom(in);
     }
 
     @Test

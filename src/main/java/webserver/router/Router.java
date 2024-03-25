@@ -1,6 +1,6 @@
 package webserver.router;
 
-import webserver.httpMessage.HttpRequest;
+import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.HttpResponse;
 
 public interface Router {

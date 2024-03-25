@@ -5,9 +5,9 @@ import java.net.Socket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Reader;
-import webserver.httpMessage.HttpRequest;
+import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.htttpRequest.RequestFactory;
 import webserver.httpMessage.ResponseTransmitter;
 import webserver.router.FrontRouter;
 
@@ -25,8 +25,8 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = Reader.inputStreamToBufferedReader(in);
-            HttpRequest httpRequest = new HttpRequest(br);
+            RequestFactory requestFactory = new RequestFactory();
+            HttpRequest httpRequest = requestFactory.createHttpRequestFrom(in);
 
             // HTTP 헤더에서 requestTarget 추출, 알맞는 핸들러 호출 후 결과 반환
             FrontRouter frontRouter = new FrontRouter();

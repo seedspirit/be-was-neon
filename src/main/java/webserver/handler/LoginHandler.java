@@ -6,7 +6,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.httpMessage.ContentType;
-import webserver.httpMessage.HttpRequest;
+import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.HttpResponse;
 import webserver.session.Cookie;
 
@@ -28,7 +28,7 @@ public class LoginHandler implements Handler {
     private final String LOGIN_FAILED_PAGE = "/login/login_failed.html";
 
     public HttpResponse handleRequest(HttpRequest httpRequest){
-        if(isSessionIssuingSucceed(httpRequest.getBody())){
+        if(isLoginSucceed(httpRequest.getBody())){
             return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
                     .contentType(ContentType.HTML)
                     .addHeaderComponent(SET_COOKIE, cookie.toString())
@@ -40,7 +40,7 @@ public class LoginHandler implements Handler {
                 .build();
     }
 
-    private boolean isSessionIssuingSucceed(String body) {
+    private boolean isLoginSucceed(String body) {
         Map<String, String> params = parseBodyToMap(body);
         try {
             User user = findUserByUserId(params.get("username"));

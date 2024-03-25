@@ -2,9 +2,8 @@ package webserver.router;
 
 import webserver.handler.*;
 import webserver.exceptions.UrlFormatException;
-import webserver.httpMessage.HttpRequest;
+import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.HttpResponse;
-import webserver.httpMessage.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
