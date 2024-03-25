@@ -1,8 +1,9 @@
 package webserver.router;
 
 import org.junit.jupiter.api.*;
-import webserver.httpMessage.HttpRequest;
+import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.htttpRequest.RequestFactory;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -101,8 +102,9 @@ class POSTRouterTest {
     }
 
     private HttpResponse sendRequestAndGetResponse(String requestExample) {
-        BufferedReader br = createBufferedReaderFromString(requestExample);
-        HttpRequest httpRequest = new HttpRequest(br);
+        InputStream is = new ByteArrayInputStream(requestExample.getBytes());
+        RequestFactory requestFactory = new RequestFactory();
+        HttpRequest httpRequest = requestFactory.createHttpRequestFrom(is);
         return postRouter.route(httpRequest);
     }
 
