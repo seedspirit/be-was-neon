@@ -1,14 +1,13 @@
 package webserver.router;
 
+import db.UserDatabase;
 import org.junit.jupiter.api.*;
 import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
 import webserver.httpMessage.htttpRequest.RequestFactory;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static webserver.httpMessage.HttpConstants.LOCATION;
@@ -23,12 +22,13 @@ class POSTRouterTest {
     @BeforeEach
     void setRouter(){
         this.postRouter = new POSTRouter();
+        UserDatabase.clearDatabase();
     }
 
     @DisplayName("존재하지 않는 회원으로 로그인을 시도하는 경우 302 응답을 반환한다")
     @Test
     @Order(1)
-    void loginWithNotRegisterdIdTest() {
+    void loginWithNotRegisteredIdTest() {
         String requestExample =
                 """
                 POST /login HTTP/1.1
@@ -106,11 +106,6 @@ class POSTRouterTest {
         RequestFactory requestFactory = new RequestFactory();
         HttpRequest httpRequest = requestFactory.createHttpRequestFrom(is);
         return postRouter.route(httpRequest);
-    }
-
-    private BufferedReader createBufferedReaderFromString(String request) {
-        InputStream is = new ByteArrayInputStream(request.getBytes());
-        return new BufferedReader(new InputStreamReader(is));
     }
 
     private HttpResponse generateExpectedResponse(int statusCode, String reasonPhrase) {
