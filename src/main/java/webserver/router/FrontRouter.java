@@ -5,7 +5,7 @@ import webserver.exceptions.UnsupportedMethodException;
 import webserver.exceptions.UrlFormatException;
 import webserver.handler.ExceptionHandler;
 import webserver.httpMessage.htttpRequest.HttpRequest;
-import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.httpResponse.HttpResponse;
 
 import java.util.HashMap;
 import java.util.Map;

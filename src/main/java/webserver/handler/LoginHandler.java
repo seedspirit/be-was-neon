@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.httpMessage.ContentType;
 import webserver.httpMessage.htttpRequest.HttpRequest;
-import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.httpResponse.HttpResponse;
 import webserver.session.Cookie;
 
 import java.net.URLDecoder;

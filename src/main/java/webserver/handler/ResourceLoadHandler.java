@@ -3,7 +3,7 @@ package webserver.handler;
 import webserver.exceptions.ResourceNotFoundException;
 import webserver.httpMessage.ContentType;
 import webserver.httpMessage.htttpRequest.HttpRequest;
-import webserver.httpMessage.HttpResponse;
+import webserver.httpMessage.httpResponse.HttpResponse;
 
 import java.io.*;
 
