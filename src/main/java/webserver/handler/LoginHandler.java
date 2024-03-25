@@ -43,6 +43,10 @@ public class LoginHandler implements Handler {
         Map<String, String> params = parseBodyToMap(body);
         try {
             User user = findUserByUserId(params.get("username"));
+            String passwordInput = params.get("password");
+            if (!isPasswordInputCorrect(user, passwordInput)){
+                return false;
+            }
             this.cookie = new Cookie();
             registerCookieUserPair(cookie, user);
             logger.debug("로그인 성공! Name: {}, SessionId: {}", user.getName(), cookie.getSessionId());
@@ -50,6 +54,10 @@ public class LoginHandler implements Handler {
         } catch (NoSuchElementException e){
             return false;
         }
+    }
+
+    private boolean isPasswordInputCorrect(User user, String passwordInput) {
+        return user.getPassword().equals(passwordInput);
     }
 
     private Map<String, String> parseBodyToMap(String body) {
