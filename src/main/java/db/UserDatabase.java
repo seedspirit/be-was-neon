@@ -24,4 +24,8 @@ public class UserDatabase {
     public static Collection<User> findAll() {
         return users.values();
     }
+
+    public static void clearDatabase(){
+        users.clear();
+    }
 }
