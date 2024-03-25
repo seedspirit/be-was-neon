@@ -1,6 +1,7 @@
 package webserver.httpMessage;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -25,5 +26,12 @@ class ContentTypeTest {
     @MethodSource("requestLineAndContentType")
     void findMatchingContentTypeTest(String requestLine, ContentType contentType) {
         assertThat(ContentType.of(requestLine)).isEqualTo(contentType);
+    }
+
+    @DisplayName("마임 타입이 text일 경우 응답 헤더의 값을 만드는 메서드의 결과로 'text/;charset=utf-8' 형태의 문자열을 반환한다")
+    @Test
+    void generateHttpContentTypeHeaderTest(){
+        String answer = "text/html;charset=utf-8";
+        assertThat(ContentType.generateHttpContentTypeHeaderOf(ContentType.HTML)).isEqualTo(answer);
     }
 }
