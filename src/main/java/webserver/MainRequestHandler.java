@@ -1,4 +1,4 @@
-package webserver.handler;
+package webserver;
 
 import java.io.*;
 import java.net.Socket;
@@ -11,12 +11,12 @@ import webserver.httpMessage.htttpRequest.RequestFactory;
 import webserver.httpMessage.httpResponse.util.ResponseTransmitter;
 import webserver.router.FrontRouter;
 
-public class RequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+public class MainRequestHandler implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(MainRequestHandler.class);
 
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    public MainRequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 

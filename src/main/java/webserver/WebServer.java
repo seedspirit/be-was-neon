@@ -8,7 +8,6 @@ import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.handler.RequestHandler;
 
 public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
@@ -31,7 +30,7 @@ public class WebServer {
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
                 // 이후 메서드 체이닝으로 쉽게 작업 추가를 할 수 있어 .runAsync 사용
-                CompletableFuture.runAsync(new RequestHandler(connection), executorService);
+                CompletableFuture.runAsync(new MainRequestHandler(connection), executorService);
             }
         }
     }

@@ -5,6 +5,7 @@ import db.SessionDatabase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.MainRequestHandler;
 import webserver.httpMessage.ContentType;
 import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
@@ -23,7 +24,7 @@ import static webserver.httpMessage.HttpConstants.SET_COOKIE;
 import static webserver.httpMessage.HttpStatus.FOUND;
 
 public class LoginHandler implements Handler {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(MainRequestHandler.class);
     private final String USERID_PARAM = "username";
     private final String PASSWORD_PARAM = "password";
     private Cookie cookie;
