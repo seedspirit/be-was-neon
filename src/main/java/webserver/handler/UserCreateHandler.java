@@ -4,6 +4,7 @@ import db.UserDatabase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.MainRequestHandler;
 import webserver.httpMessage.ContentType;
 import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
@@ -21,7 +22,7 @@ import static webserver.httpMessage.HttpConstants.LOCATION;
 import static webserver.httpMessage.HttpStatus.FOUND;
 
 public class UserCreateHandler implements Handler {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(MainRequestHandler.class);
     private final String NAME_VALIDATION_REGEX = "^[가-힣a-zA-Z\\s]+$";
     private final String EMAIL_VALIDATION_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
     private final String USERID_PARAM = "username";
