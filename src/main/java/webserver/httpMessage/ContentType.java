@@ -1,25 +1,27 @@
 package webserver.httpMessage;
 
-import webserver.exceptions.ResourceNotFoundException;
-
 import java.util.Arrays;
 
+import static util.constants.Delimiter.*;
+
 public enum ContentType {
-    HTML(".html", "text/html"),
-    CSS(".css", "text/css"),
-    JS(".js", "text/javascript"),
-    ICO(".ico", "image/x-icon"),
-    PNG(".png", "image/png"),
-    JPG(".jpg", "image/jpeg"),
-    SVG(".svg", "image/svg+xml"),
-    NONE("", "");
+    HTML(".html", "text/html", "charset=utf-8"),
+    CSS(".css", "text/css", "charset=utf-8"),
+    JS(".js", "text/javascript", "charset=utf-8"),
+    ICO(".ico", "image/x-icon", EMPTY),
+    PNG(".png", "image/png", EMPTY),
+    JPG(".jpg", "image/jpeg", EMPTY),
+    SVG(".svg", "image/svg+xml", EMPTY),
+    NONE(EMPTY, EMPTY, EMPTY);
 
     private final String extension;
     private final String mimeType;
+    private final String parameter;
 
-    ContentType(String extension, String mimeType) {
+    ContentType(String extension, String mimeType, String parameter) {
         this.extension = extension;
         this.mimeType = mimeType;
+        this.parameter = parameter;
     }
 
     public String getExtension() {
@@ -35,5 +37,12 @@ public enum ContentType {
                 .filter(v -> requestTarget.contains(v.getExtension()))
                 .findFirst()
                 .orElse(NONE);
+    }
+
+    public static String generateHttpContentTypeHeaderOf(ContentType contentType) {
+        if (!contentType.parameter.equals(EMPTY)) {
+            return contentType.mimeType + SEMICOLON + contentType.parameter;
+        }
+        return contentType.mimeType;
     }
 }

@@ -9,7 +9,6 @@ import static util.constants.Delimiter.BLANK;
 import static webserver.httpMessage.HttpConstants.*;
 
 public class ResponseSerializer {
-    private final String UTF_8 = "utf-8";
 
     public byte[] serializeStatusLine(Map<String, String> statusLine){
         String template = "HTTP/%s %s %s %s";
@@ -33,14 +32,7 @@ public class ResponseSerializer {
     }
 
     private String buildContentTypeHeaderLine(ContentType responseContentType) {
-        if(!responseContentType.equals(ContentType.NONE)){
-            if(responseContentType.getMimetype().contains("text")){
-                return generateOneHeaderLine(CONTENT_TYPE, responseContentType.getMimetype() + SEMICOLON + MIME_TYPE_PARAMETER_CHARSET + EQUAL_SIGN + UTF_8);
-            } else {
-                return generateOneHeaderLine(CONTENT_TYPE, responseContentType.getMimetype());
-            }
-        }
-        return generateOneHeaderLine(CONTENT_TYPE, EMPTY);
+        return generateOneHeaderLine(CONTENT_TYPE, ContentType.generateHttpContentTypeHeaderOf(responseContentType));
     }
 
     private String generateOneHeaderLine(String headerName, String headerValue) {
