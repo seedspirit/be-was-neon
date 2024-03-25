@@ -16,7 +16,7 @@ class SessionDatabaseTest {
     void findUserBySessionIdTest() throws NoSuchFieldException, IllegalAccessException {
         Cookie cookie = getMockSession();
         User user = new User("ex", "ex", "ex", "ex@email.com");
-        SessionDatabase.addCookie(cookie, user);
+        SessionDatabase.addRecord(cookie, user);
         String sessionId = "100";
         assertThat(SessionDatabase.findUserBySessionId(sessionId)).isEqualTo(user);
     }

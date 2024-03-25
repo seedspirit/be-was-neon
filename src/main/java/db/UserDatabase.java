@@ -17,6 +17,10 @@ public class UserDatabase {
         return users.get(userId);
     }
 
+    public static boolean isUserExists(String userId) {
+        return findUserById(userId) != null;
+    }
+
     public static Collection<User> findAll() {
         return users.values();
     }

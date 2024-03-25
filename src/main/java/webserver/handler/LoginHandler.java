@@ -24,6 +24,8 @@ import static webserver.httpMessage.HttpStatus.FOUND;
 
 public class LoginHandler implements Handler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private final String USERID_PARAM = "username";
+    private final String PASSWORD_PARAM = "password";
     private Cookie cookie;
 
     public HttpResponse handleRequest(HttpRequest httpRequest){
@@ -41,23 +43,21 @@ public class LoginHandler implements Handler {
 
     private boolean isLoginSucceed(String body) {
         Map<String, String> params = parseBodyToMap(body);
-        try {
-            User user = findUserByUserId(params.get("username"));
-            String passwordInput = params.get("password");
-            if (!isPasswordInputCorrect(user, passwordInput)){
-                return false;
-            }
-            this.cookie = new Cookie();
-            registerCookieUserPair(cookie, user);
-            logger.debug("로그인 성공! Name: {}, SessionId: {}", user.getName(), cookie.getSessionId());
-            return true;
-        } catch (NoSuchElementException e){
+        String userId = params.get(USERID_PARAM);
+        if(!isUserExistsInDB(userId)){
             return false;
         }
-    }
 
-    private boolean isPasswordInputCorrect(User user, String passwordInput) {
-        return user.getPassword().equals(passwordInput);
+        User user = UserDatabase.findUserById(userId);
+        String passwordInput = params.get(PASSWORD_PARAM);
+        if (!isPasswordInputCorrect(user, passwordInput)){
+            return false;
+        }
+
+        this.cookie = new Cookie();
+        registerCookieUserPair(cookie, user);
+        logger.debug("로그인 성공! Name: {}, SessionId: {}", user.getName(), cookie.getSessionId());
+        return true;
     }
 
     private Map<String, String> parseBodyToMap(String body) {
@@ -72,15 +72,15 @@ public class LoginHandler implements Handler {
         return params;
     }
 
-    private User findUserByUserId(String userID) throws NoSuchElementException {
-        Optional<User> userOptional = Optional.ofNullable(UserDatabase.findUserById(userID));
-        if (userOptional.isEmpty()){
-            throw new NoSuchElementException();
-        }
-        return userOptional.get();
+    private boolean isPasswordInputCorrect(User user, String passwordInput) {
+        return user.getPassword().equals(passwordInput);
+    }
+
+    private boolean isUserExistsInDB(String userId) {
+        return UserDatabase.isUserExists(userId);
     }
 
     private void registerCookieUserPair(Cookie cookie, User user){
-        SessionDatabase.addCookie(cookie, user);
+        SessionDatabase.addRecord(cookie, user);
     }
 }

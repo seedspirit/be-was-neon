@@ -9,7 +9,7 @@ import java.util.*;
 public class SessionDatabase {
     private static final Map<String, Pair<Cookie, User>> sessions = new HashMap<>();
 
-    public static void addCookie(Cookie cookie, User user) {
+    public static void addRecord(Cookie cookie, User user) {
         Pair<Cookie, User> sessionPair = Pair.of(cookie, user);
         sessions.put(cookie.getSessionId(), sessionPair);
     }
