@@ -45,7 +45,7 @@ public class UserCreateHandler implements Handler {
         }
     }
 
-    public void addUserInDatabase(String body) throws IllegalArgumentException {
+    private void addUserInDatabase(String body) throws IllegalArgumentException {
         Map<String, String> userInfo = getUserInfoFromBody(body);
         String userID = userInfo.get(USERID_PARAM);
         String password = userInfo.get(PASSWORD_PARAM);
