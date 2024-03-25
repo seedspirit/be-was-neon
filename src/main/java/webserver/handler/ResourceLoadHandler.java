@@ -7,17 +7,17 @@ import webserver.httpMessage.httpResponse.HttpResponse;
 
 import java.io.*;
 
+import static webserver.URLConstants.DEFAULT_INDEX_PAGE;
+import static webserver.URLConstants.STATIC_DIR_PATH;
 import static webserver.httpMessage.HttpStatus.NOT_FOUND;
 import static webserver.httpMessage.HttpStatus.OK;
 
 public class ResourceLoadHandler implements Handler {
-    private final String INDEX_PAGE = "/index.html";
-    private final String STATIC_DIR_PATH = "/static";
 
     public HttpResponse handleRequest(HttpRequest httpRequest) {
         String requestTarget = httpRequest.getRequestTarget();
         if(isNotStaticResourceRequest(requestTarget)){
-            requestTarget += INDEX_PAGE;
+            requestTarget += DEFAULT_INDEX_PAGE;
         }
         try {
             byte[] body = load(requestTarget);

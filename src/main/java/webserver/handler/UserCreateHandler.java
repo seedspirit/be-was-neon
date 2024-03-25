@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static webserver.URLConstants.DEFAULT_INDEX_PAGE;
+import static webserver.URLConstants.REGISTRATION_FAILED_PAGE;
 import static webserver.httpMessage.HttpConstants.LOCATION;
 import static webserver.httpMessage.HttpStatus.FOUND;
 
@@ -24,10 +26,6 @@ public class UserCreateHandler implements Handler {
     private final String PARAM_MATCHING_PATTER = "(?<=userId=)[^&\\s]*|(?<=password=)[^&\\s]*|(?<=name=)[^&\\s]*|(?<=email=)[^&\\s]*";
     private final String NAME_VALIDATION_REGEX = "^[가-힣a-zA-Z\\s]+$";
     private final String EMAIL_VALIDATION_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-
-    private final String DEFAULT_INDEX_PAGE = "/index.html";
-    private final String REGISTER_FAILED_PAGE = "/registration/register_failed.html";
-
 
     public UserCreateHandler() {
         this.userInfo = new ArrayList<>();
@@ -42,7 +40,7 @@ public class UserCreateHandler implements Handler {
                     .build();
         } catch (IllegalArgumentException e) {
             return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase() + e.getMessage())
-                    .addHeaderComponent(LOCATION, REGISTER_FAILED_PAGE)
+                    .addHeaderComponent(LOCATION, REGISTRATION_FAILED_PAGE)
                     .build();
         }
     }

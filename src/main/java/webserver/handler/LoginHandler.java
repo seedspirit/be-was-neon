@@ -16,16 +16,15 @@ import java.util.*;
 
 import static util.constants.Delimiter.AMPERSAND;
 import static util.constants.Delimiter.EQUAL_SIGN;
+import static webserver.URLConstants.LOGIN_FAILED_PAGE;
+import static webserver.URLConstants.LOGIN_USER_DEFAULT_INDEX_PAGE;
 import static webserver.httpMessage.HttpConstants.LOCATION;
 import static webserver.httpMessage.HttpConstants.SET_COOKIE;
 import static webserver.httpMessage.HttpStatus.FOUND;
 
 public class LoginHandler implements Handler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-
     private Cookie cookie;
-    private final String LOGIN_USER_DEFAULT_INDEX_PAGE = "/main/index.html";
-    private final String LOGIN_FAILED_PAGE = "/login/login_failed.html";
 
     public HttpResponse handleRequest(HttpRequest httpRequest){
         if(isLoginSucceed(httpRequest.getBody())){

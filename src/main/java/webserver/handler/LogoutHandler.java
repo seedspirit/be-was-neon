@@ -9,12 +9,12 @@ import webserver.httpMessage.httpResponse.HttpResponse;
 
 import java.util.Optional;
 
+import static webserver.URLConstants.DEFAULT_INDEX_PAGE;
 import static webserver.httpMessage.HttpConstants.LOCATION;
 import static webserver.httpMessage.HttpStatus.FOUND;
 
 public class LogoutHandler implements Handler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private final String DEFAULT_INDEX_PAGE = "/index.html";
 
     public HttpResponse handleRequest(HttpRequest httpRequest){
         Optional<String> loginCookie = httpRequest.getLoginCookie();
