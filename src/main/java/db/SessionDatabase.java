@@ -26,4 +26,8 @@ public class SessionDatabase {
     public static void removeRecordOf(String sessionId) {
         sessions.remove(sessionId);
     }
+
+    public static void clearDatabase(){
+        sessions.clear();
+    }
 }
