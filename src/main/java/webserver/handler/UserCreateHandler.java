@@ -33,7 +33,7 @@ public class UserCreateHandler implements Handler {
 
     public HttpResponse handleRequest(HttpRequest httpRequest){
         try{
-            addUserInDatabase(httpRequest.getBody());
+            addUserInDatabase(new String(httpRequest.getBody()));
             return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
                     .contentType(ContentType.HTML)
                     .addHeaderComponent(LOCATION, DEFAULT_INDEX_PAGE)
