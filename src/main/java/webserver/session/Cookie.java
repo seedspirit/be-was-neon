@@ -5,10 +5,12 @@ import db.SessionDatabase;
 public class Cookie {
     private final String sessionId;
     private final String path;
+    private int maxAge;
 
     public Cookie() {
         this.sessionId = generateSessionId();
         this.path = "/";
+        this.maxAge = 3600;
     }
 
     private String generateSessionId() {
@@ -32,8 +34,12 @@ public class Cookie {
         return path;
     }
 
+    public void invalidateCookie(){
+        this.maxAge = -1;
+    }
+
     @Override
     public String toString() {
-        return String.format("sid=%s; Path=/", sessionId);
+        return String.format("sid=%s; Path=/; Max-Age=%d", sessionId, maxAge);
     }
 }
