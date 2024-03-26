@@ -20,19 +20,19 @@ public class ResponseSerializer {
                 .getBytes();
     }
 
-    public byte[] serializeHeaders(ContentType contentType, Map<String, String> headers) {
+    public byte[] serializeHeaders(Map<String, String> headers) {
         StringBuilder headerBuilder = new StringBuilder();
         for(Map.Entry<String, String> entry : headers.entrySet()){
             headerBuilder.append(generateOneHeaderLine(entry.getKey(), entry.getValue()));
         }
-        String contentTypeLine = buildContentTypeHeaderLine(contentType);
+        String contentTypeLine = buildContentTypeHeaderLine(headers.get(CONTENT_TYPE));
         headerBuilder.append(contentTypeLine);
         headerBuilder.append(CRLF);
         return headerBuilder.toString().getBytes();
     }
 
-    private String buildContentTypeHeaderLine(ContentType responseContentType) {
-        return generateOneHeaderLine(CONTENT_TYPE, ContentType.generateHttpContentTypeHeaderOf(responseContentType));
+    private String buildContentTypeHeaderLine(String mimeType) {
+        return generateOneHeaderLine(CONTENT_TYPE, ContentType.generateHttpContentTypeHeaderOf(mimeType));
     }
 
     private String generateOneHeaderLine(String headerName, String headerValue) {

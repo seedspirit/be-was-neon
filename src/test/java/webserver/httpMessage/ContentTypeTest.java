@@ -32,6 +32,13 @@ class ContentTypeTest {
     @Test
     void generateHttpContentTypeHeaderTest(){
         String answer = "text/html;charset=utf-8";
-        assertThat(ContentType.generateHttpContentTypeHeaderOf(ContentType.HTML)).isEqualTo(answer);
+        assertThat(ContentType.generateHttpContentTypeHeaderOf(ContentType.HTML.getMimetype())).isEqualTo(answer);
+    }
+
+    @DisplayName("마임 타입이 없을 경우 응답 헤더의 값을 만드는 메서드의 결과로 빈문자열 반환한다")
+    @Test
+    void generateEmptyHttpContentTypeHeaderTest(){
+        String answer = "";
+        assertThat(ContentType.generateHttpContentTypeHeaderOf(ContentType.NONE.getMimetype())).isEqualTo(answer);
     }
 }

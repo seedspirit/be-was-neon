@@ -34,19 +34,19 @@ class ResponseSerializerTest {
     @Test
     void serializeHeadersTest() {
         Map<String, String> headers = setupHeaders();
-        ContentType contentType = ContentType.HTML;
 
-        byte[] serializedHeaders = new ResponseSerializer().serializeHeaders(contentType, headers);
+        byte[] serializedHeaders = new ResponseSerializer().serializeHeaders(headers);
         String deserializedHeaders = new String(serializedHeaders);
 
         assertThat(deserializedHeaders).contains("Host: localhost:8080\r\n", "Connection: keep-alive\r\n");
-        assertThat(deserializedHeaders).contains(ContentType.generateHttpContentTypeHeaderOf(contentType));
+        assertThat(deserializedHeaders).contains(ContentType.generateHttpContentTypeHeaderOf(ContentType.HTML.getMimetype()));
     }
 
     private Map<String, String> setupHeaders(){
         Map<String, String> headers = new HashMap<>();
         headers.put("Host", "localhost:8080");
         headers.put("Connection", "keep-alive");
+        headers.put("Content-Type", "text/html");
         return headers;
     }
 }
