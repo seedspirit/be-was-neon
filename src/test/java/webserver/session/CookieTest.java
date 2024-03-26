@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CookieTest {
 
-    @DisplayName("세션id가 100인 Session의 toString을 호출하면 sid=100; Path=/을 반환한다")
+    @DisplayName("세션id가 100인 Session의 toString을 호출하면 sid=100; Path=/; Max-Age=3600을 반환한다")
     @Test
     void sessionToStringTest() throws NoSuchFieldException, IllegalAccessException {
         Class<Cookie> clazz = Cookie.class;
@@ -17,7 +17,7 @@ public class CookieTest {
         sessionId.setAccessible(true);
         Cookie cookie = new Cookie();
         sessionId.set(cookie, "100");
-        String expected = "sid=100; Path=/";
+        String expected = "sid=100; Path=/; Max-Age=3600";
         assertThat(cookie.toString()).isEqualTo(expected);
     }
 }
