@@ -14,6 +14,10 @@ public class SessionDatabase {
         sessions.put(cookie.getSessionId(), sessionPair);
     }
 
+    public static Pair<Cookie, User> findCookieUserPairBySessionId(String sessionId) {
+        return sessions.get(sessionId);
+    }
+
     public static User findUserBySessionId(String sessionId) {
         Pair<Cookie, User> sessionPair = sessions.get(sessionId);
         return sessionPair.value2();
