@@ -30,7 +30,7 @@ public class LoginHandler implements Handler {
     private Cookie cookie;
 
     public HttpResponse handleRequest(HttpRequest httpRequest){
-        if(isLoginSucceed(httpRequest.getBody())){
+        if(isLoginSucceed(new String(httpRequest.getBody()))){
             return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
                     .contentType(ContentType.HTML)
                     .addHeaderComponent(SET_COOKIE, cookie.toString())

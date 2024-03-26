@@ -2,9 +2,10 @@ package webserver.httpMessage.htttpRequest.requestParser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.Reader;
 import webserver.MainRequestHandler;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,11 +18,11 @@ import static webserver.httpMessage.HttpConstants.COOKIE;
 public class RequestHeadersParser {
     private static final Logger logger = LoggerFactory.getLogger(MainRequestHandler.class);
 
-    public Map<String, List<String>> getParseResultFrom(BufferedReader br) {
+    public Map<String, List<String>> getParseResultFrom(BufferedInputStream bis) {
         Map<String, List<String>> headers = new HashMap<>();
         try{
             String line;
-            while((line = br.readLine()) != null && !line.isEmpty()) {
+            while(!(line = Reader.readLineFrom(bis)).isEmpty()) {
                 String[] headerParts = line.split(COLON, 2);
                 String key = headerParts[0];
                 List<String> values;

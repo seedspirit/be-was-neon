@@ -31,7 +31,7 @@ public class HttpRequest {
         return requestLine.getValues();
     }
 
-    public String getBody() {
+    public byte[] getBody() {
         return body.getValues();
     }
 
