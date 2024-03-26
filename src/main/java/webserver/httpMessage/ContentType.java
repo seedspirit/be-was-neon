@@ -52,14 +52,4 @@ public enum ContentType {
                 })
                 .orElse(mimeType);
     }
-
-    /*
-    public static String generateHttpContentTypeHeaderOf(ContentType contentType) {
-        if (!contentType.parameter.equals(EMPTY)) {
-            return contentType.mimeType + SEMICOLON + contentType.parameter;
-        }
-        return contentType.mimeType;
-    }
-
-     */
 }
