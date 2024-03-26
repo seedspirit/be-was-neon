@@ -39,10 +39,27 @@ public enum ContentType {
                 .orElse(NONE);
     }
 
+    public static String generateHttpContentTypeHeaderOf(String mimeType) {
+        return Arrays.stream(ContentType.values())
+                .filter(ct -> ct.getMimetype().equals(mimeType))
+                .findFirst()
+                .map(ct -> {
+                    if (!ct.parameter.equals(EMPTY)) {
+                        return mimeType + SEMICOLON + ct.parameter;
+                    } else {
+                        return mimeType;
+                    }
+                })
+                .orElse(mimeType);
+    }
+
+    /*
     public static String generateHttpContentTypeHeaderOf(ContentType contentType) {
         if (!contentType.parameter.equals(EMPTY)) {
             return contentType.mimeType + SEMICOLON + contentType.parameter;
         }
         return contentType.mimeType;
     }
+
+     */
 }

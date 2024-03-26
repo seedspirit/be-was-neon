@@ -16,7 +16,7 @@ public class ResponseTransmitter {
         DataOutputStream dos = new DataOutputStream(outputStream);
         ResponseSerializer serializer = new ResponseSerializer();
         byte[] responseLine = serializer.serializeStatusLine(response.getStatusLine());
-        byte[] header = serializer.serializeHeaders(response.getContentType(), response.getHeader());
+        byte[] header = serializer.serializeHeaders(response.getHeader());
         byte[] body = response.getBody();
         try {
             dos.write(responseLine);

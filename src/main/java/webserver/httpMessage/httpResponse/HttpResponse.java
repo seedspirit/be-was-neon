@@ -10,7 +10,6 @@ import static webserver.httpMessage.HttpConstants.*;
 public class HttpResponse {
     private final ResponseStatusLine statusLine;
     private final ResponseHeaders headers;
-    private final ContentType contentType;
     private ResponseBody body;
 
     public static class Builder {
@@ -20,7 +19,6 @@ public class HttpResponse {
         private final ResponseHeaders headers;
 
         // 선택 매개변수 - 기본값으로 초기화
-        private ContentType contentType = ContentType.NONE;
         private ResponseBody body = new ResponseBody();
 
         public Builder(int statusCode, String reasonPhrase) {
@@ -32,13 +30,13 @@ public class HttpResponse {
 
 
             Map<String, String> headers = new HashMap<>();
-            headers.put(CONTENT_TYPE, contentType.getMimetype());
+            headers.put(CONTENT_TYPE, ContentType.NONE.getMimetype());
             headers.put(CONTENT_LENGTH, String.valueOf(body.getBodyLength()));
             this.headers = new ResponseHeaders(headers);
         }
 
         public Builder contentType(ContentType val) {
-            contentType = val;
+            headers.addHeader(CONTENT_TYPE, val.getMimetype());
             return this;
         }
 
@@ -60,17 +58,12 @@ public class HttpResponse {
 
     private HttpResponse(Builder builder) {
         this.statusLine = builder.statusLine;
-        this.contentType = builder.contentType;
         this.headers = builder.headers;
         this.body = builder.body;
     }
 
     public Map<String, String> getStatusLine () {
         return statusLine.getValues();
-    }
-
-    public ContentType getContentType() {
-        return contentType;
     }
 
     public int getStatusCode() {
