@@ -12,7 +12,8 @@ public enum ContentType {
     PNG(".png", "image/png", EMPTY),
     JPG(".jpg", "image/jpeg", EMPTY),
     SVG(".svg", "image/svg+xml", EMPTY),
-    NONE(EMPTY, EMPTY, EMPTY);
+    NONE(EMPTY, EMPTY, EMPTY),
+    FORM_URL_ENCODED(EMPTY, "application/x-www-form-urlencoded", EMPTY);
 
     private final String extension;
     private final String mimeType;

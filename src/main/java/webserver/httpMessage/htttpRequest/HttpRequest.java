@@ -31,8 +31,8 @@ public class HttpRequest {
         return requestLine.getValues();
     }
 
-    public byte[] getBody() {
-        return body.getValues();
+    public RequestBody getBody() {
+        return body;
     }
 
     public Optional<String> getLoginCookie(){
