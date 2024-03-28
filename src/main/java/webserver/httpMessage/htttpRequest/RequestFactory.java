@@ -2,7 +2,7 @@ package webserver.httpMessage.htttpRequest;
 
 import webserver.httpMessage.htttpRequest.requestParser.RequestBodyParser;
 import webserver.httpMessage.htttpRequest.requestParser.RequestHeadersParser;
-import webserver.httpMessage.htttpRequest.requestParser.RequestLineParser;
+import webserver.httpMessage.htttpRequest.requestParser.RequestLineFactory;
 
 import java.io.*;
 import java.util.List;
@@ -21,8 +21,7 @@ public class RequestFactory {
     }
 
     private RequestLine createRequestLine(BufferedInputStream bis) {
-        Map<String, String> requestLine = new RequestLineParser().getParseResultFrom(bis);
-        return new RequestLine(requestLine);
+        return new RequestLineFactory().createRequestLineFrom(bis);
     }
 
     private RequestHeaders createHeaders(BufferedInputStream bis) {
