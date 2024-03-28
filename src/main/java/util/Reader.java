@@ -7,20 +7,15 @@ import java.io.IOException;
 public class Reader {
     public static String readLineFrom(BufferedInputStream bufferedInputStream) throws IOException {
         StringBuilder builder = new StringBuilder();
-        int previous = -1;
         int current = 0;
-
         while((current = bufferedInputStream.read()) != -1) {
-            if (previous == '\r' && current == '\n') {
-                builder.deleteCharAt(builder.length()-1);
+            if (current == '\r'){
+                continue;
+            }
+            if (current == '\n'){
                 break;
             }
             builder.append((char) current);
-            previous = current;
-        }
-
-        if (previous != -1 && previous != '\r'){
-            builder.append((char) previous);
         }
         return builder.toString();
     }
