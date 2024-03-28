@@ -6,8 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.MainRequestHandler;
 import webserver.httpMessage.ContentType;
+import webserver.httpMessage.htttpRequest.FormBody;
 import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
+import webserver.httpMessage.htttpRequest.RequestBody;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -33,7 +35,7 @@ public class UserCreateHandler implements Handler {
 
     public HttpResponse handleRequest(HttpRequest httpRequest){
         try{
-            addUserInDatabase(new String(httpRequest.getBody()));
+            addUserInDatabase(httpRequest.getBody());
             return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
                     .contentType(ContentType.HTML)
                     .addHeaderComponent(LOCATION, DEFAULT_INDEX_PAGE)
@@ -45,8 +47,9 @@ public class UserCreateHandler implements Handler {
         }
     }
 
-    private void addUserInDatabase(String body) throws IllegalArgumentException {
-        Map<String, String> userInfo = getUserInfoFromBody(body);
+    private void addUserInDatabase(RequestBody body) throws IllegalArgumentException {
+        FormBody formBody = (FormBody) body;
+        Map<String, String> userInfo = formBody.getFormParsedBytes();
         String userID = userInfo.get(USERID_PARAM);
         String password = userInfo.get(PASSWORD_PARAM);
         String name =  URLDecoder.decode(userInfo.get(NAME_PARAM), StandardCharsets.UTF_8);
@@ -57,17 +60,6 @@ public class UserCreateHandler implements Handler {
         User user = new User(userID, password, name, email);
         UserDatabase.addUser(user);
         logger.debug("회원가입 성공! ID: {}, Name: {}", userID, name);
-    }
-
-    private Map<String, String> getUserInfoFromBody(String body) {
-        Map<String, String> userInfo = new HashMap<>();
-        String[] bodyComponents = body.split(AMPERSAND);
-        for (String bodyComponent : bodyComponents) {
-            String param = bodyComponent.split(EQUAL_SIGN)[0];
-            String value = bodyComponent.split(EQUAL_SIGN)[1];
-            userInfo.put(param, value);
-        }
-        return userInfo;
     }
 
     private void checkNameFormat(String name) throws IllegalArgumentException {

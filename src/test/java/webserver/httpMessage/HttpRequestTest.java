@@ -59,7 +59,7 @@ class HttpRequestTest {
     @Test
     @DisplayName("예시 http요청 메시지 중 body 부분을 추출한다")
     void getBodyTest() {
-        String answer = "";
+        byte[] answer = new byte[0];
         assertThat(httpRequest.getBody()).isEqualTo(answer);
     }
 }

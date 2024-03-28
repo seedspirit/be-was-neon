@@ -16,7 +16,7 @@ class ContentTypeTest {
     static Stream<Arguments> requestLineAndContentType() {
         return Stream.of(
                 Arguments.arguments("GET /index.html HTTP/1.1", ContentType.HTML),
-                Arguments.arguments("GET /reset.csss HTTP/1.1", ContentType.CSS),
+                Arguments.arguments("GET /reset.css HTTP/1.1", ContentType.CSS),
                 Arguments.arguments("GET /registration HTTP/1.1", ContentType.NONE)
         );
     }
