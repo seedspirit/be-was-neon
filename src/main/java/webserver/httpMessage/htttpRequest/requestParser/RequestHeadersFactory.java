@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.Reader;
 import webserver.MainRequestHandler;
+import webserver.httpMessage.htttpRequest.RequestHeaders;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -15,10 +16,10 @@ import java.util.Map;
 import static util.constants.Delimiter.*;
 import static webserver.httpMessage.HttpConstants.COOKIE;
 
-public class RequestHeadersParser {
+public class RequestHeadersFactory {
     private static final Logger logger = LoggerFactory.getLogger(MainRequestHandler.class);
 
-    public Map<String, List<String>> getParseResultFrom(BufferedInputStream bis) {
+    public RequestHeaders createRequestHeadersFrom(BufferedInputStream bis) {
         Map<String, List<String>> headers = new HashMap<>();
         try{
             String line;
@@ -36,7 +37,7 @@ public class RequestHeadersParser {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-        return headers;
+        return new RequestHeaders(headers);
     }
 
     private List<String> parseCookie(String values) {

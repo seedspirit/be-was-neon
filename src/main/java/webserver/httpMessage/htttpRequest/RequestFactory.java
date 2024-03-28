@@ -1,7 +1,7 @@
 package webserver.httpMessage.htttpRequest;
 
 import webserver.httpMessage.htttpRequest.requestParser.RequestBodyParser;
-import webserver.httpMessage.htttpRequest.requestParser.RequestHeadersParser;
+import webserver.httpMessage.htttpRequest.requestParser.RequestHeadersFactory;
 import webserver.httpMessage.htttpRequest.requestParser.RequestLineFactory;
 
 import java.io.*;
@@ -25,8 +25,7 @@ public class RequestFactory {
     }
 
     private RequestHeaders createHeaders(BufferedInputStream bis) {
-        Map<String, List<String>> headers = new RequestHeadersParser().getParseResultFrom(bis);
-        return new RequestHeaders(headers);
+        return new RequestHeadersFactory().createRequestHeadersFrom(bis);
     }
 
     private RequestBody createBodyBasedOnHeaders(BufferedInputStream bis, RequestHeaders headers) {
