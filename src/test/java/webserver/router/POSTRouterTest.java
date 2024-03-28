@@ -4,7 +4,7 @@ import db.UserDatabase;
 import org.junit.jupiter.api.*;
 import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
-import webserver.httpMessage.htttpRequest.RequestFactory;
+import webserver.httpMessage.htttpRequest.factory.RequestFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

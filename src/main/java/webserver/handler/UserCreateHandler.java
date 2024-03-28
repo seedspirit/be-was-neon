@@ -6,18 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.MainRequestHandler;
 import webserver.httpMessage.ContentType;
-import webserver.httpMessage.htttpRequest.FormBody;
+import webserver.httpMessage.htttpRequest.body.FormBody;
 import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
-import webserver.httpMessage.htttpRequest.RequestBody;
+import webserver.httpMessage.htttpRequest.body.RequestBody;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 
-import static util.constants.Delimiter.AMPERSAND;
-import static util.constants.Delimiter.EQUAL_SIGN;
 import static webserver.URLConstants.DEFAULT_INDEX_PAGE;
 import static webserver.URLConstants.REGISTRATION_FAILED_PAGE;
 import static webserver.httpMessage.HttpConstants.LOCATION;

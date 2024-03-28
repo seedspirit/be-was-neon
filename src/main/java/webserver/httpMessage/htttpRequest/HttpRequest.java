@@ -1,5 +1,7 @@
 package webserver.httpMessage.htttpRequest;
 
+import webserver.httpMessage.htttpRequest.body.RequestBody;
+
 import java.util.*;
 
 import static webserver.httpMessage.HttpConstants.*;

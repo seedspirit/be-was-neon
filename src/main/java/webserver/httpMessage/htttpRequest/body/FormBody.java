@@ -1,4 +1,4 @@
-package webserver.httpMessage.htttpRequest;
+package webserver.httpMessage.htttpRequest.body;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;

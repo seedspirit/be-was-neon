@@ -1,4 +1,4 @@
-package webserver.httpMessage.htttpRequest;
+package webserver.httpMessage.htttpRequest.body;
 
 public class BinaryBody implements RequestBody {
     private final byte[] body;

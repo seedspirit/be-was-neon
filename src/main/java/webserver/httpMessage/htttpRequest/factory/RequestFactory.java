@@ -1,12 +1,11 @@
-package webserver.httpMessage.htttpRequest;
+package webserver.httpMessage.htttpRequest.factory;
 
-import webserver.httpMessage.htttpRequest.requestParser.RequestBodyFactory;
-import webserver.httpMessage.htttpRequest.requestParser.RequestHeadersFactory;
-import webserver.httpMessage.htttpRequest.requestParser.RequestLineFactory;
+import webserver.httpMessage.htttpRequest.HttpRequest;
+import webserver.httpMessage.htttpRequest.body.RequestBody;
+import webserver.httpMessage.htttpRequest.RequestHeaders;
+import webserver.httpMessage.htttpRequest.RequestLine;
 
 import java.io.*;
-
-import static webserver.httpMessage.HttpConstants.*;
 
 public class RequestFactory {
 

@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
-import webserver.httpMessage.htttpRequest.RequestFactory;
+import webserver.httpMessage.htttpRequest.factory.RequestFactory;
 import webserver.httpMessage.httpResponse.util.ResponseTransmitter;
 import webserver.router.FrontRouter;
 
