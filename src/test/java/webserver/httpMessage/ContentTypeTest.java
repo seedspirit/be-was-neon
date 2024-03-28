@@ -25,7 +25,7 @@ class ContentTypeTest {
     @ParameterizedTest
     @MethodSource("requestLineAndContentType")
     void findMatchingContentTypeTest(String requestLine, ContentType contentType) {
-        assertThat(ContentType.of(requestLine)).isEqualTo(contentType);
+        assertThat(ContentType.findContentTypeByExtension(requestLine)).isEqualTo(contentType);
     }
 
     @DisplayName("마임 타입이 text일 경우 응답 헤더의 값을 만드는 메서드의 결과로 'text/;charset=utf-8' 형태의 문자열을 반환한다")

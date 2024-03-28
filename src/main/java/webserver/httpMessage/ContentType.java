@@ -33,7 +33,7 @@ public enum ContentType {
         return mimeType;
     }
 
-    public static ContentType of(String requestTarget){
+    public static ContentType findContentTypeByExtension(String requestTarget){
         return Arrays.stream(values())
                 .filter(v -> requestTarget.contains(v.getExtension()))
                 .findFirst()

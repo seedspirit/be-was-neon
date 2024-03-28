@@ -3,6 +3,7 @@ package webserver.httpMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.httpMessage.htttpRequest.EmptyBody;
 import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.htttpRequest.RequestFactory;
 
@@ -60,6 +61,6 @@ class HttpRequestTest {
     @DisplayName("예시 http요청 메시지 중 body 부분을 추출한다")
     void getBodyTest() {
         byte[] answer = new byte[0];
-        assertThat(httpRequest.getBody()).isEqualTo(answer);
+        assertThat(httpRequest.getBody()).isInstanceOf(EmptyBody.class);
     }
 }

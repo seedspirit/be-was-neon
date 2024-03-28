@@ -22,7 +22,7 @@ public class ResourceLoadHandler implements Handler {
         try {
             byte[] body = load(requestTarget);
             return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
-                    .contentType(ContentType.of(httpRequest.getRequestTarget()))
+                    .contentType(ContentType.findContentTypeByExtension(httpRequest.getRequestTarget()))
                     .body(body)
                     .build();
         } catch (ResourceNotFoundException e) {
@@ -46,6 +46,6 @@ public class ResourceLoadHandler implements Handler {
 
 
     private boolean isNotStaticResourceRequest(String requestTarget){
-        return ContentType.of(requestTarget).equals(ContentType.NONE);
+        return ContentType.findContentTypeByExtension(requestTarget).equals(ContentType.NONE);
     }
 }
