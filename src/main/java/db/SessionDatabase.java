@@ -20,7 +20,7 @@ public class SessionDatabase {
 
     public static User findUserBySessionId(String sessionId) {
         Pair<Cookie, User> sessionPair = sessions.get(sessionId);
-        return sessionPair.value2();
+        return sessionPair.getUser();
     }
 
     public static boolean isSessionIdExists(String sessionId) {

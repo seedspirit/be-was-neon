@@ -26,8 +26,8 @@ public class LogoutHandler implements Handler {
         if(loginCookie.isPresent() && SessionDatabase.isSessionIdExists(loginCookie.get())){
             String sessionId = loginCookie.get();
             Pair<Cookie, User> cookieUserPair = SessionDatabase.findCookieUserPairBySessionId(sessionId);
-            Cookie cookie = cookieUserPair.value1();
-            User user = cookieUserPair.value2();
+            Cookie cookie = cookieUserPair.getCookie();
+            User user = cookieUserPair.getUser();
             executeLogout(cookie);
             logger.debug("로그아웃 성공! Name: {}, SessionId: {}", user.getName(), loginCookie.get());
 
