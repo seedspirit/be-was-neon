@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.Reader;
 import webserver.MainRequestHandler;
-import webserver.httpMessage.ContentType;
 import webserver.httpMessage.htttpRequest.*;
 import webserver.httpMessage.htttpRequest.body.BinaryBody;
 import webserver.httpMessage.htttpRequest.body.EmptyBody;
@@ -13,9 +12,6 @@ import webserver.httpMessage.htttpRequest.body.RequestBody;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-
-import static webserver.httpMessage.HttpConstants.CONTENT_LENGTH;
-import static webserver.httpMessage.HttpConstants.CONTENT_TYPE;
 
 public class RequestBodyFactory {
     private static final Logger logger = LoggerFactory.getLogger(MainRequestHandler.class);

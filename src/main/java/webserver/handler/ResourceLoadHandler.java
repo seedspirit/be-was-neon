@@ -22,7 +22,7 @@ public class ResourceLoadHandler implements Handler {
         try {
             byte[] body = load(requestLine.getRequestTarget());
             return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
-                    .contentType(ContentType.findContentTypeByExtension(httpRequest.getRequestTarget()))
+                    .contentType(ContentType.findContentTypeByExtension(requestLine.getRequestTarget()))
                     .body(body)
                     .build();
         } catch (ResourceNotFoundException e) {

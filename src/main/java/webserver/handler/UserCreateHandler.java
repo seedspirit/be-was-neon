@@ -11,10 +11,6 @@ import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
 import webserver.httpMessage.htttpRequest.body.RequestBody;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-
 import static webserver.URLConstants.DEFAULT_INDEX_PAGE;
 import static webserver.URLConstants.REGISTRATION_FAILED_PAGE;
 import static webserver.httpMessage.HttpConstants.LOCATION;

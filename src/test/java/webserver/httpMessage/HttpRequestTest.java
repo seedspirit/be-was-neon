@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static webserver.httpMessage.HttpConstants.METHOD;
 
 class HttpRequestTest {
 
@@ -38,13 +39,13 @@ class HttpRequestTest {
     @Test
     @DisplayName("예시 http요청 메시지 중 method인 GET을 추출한다")
     void getMethodTest() {
-        assertThat(httpRequest.getMethod()).isEqualTo("GET");
+        assertThat(httpRequest.getRequestLine().getValueOf(METHOD)).isEqualTo("GET");
     }
 
     @Test
     @DisplayName("예시 http요청 메시지 중 request target인 \"/index.html\"을 추출한다")
     void getRequestTargetTest() {
-        assertThat(httpRequest.getRequestTarget()).isEqualTo("/index.html");
+        assertThat(httpRequest.getRequestLine().getRequestTarget()).isEqualTo("/index.html");
     }
 
     @Test

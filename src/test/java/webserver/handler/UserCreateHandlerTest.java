@@ -13,7 +13,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static webserver.httpMessage.HttpConstants.LOCATION;
 import static webserver.httpMessage.HttpStatus.FOUND;
 
@@ -94,9 +93,5 @@ class UserCreateHandlerTest {
         RequestFactory requestFactory = new RequestFactory();
         HttpRequest httpRequest = requestFactory.createHttpRequestFrom(is);
         return handler.handleRequest(httpRequest);
-    }
-
-    private HttpResponse generateExpectedResponse(int statusCode, String reasonPhrase) {
-        return new HttpResponse.Builder(statusCode, reasonPhrase).build();
     }
 }
