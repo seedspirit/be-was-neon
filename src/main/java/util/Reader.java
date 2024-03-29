@@ -1,23 +1,25 @@
 package util;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class Reader {
     public static String readLineFrom(BufferedInputStream bufferedInputStream) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        int current = 0;
-        while((current = bufferedInputStream.read()) != -1) {
-            if (current == '\r'){
-                continue;
+        ByteArrayOutputStream bufferStream = new ByteArrayOutputStream();
+        int readByte;
+        boolean foundNewLine = false;
+
+        while (!foundNewLine && (readByte = bufferedInputStream.read()) != -1) {
+            if (readByte == '\n') {
+                foundNewLine = true;
+            } else if (readByte != '\r') {
+                bufferStream.write(readByte);
             }
-            if (current == '\n'){
-                break;
-            }
-            builder.append((char) current);
         }
-        return builder.toString();
+        return bufferStream.toString(StandardCharsets.UTF_8);
     }
 
     public static byte[] readBodyFrom(BufferedInputStream bufferedInputStream, int contentLength) throws IOException {
