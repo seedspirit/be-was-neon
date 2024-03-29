@@ -21,9 +21,9 @@ public class RequestBodyFactory {
     private static final Logger logger = LoggerFactory.getLogger(MainRequestHandler.class);
 
     public RequestBody createRequestBodyFrom(BufferedInputStream bis, RequestHeaders headers) {
-        if (headers.containsKey(CONTENT_TYPE)){
-            int contentLength = Integer.parseInt(headers.getValueOf(CONTENT_LENGTH).get(0));
-            if(headers.getValueOf(CONTENT_TYPE).get(0).equals(ContentType.FORM_URL_ENCODED.getMimetype())){
+        if (headers.containsContentType()){
+            int contentLength = headers.getContentLength();
+            if(headers.contentTypeEqualsFormURLEncoded()){
                 return new FormBody(getBytesFrom(bis, contentLength));
             }
             return new BinaryBody(getBytesFrom(bis, contentLength));
