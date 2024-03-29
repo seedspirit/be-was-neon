@@ -47,10 +47,14 @@ public class RequestHeaders {
     }
 
     public boolean sessionIdExistsInSessionDB() {
-        return SessionDatabase.isSessionIdExists(getLoginCookieSessionId());
+        try{
+            return SessionDatabase.isSessionIdExists(getLoginCookieSessionId());
+        } catch (NoSuchElementException e){
+            return false;
+        }
     }
 
-    public boolean isClientSessionAuthenticated(){
+    public boolean isClientSessionAuthenticated() {
         return hasLoginCookie() && sessionIdExistsInSessionDB();
     }
 
