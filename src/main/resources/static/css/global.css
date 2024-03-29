@@ -67,6 +67,14 @@
   color: #ffffff;
 }
 
+.btn_userName {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 14px;
+  background: #ff6666;
+  color: #ffffff;
+}
+
 .btn_size_s {
   padding: 8px 16px;
   font-size: 14px;
@@ -147,4 +155,19 @@
   font-size: 14px;
   margin-bottom: 20px;
   text-align: center;
+}
+
+.grid-table {
+  width: 100%;
+  border-collapse: collapse; /* Remove space between borders */
+}
+
+.grid-table th, .grid-table td {
+  border: 1px solid black; /* Black grid lines */
+  padding: 8px; /* Padding inside cells */
+  text-align: left; /* Align text to the left */
+}
+
+.grid-table th {
+  background-color: #f2f2f2; /* Light grey background for headers */
 }
