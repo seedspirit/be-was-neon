@@ -4,10 +4,10 @@ import webserver.exceptions.ResourceNotFoundException;
 import webserver.httpMessage.ContentType;
 import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
+import webserver.httpMessage.htttpRequest.RequestLine;
 
 import java.io.*;
 
-import static webserver.URLConstants.DEFAULT_INDEX_PAGE;
 import static webserver.URLConstants.STATIC_DIR_PATH;
 import static webserver.httpMessage.HttpStatus.NOT_FOUND;
 import static webserver.httpMessage.HttpStatus.OK;
@@ -15,12 +15,12 @@ import static webserver.httpMessage.HttpStatus.OK;
 public class ResourceLoadHandler implements Handler {
 
     public HttpResponse handleRequest(HttpRequest httpRequest) {
-        String requestTarget = httpRequest.getRequestTarget();
-        if(isNotStaticResourceRequest(requestTarget)){
-            requestTarget += DEFAULT_INDEX_PAGE;
+        RequestLine requestLine = httpRequest.getRequestLine();
+        if(requestLine.isNotStaticResourceRequest()){
+            requestLine.addRequestTargetDefaultIndexPage();
         }
         try {
-            byte[] body = load(requestTarget);
+            byte[] body = load(requestLine.getRequestTarget());
             return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
                     .contentType(ContentType.findContentTypeByExtension(httpRequest.getRequestTarget()))
                     .body(body)
@@ -42,10 +42,5 @@ public class ResourceLoadHandler implements Handler {
         } catch (IOException e) {
             throw new ResourceNotFoundException("요청한 리소스를 %s에서 읽는 중에 에러가 발생했습니다", path);
         }
-    }
-
-
-    private boolean isNotStaticResourceRequest(String requestTarget){
-        return ContentType.findContentTypeByExtension(requestTarget).equals(ContentType.NONE);
     }
 }

@@ -29,8 +29,8 @@ public class HttpRequest {
         return headers.getValues();
     }
 
-    public Map<String, String> getRequestLine() {
-        return requestLine.getValues();
+    public RequestLine getRequestLine() {
+        return requestLine;
     }
 
     public RequestBody getBody() {

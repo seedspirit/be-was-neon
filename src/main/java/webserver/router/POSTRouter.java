@@ -1,21 +1,18 @@
 package webserver.router;
 
 import webserver.handler.*;
-import webserver.exceptions.UrlFormatException;
 import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
+import webserver.httpMessage.htttpRequest.RequestLine;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class POSTRouter implements Router {
 
     private final Map<String, Handler> handlers;
     private final ExceptionHandler exceptionHandler;
-    private final String INITIAL_PATH_SEGMENT_EXTRACTION_PATTERN = "^\\/[^\\/\\?]+";
 
     public POSTRouter(){
         this.handlers = new HashMap<>();
@@ -27,7 +24,8 @@ public class POSTRouter implements Router {
 
     public HttpResponse route(HttpRequest httpRequest) {
         try {
-            String targetHandler = extractTargetHandler(httpRequest.getRequestTarget());
+            RequestLine requestLine = httpRequest.getRequestLine();
+            String targetHandler = requestLine.getInitialPathSegment();
             checkRequestCanBeHandle(targetHandler);
             Handler handler = handlers.get(targetHandler);
             return handler.handleRequest(httpRequest);
@@ -39,16 +37,6 @@ public class POSTRouter implements Router {
     private void checkRequestCanBeHandle(String targetHandler) throws NoSuchElementException {
         if (!handlers.containsKey(targetHandler)){
             throw new NoSuchElementException();
-        }
-    }
-
-    private String extractTargetHandler(String requestTarget) throws UrlFormatException {
-        Pattern pattern = Pattern.compile(INITIAL_PATH_SEGMENT_EXTRACTION_PATTERN);
-        Matcher matcher = pattern.matcher(requestTarget);
-        if (matcher.find()) {
-            return matcher.group();
-        } else {
-            throw new UrlFormatException();
         }
     }
 }
