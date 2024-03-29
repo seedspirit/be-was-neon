@@ -7,13 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.MainRequestHandler;
 import webserver.httpMessage.ContentType;
-import webserver.httpMessage.htttpRequest.body.FormBody;
-import webserver.httpMessage.htttpRequest.HttpRequest;
+import webserver.httpMessage.httpRequest.body.FormBody;
+import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
-import webserver.httpMessage.htttpRequest.body.RequestBody;
+import webserver.httpMessage.httpRequest.body.RequestBody;
 import webserver.session.Cookie;
-
-import java.util.*;
 
 import static webserver.URLConstants.LOGIN_FAILED_PAGE;
 import static webserver.URLConstants.LOGIN_USER_DEFAULT_INDEX_PAGE;

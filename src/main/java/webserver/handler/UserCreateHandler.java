@@ -6,10 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.MainRequestHandler;
 import webserver.httpMessage.ContentType;
-import webserver.httpMessage.htttpRequest.body.FormBody;
-import webserver.httpMessage.htttpRequest.HttpRequest;
+import webserver.httpMessage.httpRequest.body.FormBody;
+import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
-import webserver.httpMessage.htttpRequest.body.RequestBody;
+import webserver.httpMessage.httpRequest.body.RequestBody;
 
 import static webserver.URLConstants.DEFAULT_INDEX_PAGE;
 import static webserver.URLConstants.REGISTRATION_FAILED_PAGE;

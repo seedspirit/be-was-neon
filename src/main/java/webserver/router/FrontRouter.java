@@ -1,9 +1,9 @@
 package webserver.router;
 
 import webserver.handler.ExceptionHandler;
-import webserver.httpMessage.htttpRequest.HttpRequest;
+import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
-import webserver.httpMessage.htttpRequest.RequestLine;
+import webserver.httpMessage.httpRequest.RequestLine;
 
 import java.util.HashMap;
 import java.util.Map;

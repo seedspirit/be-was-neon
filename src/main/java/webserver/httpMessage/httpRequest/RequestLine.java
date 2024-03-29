@@ -1,4 +1,4 @@
-package webserver.httpMessage.htttpRequest;
+package webserver.httpMessage.httpRequest;
 
 import webserver.URLConstants;
 import webserver.exceptions.UnsupportedMethodException;

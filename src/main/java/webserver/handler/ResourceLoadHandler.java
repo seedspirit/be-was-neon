@@ -2,9 +2,9 @@ package webserver.handler;
 
 import webserver.exceptions.ResourceNotFoundException;
 import webserver.httpMessage.ContentType;
-import webserver.httpMessage.htttpRequest.HttpRequest;
+import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
-import webserver.httpMessage.htttpRequest.RequestLine;
+import webserver.httpMessage.httpRequest.RequestLine;
 
 import java.io.*;
 

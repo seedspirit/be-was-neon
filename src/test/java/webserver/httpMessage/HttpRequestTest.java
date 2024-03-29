@@ -3,9 +3,9 @@ package webserver.httpMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.httpMessage.htttpRequest.body.EmptyBody;
-import webserver.httpMessage.htttpRequest.HttpRequest;
-import webserver.httpMessage.htttpRequest.factory.RequestFactory;
+import webserver.httpMessage.httpRequest.body.EmptyBody;
+import webserver.httpMessage.httpRequest.HttpRequest;
+import webserver.httpMessage.httpRequest.factory.RequestFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

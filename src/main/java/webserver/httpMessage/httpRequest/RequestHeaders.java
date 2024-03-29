@@ -1,4 +1,4 @@
-package webserver.httpMessage.htttpRequest;
+package webserver.httpMessage.httpRequest;
 
 import db.SessionDatabase;
 import webserver.httpMessage.ContentType;

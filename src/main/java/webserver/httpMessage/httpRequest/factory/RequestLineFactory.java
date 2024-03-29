@@ -1,10 +1,10 @@
-package webserver.httpMessage.htttpRequest.factory;
+package webserver.httpMessage.httpRequest.factory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.Reader;
 import webserver.MainRequestHandler;
-import webserver.httpMessage.htttpRequest.RequestLine;
+import webserver.httpMessage.httpRequest.RequestLine;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

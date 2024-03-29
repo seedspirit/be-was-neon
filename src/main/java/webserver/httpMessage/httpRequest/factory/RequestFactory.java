@@ -1,9 +1,9 @@
-package webserver.httpMessage.htttpRequest.factory;
+package webserver.httpMessage.httpRequest.factory;
 
-import webserver.httpMessage.htttpRequest.HttpRequest;
-import webserver.httpMessage.htttpRequest.body.RequestBody;
-import webserver.httpMessage.htttpRequest.RequestHeaders;
-import webserver.httpMessage.htttpRequest.RequestLine;
+import webserver.httpMessage.httpRequest.HttpRequest;
+import webserver.httpMessage.httpRequest.body.RequestBody;
+import webserver.httpMessage.httpRequest.RequestHeaders;
+import webserver.httpMessage.httpRequest.RequestLine;
 
 import java.io.*;
 

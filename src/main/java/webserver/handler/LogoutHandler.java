@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import util.Pair;
 import webserver.MainRequestHandler;
 import webserver.httpMessage.ContentType;
-import webserver.httpMessage.htttpRequest.HttpRequest;
+import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
-import webserver.httpMessage.htttpRequest.RequestHeaders;
+import webserver.httpMessage.httpRequest.RequestHeaders;
 import webserver.session.Cookie;
 
 import static webserver.URLConstants.DEFAULT_INDEX_PAGE;

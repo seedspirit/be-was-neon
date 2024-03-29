@@ -1,6 +1,6 @@
-package webserver.httpMessage.htttpRequest;
+package webserver.httpMessage.httpRequest;
 
-import webserver.httpMessage.htttpRequest.body.RequestBody;
+import webserver.httpMessage.httpRequest.body.RequestBody;
 
 public class HttpRequest {
     private final RequestLine requestLine;

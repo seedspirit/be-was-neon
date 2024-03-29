@@ -1,4 +1,4 @@
-package webserver.httpMessage.htttpRequest.body;
+package webserver.httpMessage.httpRequest.body;
 
 public class EmptyBody implements RequestBody {
     private byte[] body;

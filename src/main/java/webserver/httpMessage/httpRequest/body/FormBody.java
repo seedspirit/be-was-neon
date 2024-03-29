@@ -1,4 +1,4 @@
-package webserver.httpMessage.htttpRequest.body;
+package webserver.httpMessage.httpRequest.body;
 
 import db.UserDatabase;
 import model.User;

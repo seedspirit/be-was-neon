@@ -3,9 +3,9 @@ package webserver.handler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.exceptions.ResourceNotFoundException;
-import webserver.httpMessage.htttpRequest.HttpRequest;
+import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
-import webserver.httpMessage.htttpRequest.factory.RequestFactory;
+import webserver.httpMessage.httpRequest.factory.RequestFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

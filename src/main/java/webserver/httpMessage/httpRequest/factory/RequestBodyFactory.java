@@ -1,14 +1,14 @@
-package webserver.httpMessage.htttpRequest.factory;
+package webserver.httpMessage.httpRequest.factory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.Reader;
 import webserver.MainRequestHandler;
-import webserver.httpMessage.htttpRequest.*;
-import webserver.httpMessage.htttpRequest.body.BinaryBody;
-import webserver.httpMessage.htttpRequest.body.EmptyBody;
-import webserver.httpMessage.htttpRequest.body.FormBody;
-import webserver.httpMessage.htttpRequest.body.RequestBody;
+import webserver.httpMessage.httpRequest.*;
+import webserver.httpMessage.httpRequest.body.BinaryBody;
+import webserver.httpMessage.httpRequest.body.EmptyBody;
+import webserver.httpMessage.httpRequest.body.FormBody;
+import webserver.httpMessage.httpRequest.body.RequestBody;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

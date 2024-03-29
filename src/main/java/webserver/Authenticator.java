@@ -1,8 +1,8 @@
 package webserver;
 
-import webserver.httpMessage.htttpRequest.HttpRequest;
-import webserver.httpMessage.htttpRequest.RequestHeaders;
-import webserver.httpMessage.htttpRequest.RequestLine;
+import webserver.httpMessage.httpRequest.HttpRequest;
+import webserver.httpMessage.httpRequest.RequestHeaders;
+import webserver.httpMessage.httpRequest.RequestLine;
 
 public class Authenticator {
     public boolean isAuthenticated(HttpRequest httpRequest){
