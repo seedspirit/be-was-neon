@@ -1,5 +1,8 @@
 package webserver.httpMessage.htttpRequest.body;
 
+import db.UserDatabase;
+import model.User;
+
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -10,6 +13,13 @@ import static util.constants.Delimiter.*;
 public class FormBody implements RequestBody {
     private final byte[] rawBytes;
     private final Map<String, String> formParsedBytes;
+    private final String NAME_VALIDATION_REGEX = "^[가-힣a-zA-Z\\s]+$";
+    private final String EMAIL_VALIDATION_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+    private final String USERID_PARAM = "username";
+    private final String PASSWORD_PARAM = "password";
+    private final String NAME_PARAM = "nickname";
+    private final String EMAIL_PARAM = "email";
+
 
     public FormBody(byte[] bytes){
         this.rawBytes = bytes;
@@ -37,5 +47,48 @@ public class FormBody implements RequestBody {
 
     public Map<String, String> getFormParsedBytes(){
         return formParsedBytes;
+    }
+
+    public User createUserByFormData() throws IllegalArgumentException {
+        String userID = formParsedBytes.get(USERID_PARAM);
+        String password = formParsedBytes.get(PASSWORD_PARAM);
+        String name =  URLDecoder.decode(formParsedBytes.get(NAME_PARAM), StandardCharsets.UTF_8);
+        String email = URLDecoder.decode(formParsedBytes.get(EMAIL_PARAM), StandardCharsets.UTF_8);
+        return new User(userID, password, name, email);
+    }
+
+    public void checkUserNameFormatValid() throws IllegalArgumentException {
+        if (!URLDecoder.decode(formParsedBytes.get(NAME_PARAM), StandardCharsets.UTF_8).matches(NAME_VALIDATION_REGEX)){
+            throw new IllegalArgumentException(": 잘못된 이름 형식입니다");
+        }
+    }
+
+    public void checkUserEmailFormatValid() throws IllegalArgumentException {
+        if (!URLDecoder.decode(formParsedBytes.get(EMAIL_PARAM), StandardCharsets.UTF_8).matches(EMAIL_VALIDATION_REGEX)) {
+            throw new IllegalArgumentException(": 잘못된 이메일 형식입니다");
+        }
+    }
+    public boolean userIdExistsInDB() {
+        return UserDatabase.isUserExists(getUserId());
+    }
+
+    public boolean passwordInputCorrespondPasswordOf(User user) {
+        return user.getPassword().equals(getPassword());
+    }
+
+    public String getUserId(){
+        return formParsedBytes.get(USERID_PARAM);
+    }
+
+    public String getPassword(){
+        return formParsedBytes.get(PASSWORD_PARAM);
+    }
+
+    public String getUserName(){
+        return URLDecoder.decode(formParsedBytes.get(NAME_PARAM), StandardCharsets.UTF_8);
+    }
+
+    public String getUserEmail(){
+        return URLDecoder.decode(formParsedBytes.get(EMAIL_PARAM), StandardCharsets.UTF_8);
     }
 }

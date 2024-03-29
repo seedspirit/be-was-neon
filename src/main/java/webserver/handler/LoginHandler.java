@@ -23,8 +23,6 @@ import static webserver.httpMessage.HttpStatus.FOUND;
 
 public class LoginHandler implements Handler {
     private static final Logger logger = LoggerFactory.getLogger(MainRequestHandler.class);
-    private final String USERID_PARAM = "username";
-    private final String PASSWORD_PARAM = "password";
     private Cookie cookie;
 
     public HttpResponse handleRequest(HttpRequest httpRequest){
@@ -42,15 +40,12 @@ public class LoginHandler implements Handler {
 
     private boolean isLoginSucceed(RequestBody body) {
         FormBody formBody = (FormBody) body;
-        Map<String, String> params = formBody.getFormParsedBytes();
-        String userId = params.get(USERID_PARAM);
-        if(!isUserExistsInDB(userId)){
+        if(!formBody.userIdExistsInDB()){
             return false;
         }
 
-        User user = UserDatabase.findUserById(userId);
-        String passwordInput = params.get(PASSWORD_PARAM);
-        if (!isPasswordInputCorrect(user, passwordInput)){
+        User user = UserDatabase.findUserById(formBody.getUserId());
+        if (!formBody.passwordInputCorrespondPasswordOf(user)){
             return false;
         }
 
@@ -58,14 +53,6 @@ public class LoginHandler implements Handler {
         registerCookieUserPair(cookie, user);
         logger.debug("로그인 성공! Name: {}, SessionId: {}", user.getName(), cookie.getSessionId());
         return true;
-    }
-
-    private boolean isPasswordInputCorrect(User user, String passwordInput) {
-        return user.getPassword().equals(passwordInput);
-    }
-
-    private boolean isUserExistsInDB(String userId) {
-        return UserDatabase.isUserExists(userId);
     }
 
     private void registerCookieUserPair(Cookie cookie, User user){
