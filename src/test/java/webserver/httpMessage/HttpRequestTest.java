@@ -54,7 +54,7 @@ class HttpRequestTest {
         answer.put("Host", List.of("localhost:8080"));
         answer.put("Connection", List.of("keep-alive"));
         answer.put("Accept", List.of("*/*"));
-        assertThat(httpRequest.getHeaders()).isEqualTo(answer);
+        assertThat(httpRequest.getHeaders().getValues()).isEqualTo(answer);
     }
 
     @Test

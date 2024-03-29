@@ -9,9 +9,8 @@ import webserver.MainRequestHandler;
 import webserver.httpMessage.ContentType;
 import webserver.httpMessage.htttpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
+import webserver.httpMessage.htttpRequest.RequestHeaders;
 import webserver.session.Cookie;
-
-import java.util.Optional;
 
 import static webserver.URLConstants.DEFAULT_INDEX_PAGE;
 import static webserver.httpMessage.HttpConstants.LOCATION;
@@ -22,14 +21,14 @@ public class LogoutHandler implements Handler {
     private static final Logger logger = LoggerFactory.getLogger(MainRequestHandler.class);
 
     public HttpResponse handleRequest(HttpRequest httpRequest){
-        Optional<String> loginCookie = httpRequest.getLoginCookie();
-        if(loginCookie.isPresent() && SessionDatabase.isSessionIdExists(loginCookie.get())){
-            String sessionId = loginCookie.get();
+        RequestHeaders requestHeaders = httpRequest.getHeaders();
+        if(requestHeaders.isClientSessionAuthenticated()){
+            String sessionId = requestHeaders.getLoginCookieSessionId();
             Pair<Cookie, User> cookieUserPair = SessionDatabase.findCookieUserPairBySessionId(sessionId);
             Cookie cookie = cookieUserPair.getCookie();
             User user = cookieUserPair.getUser();
             executeLogout(cookie);
-            logger.debug("로그아웃 성공! Name: {}, SessionId: {}", user.getName(), loginCookie.get());
+            logger.debug("로그아웃 성공! Name: {}, SessionId: {}", user.getName(), sessionId);
 
             return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
                     .contentType(ContentType.HTML)

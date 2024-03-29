@@ -25,8 +25,8 @@ public class HttpRequest {
         return requestLine.getValueOf(REQUEST_TARGET);
     }
 
-    public Map<String, List<String>> getHeaders() {
-        return headers.getValues();
+    public RequestHeaders getHeaders() {
+        return headers;
     }
 
     public RequestLine getRequestLine() {
@@ -35,12 +35,5 @@ public class HttpRequest {
 
     public RequestBody getBody() {
         return body;
-    }
-
-    public Optional<String> getLoginCookie(){
-        return headers.getValueOf(COOKIE).stream()
-                .filter(cookie -> cookie.startsWith("sid="))
-                .findFirst()
-                .map(cookie -> cookie.substring(4));
     }
 }
