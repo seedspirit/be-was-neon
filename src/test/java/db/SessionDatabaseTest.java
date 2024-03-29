@@ -4,6 +4,7 @@ import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import util.Pair;
 import webserver.session.Cookie;
 
 import java.lang.reflect.Field;
@@ -21,6 +22,15 @@ class SessionDatabaseTest {
         this.cookie = getMockCookie();
         this.user = new User("ex", "ex", "ex", "ex@email.com");
         SessionDatabase.addRecord(cookie, user);
+    }
+
+    @DisplayName("세션 ID로 데이터베이스에서 쿠키, 유저 페어 객체를 찾을 수 있다")
+    @Test
+    void findCookieUserPairBySessionIdTest(){
+        String sessionId = "100";
+        Pair<Cookie, User> cookieUserPair = SessionDatabase.findCookieUserPairBySessionId(sessionId);
+        assertThat(cookieUserPair.getUser()).isEqualTo(user);
+        assertThat(cookieUserPair.getCookie().getSessionId()).isEqualTo(sessionId);
     }
 
     @DisplayName("세션 ID로 데이터베이스에서 특정 유저 객체를 찾을 수 있다")
