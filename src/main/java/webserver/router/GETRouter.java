@@ -7,10 +7,6 @@ import webserver.httpMessage.httpResponse.HttpResponse;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
-
-import static webserver.URLConstants.DEFAULT_INDEX_PAGE;
-import static webserver.httpMessage.HttpConstants.REQUEST_TARGET;
 
 public class GETRouter implements Router {
 
@@ -19,8 +15,8 @@ public class GETRouter implements Router {
 
     public GETRouter(){
         this.handlers = new HashMap<>();
-        handlers.put("/user/list", new UserListPageBuildHandler());
-        handlers.put("/main/index.html", new CustomUserHtmlBuildHandler());
+        handlers.put("/user/list", new UserListHandler());
+        handlers.put("/main/index.html", new LoginUserMainPageHandler());
         this.exceptionHandler = new ExceptionHandler();
     }
 

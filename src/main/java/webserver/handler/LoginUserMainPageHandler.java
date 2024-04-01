@@ -14,7 +14,7 @@ import static webserver.httpMessage.HttpConstants.LOCATION;
 import static webserver.httpMessage.HttpStatus.FOUND;
 import static webserver.httpMessage.HttpStatus.OK;
 
-public class CustomUserHtmlBuildHandler extends CustomHtmlBuilder {
+public class LoginUserMainPageHandler extends CustomHtmlBuilder {
     private final String USER_NAME_BUTTON_CSS_ID = "authenticated-userNameButton";
     private final String USER_NAME_INSERTION_MARKER = "userNameText";
 

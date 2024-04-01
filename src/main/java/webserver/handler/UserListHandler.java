@@ -9,7 +9,7 @@ import webserver.httpMessage.httpResponse.HttpResponse;
 
 import static webserver.httpMessage.HttpStatus.OK;
 
-public class UserListPageBuildHandler extends CustomHtmlBuilder {
+public class UserListHandler extends CustomHtmlBuilder {
     private final String TABLE_CSS_CLASS_NAME = "grid-table";
     private final String USER_INFO_TABLE_INSERTION_MARKER = "userInfoTable";
     private final String HTML_FILE_EXTENSION = ".html";
