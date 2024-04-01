@@ -36,6 +36,7 @@ public class UserCreateHandler implements Handler {
     private void addUserInDatabase(RequestBody body) throws IllegalArgumentException {
         FormBody formBody = (FormBody) body;
 
+        formBody.checkUserIdDuplicated();
         formBody.checkUserNameFormatValid();
         formBody.checkUserEmailFormatValid();
 

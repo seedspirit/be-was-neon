@@ -24,24 +24,28 @@ class FormBodyTest {
         UserDatabase.clearDatabase();
     }
 
-    private static Stream<Arguments> formBodyArguments() {
-        return Stream.of(
-                Arguments.of("javajigi", "password", "javajigi@slipp.net", "박재성")
-        );
-    }
-
     @DisplayName("Body에 byte 형태로 들어온 form 입력을 userId, Password, UserName, UserEmail 형태로 파싱하여 반환할 수 있다")
-    @ParameterizedTest
-    @MethodSource("formBodyArguments")
-    void parsingFormBodyTest(String expectedUserId, String expectedPassword, String expectedEmail, String expectedUserName){
+    @Test
+    void parsingFormBodyTest(){
         String bodyStringExample =
                 "username=javajigi&nickname=%EB%B0%95%EC%9E%AC%EC%84%B1&password=password&email=javajigi%40slipp.net";
         FormBody formBody = new FormBody(bodyStringExample.getBytes());
 
-        assertThat(formBody.getUserId()).isEqualTo(expectedUserId);
-        assertThat(formBody.getPassword()).isEqualTo(expectedPassword);
-        assertThat(formBody.getUserEmail()).isEqualTo(expectedEmail);
-        assertThat(formBody.getUserName()).isEqualTo(expectedUserName);
+        assertThat(formBody.getUserId()).isEqualTo("javajigi");
+        assertThat(formBody.getPassword()).isEqualTo("password");
+        assertThat(formBody.getUserEmail()).isEqualTo("javajigi@slipp.net");
+        assertThat(formBody.getUserName()).isEqualTo("박재성");
+    }
+
+    @DisplayName("이미 존재하는 userId를 입력했을 경우 IllegalArgumentException을 반환한다")
+    @Test
+    void checkUserIdDuplicatedTest(){
+        User user = new User("javajigi", "password", "박재성", "javajigi@slipp.net");
+        UserDatabase.addUser(user);
+        String bodyStringExample =
+                "username=javajigi&nickname=%EB%B0%95%EC%9E%AC%EC%84%B1&password=password&email=javajigi%40slipp.net";
+        FormBody formBody = new FormBody(bodyStringExample.getBytes());
+        assertThatThrownBy(formBody::checkUserIdDuplicated).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("Body에 잘못된 유저이름 형식이 들어왔을 때 IllegalArgumentException을 반환한다")

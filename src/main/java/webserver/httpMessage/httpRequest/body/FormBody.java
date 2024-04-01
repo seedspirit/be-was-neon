@@ -57,6 +57,12 @@ public class FormBody implements RequestBody {
         return new User(userID, password, name, email);
     }
 
+    public void checkUserIdDuplicated() throws IllegalArgumentException {
+        if (userIdExistsInDB()){
+            throw new IllegalArgumentException();
+        }
+    }
+
     public void checkUserNameFormatValid() throws IllegalArgumentException {
         if (!URLDecoder.decode(formParsedBytes.get(NAME_PARAM), StandardCharsets.UTF_8).matches(NAME_VALIDATION_REGEX)){
             throw new IllegalArgumentException(": 잘못된 이름 형식입니다");
