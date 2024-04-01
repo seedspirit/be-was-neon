@@ -22,14 +22,19 @@ class UserDatabaseTest {
     public void generateUserInfoTableTest() {
         String expected =
                 """
-                        <tr>
-                        <td>asdf</td>
-                        <td>userOne</td>
-                        </tr>
-                        <tr>
-                        <td>qwer</td>
-                        <td>userTwo</td>
-                        </tr>
+                <tr>
+                    <th>아이디</th>
+                    <th>이름</th>
+                </tr>
+                <tr>
+                <td>asdf</td>
+                <td>userOne</td>
+                </tr>
+                <tr>
+                <td>qwer</td>
+                <td>userTwo</td>
+                </tr>
+
                         """;
 
         String actual = UserDatabase.generateUserInfoTable();

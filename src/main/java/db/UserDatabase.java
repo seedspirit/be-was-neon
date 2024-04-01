@@ -28,6 +28,13 @@ public class UserDatabase {
     }
 
     public static String generateUserInfoTable() {
+        final String TABLE_HTML_FORMAT = """
+                <tr>
+                    <th>아이디</th>
+                    <th>이름</th>
+                </tr>
+                %s
+                            """;
         StringBuilder result = new StringBuilder();
         for (User user : users.values()){
             result.append("<tr>\n")
@@ -35,6 +42,6 @@ public class UserDatabase {
                     .append(String.format("<td>%s</td>\n", user.getName()))
                     .append("</tr>\n");
         }
-        return result.toString();
+        return String.format(TABLE_HTML_FORMAT, result.toString());
     }
 }
