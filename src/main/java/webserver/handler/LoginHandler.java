@@ -38,15 +38,18 @@ public class LoginHandler implements Handler {
 
     private boolean isLoginSucceed(RequestBody body) {
         FormBody formBody = (FormBody) body;
+        // 유저 ID가 DB에 존재하는지 검증
         if(!formBody.userIdExistsInDB()){
             return false;
         }
 
+        // 입력한 비밀번호와 로그인하고자 하는 User 객체의 비밀번호가 일치하는지 검증
         User user = UserDatabase.findUserById(formBody.getUserId());
         if (!formBody.passwordInputCorrespondPasswordOf(user)){
             return false;
         }
 
+        // 세션ID 발급 후 세션ID와 유저를 Session DB에 저장
         this.cookie = new Cookie();
         registerCookieUserPair(cookie, user);
         logger.debug("로그인 성공! Name: {}, SessionId: {}", user.getName(), cookie.getSessionId());

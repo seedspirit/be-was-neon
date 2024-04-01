@@ -33,6 +33,7 @@ public class UserCreateHandler implements Handler {
         }
     }
 
+    // Body에서 아이디 중복, 아이디와 비밀번호 형식 검증 후 User 객체를 생성, DB에 저장하는 회원가입 절차 진행
     private void addUserInDatabase(RequestBody body) throws IllegalArgumentException {
         FormBody formBody = (FormBody) body;
 

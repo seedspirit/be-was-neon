@@ -17,6 +17,7 @@ public class UserListHandler extends CustomHtmlBuilder {
     @Override
     public HttpResponse handleRequest(HttpRequest httpRequest){
         RequestLine requestLine = httpRequest.getRequestLine();
+        // DB에 저장되어 있는 유저들의 아이디, 이름을 바탕으로 표 형태의 HTML을 만들어 삽입
         String tableHTML = UserDatabase.generateUserInfoTable();
         byte[] body = loadCustomHtml(
                 TABLE_CSS_CLASS_NAME,

@@ -16,6 +16,7 @@ public class ResourceLoadHandler implements Handler {
 
     public HttpResponse handleRequest(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
+        // 디렉토리 형태로 요청이 오는 경우 url에 /index.html을 추가
         if(requestLine.isNotStaticResourceRequest()){
             requestLine.addRequestTargetDefaultIndexPage();
         }

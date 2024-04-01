@@ -16,6 +16,9 @@ public class RequestFactory {
         this.in = in;
     }
 
+    // InputStream을 받아 요청 메시지의 각 부분을 객체로 생성, 이를 조합하여 HttpRequest 객체 생성
+    // 파싱 중 에러가 발생할 경우 ParsingException throw -> MainRequestHandler에서 catch하여 500 응답 전송
+
     public HttpRequest createHttpRequest() throws ParsingException {
         BufferedInputStream bis = new BufferedInputStream(in);
         RequestLine requestLine = createRequestLine(bis);

@@ -23,6 +23,7 @@ public class URLConstants {
         AccessLevel(List<String> urls) {
             this.urls = urls;
         }
+        // 입력된 url이 인가가 필요한 url인지 정규표현식을 이용하여 검증
 
         public static boolean belongsToPublic(String url){
             return PRIVATE.urls.stream().noneMatch(u -> Pattern.compile(u).matcher(url).matches());

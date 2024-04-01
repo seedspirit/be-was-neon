@@ -27,9 +27,11 @@ public class FrontRouter implements Router {
             requestLine.checkMethodSupportedInServer();
             requestLine.checkRequestTargetFormatValid();
 
+            // RequestLine에서 Method를 판단한 이후 알맞은 라우터로 다시 라우팅
             String method = requestLine.getValueOf(METHOD);
             return router.get(method).route(httpRequest);
         } catch (Exception exception) {
+            // 라우팅 단에서 예외가 발생했을 경우 그에 알맞은 http 응답 메시지를 반환
             return exceptionHandler.handleException(exception);
         }
     }

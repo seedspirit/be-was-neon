@@ -22,6 +22,7 @@ public class ExceptionHandler {
         exceptions.put(UnsupportedMethodException.class, METHOD_NOT_ALLOWED);
     }
 
+    // 라우팅 단계에서 발생하는 예외를 받아, 그에 알맞는 상태 코드의 응답을 클라이언트에 반환
     public HttpResponse handleException(Exception exception){
         HttpStatus status = exceptions.getOrDefault(exception.getClass(), INTERNAL_SERVER_ERROR);
         return new HttpResponse.Builder(status.getStatusCode(), status.getReasonPhrase()).build();

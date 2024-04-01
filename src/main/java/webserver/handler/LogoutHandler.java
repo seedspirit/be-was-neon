@@ -22,6 +22,7 @@ public class LogoutHandler implements Handler {
 
     public HttpResponse handleRequest(HttpRequest httpRequest){
         RequestHeaders requestHeaders = httpRequest.getHeaders();
+        // 로그인한 유저가 로그아웃을 시도하는 경우, 세션DB에서 세션ID를 삭제, 쿠키 만료 후 응답 전송
         if(requestHeaders.isClientSessionAuthenticated()){
             String sessionId = requestHeaders.getLoginCookieSessionId();
             Pair<Cookie, User> cookieUserPair = SessionDatabase.findCookieUserPairBySessionId(sessionId);
