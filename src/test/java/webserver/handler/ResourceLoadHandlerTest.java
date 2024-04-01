@@ -2,6 +2,7 @@ package webserver.handler;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.exceptions.ParsingException;
 import webserver.exceptions.ResourceNotFoundException;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
@@ -17,7 +18,7 @@ class ResourceLoadHandlerTest {
 
     @DisplayName("요청한 경로에 리소스가 없는 경우 404 응답을 반환한다")
     @Test
-    void loadExceptionTest() throws ResourceNotFoundException {
+    void loadExceptionTest() throws ResourceNotFoundException, ParsingException {
         String requestExample =
                 """
                 GET /inqeux.html HTTP/1.1
@@ -29,8 +30,8 @@ class ResourceLoadHandlerTest {
                
                 """;
         InputStream is = new ByteArrayInputStream(requestExample.getBytes());
-        RequestFactory requestFactory = new RequestFactory();
-        HttpRequest httpRequest = requestFactory.createHttpRequestFrom(is);
+        RequestFactory requestFactory = new RequestFactory(is);
+        HttpRequest httpRequest = requestFactory.createHttpRequest();
         HttpResponse actualResponse = new ResourceLoadHandler().handleRequest(httpRequest);
         assertThat(actualResponse.getStatusCode()).isEqualTo(NOT_FOUND.getStatusCode());
         assertThat(actualResponse.getReasonPhrase()).isEqualTo(NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다");

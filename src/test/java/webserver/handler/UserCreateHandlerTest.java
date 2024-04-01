@@ -5,6 +5,7 @@ import model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.exceptions.ParsingException;
 import webserver.httpMessage.httpResponse.HttpResponse;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpRequest.factory.RequestFactory;
@@ -29,7 +30,7 @@ class UserCreateHandlerTest {
 
     @DisplayName("요청에 맞는 정보를 지닌 User 객체가 회원가입에 성공하여 데이터베이스에 저장된다")
     @Test
-    void addUserInDatabaseTest() {
+    void addUserInDatabaseTest() throws ParsingException {
         String requestExample =
                 """
                 POST /create HTTP/1.1
@@ -50,7 +51,7 @@ class UserCreateHandlerTest {
 
     @DisplayName("잘못된 이메일 형식을 입력하였을 때 회원가입 실패 페이지로 리다이렉션하는 응답을 반환받는다")
     @Test
-    void invalidEmailFormatTest() {
+    void invalidEmailFormatTest() throws ParsingException {
         String requestExample =
                 """
                 POST /create HTTP/1.1
@@ -70,7 +71,7 @@ class UserCreateHandlerTest {
 
     @DisplayName("잘못된 이름 형식을 입력하였을 때 회원가입 실패 페이지로 리다이렉션하는 응답을 반환받는다")
     @Test
-    void invalidNameFormatTest() {
+    void invalidNameFormatTest() throws ParsingException {
         String requestExample =
                 """
                 POST /create HTTP/1.1
@@ -88,10 +89,10 @@ class UserCreateHandlerTest {
         assertThat(httpResponse.getHeader().get(LOCATION)).isEqualTo("/registration/register_failed.html");
     }
 
-    private HttpResponse sendRequestAndGetResponse(String requestExample) {
+    private HttpResponse sendRequestAndGetResponse(String requestExample) throws ParsingException {
         InputStream is = new ByteArrayInputStream(requestExample.getBytes());
-        RequestFactory requestFactory = new RequestFactory();
-        HttpRequest httpRequest = requestFactory.createHttpRequestFrom(is);
+        RequestFactory requestFactory = new RequestFactory(is);
+        HttpRequest httpRequest = requestFactory.createHttpRequest();
         return handler.handleRequest(httpRequest);
     }
 }

@@ -3,6 +3,7 @@ package webserver.httpMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.exceptions.ParsingException;
 import webserver.httpMessage.httpRequest.body.EmptyBody;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpRequest.factory.RequestFactory;
@@ -30,10 +31,10 @@ class HttpRequestTest {
                     """;
 
     @BeforeEach
-    void setMsg(){
+    void setMsg() throws ParsingException {
         InputStream in = new ByteArrayInputStream(requestExample.getBytes());
-        RequestFactory requestFactory = new RequestFactory();
-        httpRequest = requestFactory.createHttpRequestFrom(in);
+        RequestFactory requestFactory = new RequestFactory(in);
+        httpRequest = requestFactory.createHttpRequest();
     }
 
     @Test

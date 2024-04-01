@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.Reader;
 import webserver.MainRequestHandler;
+import webserver.exceptions.ParsingException;
 import webserver.httpMessage.httpRequest.RequestHeaders;
 
 import java.io.BufferedInputStream;
@@ -19,7 +20,7 @@ import static webserver.httpMessage.HttpConstants.COOKIE;
 public class RequestHeadersFactory {
     private static final Logger logger = LoggerFactory.getLogger(MainRequestHandler.class);
 
-    public RequestHeaders createRequestHeadersFrom(BufferedInputStream bis) {
+    public RequestHeaders createRequestHeadersFrom(BufferedInputStream bis) throws ParsingException {
         Map<String, List<String>> headers = new HashMap<>();
         try{
             String line;
@@ -34,10 +35,11 @@ public class RequestHeadersFactory {
                 }
                 headers.put(key, values);
             }
+            return new RequestHeaders(headers);
         } catch (IOException e) {
             logger.error(e.getMessage());
+            throw new ParsingException();
         }
-        return new RequestHeaders(headers);
     }
 
     private List<String> parseCookie(String values) {

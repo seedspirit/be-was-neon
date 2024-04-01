@@ -4,6 +4,7 @@ import db.UserDatabase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.exceptions.ParsingException;
 import webserver.httpMessage.httpResponse.HttpResponse;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpRequest.factory.RequestFactory;
@@ -21,13 +22,13 @@ class LoginHandlerTest {
     private LoginHandler loginHandler;
 
     @BeforeEach
-    void setLoginEnv(){
+    void setLoginEnv() throws ParsingException {
         UserDatabase.clearDatabase();
         registerTestUser();
         this.loginHandler = new LoginHandler();
     }
 
-    void registerTestUser(){
+    void registerTestUser() throws ParsingException {
         String registrationRequest =
                 """
                 POST /create HTTP/1.1
@@ -46,7 +47,7 @@ class LoginHandlerTest {
 
     @DisplayName("로그인에 성공하면 쿠키와 함께 로그인 유저를 위한 index.html 페이지로 리다이레션하는 응답을 반환한다")
     @Test
-    void handleRequestSuccessTest() {
+    void handleRequestSuccessTest() throws ParsingException {
         HttpResponse httpResponse = login("javajigi", "password");
         assertThat(httpResponse.getStatusCode()).isEqualTo(FOUND.getStatusCode());
         assertThat(httpResponse.getHeader()).containsKeys(SET_COOKIE);
@@ -55,7 +56,7 @@ class LoginHandlerTest {
 
     @DisplayName("존재하지 않는 아이디로 로그인 요청을 보내면 로그인 실패 페이지로 리다이렉션하는 응답을 반환한다")
     @Test
-    void invalidUserIdLoginTest() {
+    void invalidUserIdLoginTest() throws ParsingException {
         HttpResponse httpResponse = login("java", "password");
         assertThat(httpResponse.getStatusCode()).isEqualTo(FOUND.getStatusCode());
         assertThat(httpResponse.getHeader().get(LOCATION)).isEqualTo("/login/login_failed.html");
@@ -63,13 +64,13 @@ class LoginHandlerTest {
 
     @DisplayName("틀린 비밀번호로 로그인 요청을 보내면 로그인 실패 페이지로 리다이렉션하는 응답을 반환한다")
     @Test
-    void invalidPasswordLoginTest() {
+    void invalidPasswordLoginTest() throws ParsingException {
         HttpResponse httpResponse = login("javajigi", "pass");
         assertThat(httpResponse.getStatusCode()).isEqualTo(FOUND.getStatusCode());
         assertThat(httpResponse.getHeader().get(LOCATION)).isEqualTo("/login/login_failed.html");
     }
 
-    private HttpResponse login(String username, String password){
+    private HttpResponse login(String username, String password) throws ParsingException {
         String loginRequestTemplate = """
             POST /login HTTP/1.1
             Host: localhost:8080
@@ -85,14 +86,14 @@ class LoginHandlerTest {
         return handleRequest(loginRequest, loginHandler);
     }
 
-    private HttpResponse handleRequest(String request, Handler handler){
+    private HttpResponse handleRequest(String request, Handler handler) throws ParsingException {
         HttpRequest httpRequest = makeRequestFrom(request);
         return handler.handleRequest(httpRequest);
     }
 
-    private HttpRequest makeRequestFrom(String requestExample) {
+    private HttpRequest makeRequestFrom(String requestExample) throws ParsingException {
         InputStream is = new ByteArrayInputStream(requestExample.getBytes());
-        RequestFactory requestFactory = new RequestFactory();
-        return requestFactory.createHttpRequestFrom(is);
+        RequestFactory requestFactory = new RequestFactory(is);
+        return requestFactory.createHttpRequest();
     }
 }

@@ -1,5 +1,6 @@
 package webserver.httpMessage.httpRequest.factory;
 
+import webserver.exceptions.ParsingException;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpRequest.body.RequestBody;
 import webserver.httpMessage.httpRequest.RequestHeaders;
@@ -9,7 +10,13 @@ import java.io.*;
 
 public class RequestFactory {
 
-    public HttpRequest createHttpRequestFrom(InputStream in) {
+    private InputStream in;
+
+    public RequestFactory(InputStream in){
+        this.in = in;
+    }
+
+    public HttpRequest createHttpRequest() throws ParsingException {
         BufferedInputStream bis = new BufferedInputStream(in);
         RequestLine requestLine = createRequestLine(bis);
         RequestHeaders headers = createHeaders(bis);
@@ -17,15 +24,15 @@ public class RequestFactory {
         return new HttpRequest(requestLine, headers, body);
     }
 
-    private RequestLine createRequestLine(BufferedInputStream bis) {
+    private RequestLine createRequestLine(BufferedInputStream bis) throws ParsingException {
         return new RequestLineFactory().createRequestLineFrom(bis);
     }
 
-    private RequestHeaders createHeaders(BufferedInputStream bis) {
+    private RequestHeaders createHeaders(BufferedInputStream bis) throws ParsingException {
         return new RequestHeadersFactory().createRequestHeadersFrom(bis);
     }
 
-    private RequestBody createBody(BufferedInputStream bis, RequestHeaders requestHeaders) {
+    private RequestBody createBody(BufferedInputStream bis, RequestHeaders requestHeaders) throws ParsingException {
         return new RequestBodyFactory().createRequestBodyFrom(bis, requestHeaders);
     }
 }

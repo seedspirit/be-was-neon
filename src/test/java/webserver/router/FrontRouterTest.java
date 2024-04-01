@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import webserver.exceptions.ParsingException;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
 import webserver.httpMessage.httpRequest.factory.RequestFactory;
@@ -35,7 +36,7 @@ class FrontRouterTest {
             "/mission, 404, Not Found: 요청한 리소스를 찾을 수 없습니다",
             "\\dkjwn.dj, 400, Bad Request"
     })
-    void routeTest(String requestPath, int expectedStatusCode, String expectedReasonPhrase) {
+    void routeTest(String requestPath, int expectedStatusCode, String expectedReasonPhrase) throws ParsingException {
         String requestTemplate =
                 """
                 GET %s HTTP/1.1
@@ -55,7 +56,7 @@ class FrontRouterTest {
 
     @DisplayName("지원하지 않는 메서드로 요청할 경우 405 에러를 반환한다")
     @Test
-    void methodTest(){
+    void methodTest() throws ParsingException {
         String requestExample =
                 """
                 DELETE /index.html HTTP/1.1
@@ -80,10 +81,10 @@ class FrontRouterTest {
         return new HttpResponse.Builder(statusCode, reasonPhrase).build();
     }
 
-    private HttpResponse sendRequestAndGetResponse(String requestExample) {
+    private HttpResponse sendRequestAndGetResponse(String requestExample) throws ParsingException {
         InputStream is = new ByteArrayInputStream(requestExample.getBytes());
-        RequestFactory requestFactory = new RequestFactory();
-        HttpRequest httpRequest = requestFactory.createHttpRequestFrom(is);
+        RequestFactory requestFactory = new RequestFactory(is);
+        HttpRequest httpRequest = requestFactory.createHttpRequest();
         return frontRouter.route(httpRequest);
     }
 }

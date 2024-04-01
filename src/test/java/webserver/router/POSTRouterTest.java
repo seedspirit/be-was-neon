@@ -2,6 +2,7 @@ package webserver.router;
 
 import db.UserDatabase;
 import org.junit.jupiter.api.*;
+import webserver.exceptions.ParsingException;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
 import webserver.httpMessage.httpRequest.factory.RequestFactory;
@@ -28,7 +29,7 @@ class POSTRouterTest {
     @DisplayName("존재하지 않는 회원으로 로그인을 시도하는 경우 302 응답을 반환한다")
     @Test
     @Order(1)
-    void loginWithNotRegisteredIdTest() {
+    void loginWithNotRegisteredIdTest() throws ParsingException {
         String requestExample =
                 """
                 POST /login HTTP/1.1
@@ -51,7 +52,7 @@ class POSTRouterTest {
     @DisplayName("회원가입이 성공한 경우 http://localhost:8080/index.html로 리다이렉트하는 응답을 반환한다")
     @Test
     @Order(2)
-    void redirectTest() {
+    void redirectTest() throws ParsingException {
         String requestExample =
                 """
                 POST /create HTTP/1.1
@@ -78,7 +79,7 @@ class POSTRouterTest {
     @DisplayName("지원하지 않는 url을 입력한 경우 404 에러 응답을 반환한다")
     @Test
     @Order(3)
-    void notFoundResponseTest() {
+    void notFoundResponseTest() throws ParsingException {
         String requestExample =
                 """
                 POST /index.html HTTP/1.1
@@ -101,10 +102,10 @@ class POSTRouterTest {
         assertThat(actual.getReasonPhrase()).isEqualTo(expected.getReasonPhrase());
     }
 
-    private HttpResponse sendRequestAndGetResponse(String requestExample) {
+    private HttpResponse sendRequestAndGetResponse(String requestExample) throws ParsingException {
         InputStream is = new ByteArrayInputStream(requestExample.getBytes());
-        RequestFactory requestFactory = new RequestFactory();
-        HttpRequest httpRequest = requestFactory.createHttpRequestFrom(is);
+        RequestFactory requestFactory = new RequestFactory(is);
+        HttpRequest httpRequest = requestFactory.createHttpRequest();
         return postRouter.route(httpRequest);
     }
 

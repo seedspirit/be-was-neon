@@ -11,9 +11,14 @@ import java.io.OutputStream;
 
 public class ResponseTransmitter {
     private static final Logger logger = LoggerFactory.getLogger(MainRequestHandler.class);
+    private OutputStream out;
 
-    public void transmit(HttpResponse response, OutputStream outputStream) {
-        DataOutputStream dos = new DataOutputStream(outputStream);
+    public ResponseTransmitter(OutputStream out){
+        this.out = out;
+    }
+
+    public void transmit(HttpResponse response) {
+        DataOutputStream dos = new DataOutputStream(out);
         ResponseSerializer serializer = new ResponseSerializer();
         byte[] responseLine = serializer.serializeStatusLine(response.getStatusLine());
         byte[] header = serializer.serializeHeaders(response.getHeader());
