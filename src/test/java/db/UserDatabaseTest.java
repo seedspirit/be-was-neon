@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserDatabaseTest {
     @BeforeEach
     void setupDatabase(){
+        UserDatabase.clearDatabase();
         User userOne = new User("asdf", "userOne", "userOne", "asdf@asdf.com");
         User userTwo = new User("qwer", "userTwo", "userTwo", "qwer@qwer.com");
         UserDatabase.addUser(userOne);
