@@ -27,18 +27,17 @@ public class GETRouter implements Router {
     public HttpResponse route(HttpRequest httpRequest) {
         try {
             RequestLine requestLine = httpRequest.getRequestLine();
-            String finalUrl = editMainPath(requestLine.getValueOf(REQUEST_TARGET));
-            Handler handler = handlers.getOrDefault(finalUrl, new ResourceLoadHandler());
+            editMainPath(requestLine);
+            Handler handler = handlers.getOrDefault(requestLine.getRequestTarget(), new ResourceLoadHandler());
             return  handler.handleRequest(httpRequest);
         } catch (Exception exception) {
             return exceptionHandler.handleException(exception);
         }
     }
 
-    private String editMainPath(String path){
-        if(path.equals("/main")){
-            return path + DEFAULT_INDEX_PAGE;
+    private void editMainPath(RequestLine requestLine){
+        if(requestLine.getRequestTarget().equals("/main")){
+            requestLine.addRequestTargetDefaultIndexPage();
         }
-        return path;
     }
 }
