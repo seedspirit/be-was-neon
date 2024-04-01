@@ -2,12 +2,10 @@ package db;
 
 import model.User;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class UserDatabase {
-    private static Map<String, User> users = new HashMap<>();
+    private static Map<String, User> users = new LinkedHashMap<>();
 
     public static void addUser(User user) {
         users.put(user.getUserId(), user);
@@ -27,5 +25,16 @@ public class UserDatabase {
 
     public static void clearDatabase(){
         users.clear();
+    }
+
+    public static String generateUserInfoTable() {
+        StringBuilder result = new StringBuilder();
+        for (User user : users.values()){
+            result.append("<tr>\n")
+                    .append(String.format("<td>%s</td>\n", user.getUserId()))
+                    .append(String.format("<td>%s</td>\n", user.getName()))
+                    .append("</tr>\n");
+        }
+        return result.toString();
     }
 }
