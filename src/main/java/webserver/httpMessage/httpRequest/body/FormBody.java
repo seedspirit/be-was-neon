@@ -19,6 +19,8 @@ public class FormBody implements RequestBody {
     private final String PASSWORD_PARAM = "password";
     private final String NAME_PARAM = "nickname";
     private final String EMAIL_PARAM = "email";
+    private final String ARTICLE_TITLE_PARAM = "title";
+    private final String ARTICLE_CONTENT_PARAM = "content";
 
 
     public FormBody(byte[] bytes){
@@ -80,6 +82,14 @@ public class FormBody implements RequestBody {
 
     public boolean passwordInputCorrespondPasswordOf(User user) {
         return user.getPassword().equals(getPassword());
+    }
+
+    public String getArticleTitle(){
+        return formParsedBytes.get(ARTICLE_TITLE_PARAM);
+    }
+
+    public String getArticleContent(){
+        return formParsedBytes.get(ARTICLE_CONTENT_PARAM);
     }
 
     public String getUserId(){
