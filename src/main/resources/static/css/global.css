@@ -110,6 +110,13 @@
   border: 1px solid #d2dae0;
 }
 
+.textfield_size_tile {
+  gap: 4px;
+  padding: 8px 16px;
+  width: 680px;
+  height: 50px;
+}
+
 .textfield_size_s {
   gap: 4px;
   padding: 8px 16px;
