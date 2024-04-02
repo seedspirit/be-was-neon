@@ -1,6 +1,7 @@
-package webserver.handler;
+package webserver.handler.dynamicHTML;
 
 import util.Reader;
+import webserver.handler.Handler;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
 

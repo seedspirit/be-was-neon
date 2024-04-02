@@ -1,4 +1,4 @@
-package webserver.handler;
+package webserver.handler.dynamicHTML;
 
 import db.UserDatabase;
 

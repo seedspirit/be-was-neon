@@ -1,9 +1,11 @@
-package webserver.handler;
+package webserver.handler.dynamicHTML;
 
+import db.ArticleDatabase;
 import db.SessionDatabase;
 import model.User;
 
 import webserver.URLConstants;
+import webserver.handler.dynamicHTML.CustomHtmlBuilder;
 import webserver.httpMessage.ContentType;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpRequest.RequestHeaders;
@@ -16,6 +18,7 @@ import static webserver.httpMessage.HttpStatus.OK;
 
 public class LoginUserMainPageHandler extends CustomHtmlBuilder {
     private final String USER_NAME_INSERTION_MARKER = "userNameText";
+    private final String ARTICLE_INFO_INSERTION_MARKER = "articleListTableBody";
 
     @Override
     public HttpResponse handleRequest(HttpRequest httpRequest){
@@ -26,6 +29,7 @@ public class LoginUserMainPageHandler extends CustomHtmlBuilder {
             User user = SessionDatabase.findUserBySessionId(sessionId);
             String basicHtml = loadHtml(requestLine.getRequestTarget());
             String customizedHtml = modifyHtmlBySelector(basicHtml, USER_NAME_INSERTION_MARKER, user.getUserId());
+            customizedHtml = modifyHtmlBySelector(customizedHtml, ARTICLE_INFO_INSERTION_MARKER, ArticleDatabase.generateArticleListHTML());
             return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
                     .contentType(ContentType.findContentTypeByExtension(requestLine.getRequestTarget()))
                     .body(customizedHtml.getBytes())
