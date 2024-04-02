@@ -1,6 +1,7 @@
 package webserver.httpMessage.httpRequest;
 
 import db.SessionDatabase;
+import model.User;
 import webserver.httpMessage.ContentType;
 
 import java.util.List;
@@ -56,6 +57,12 @@ public class RequestHeaders {
 
     public boolean isClientSessionAuthenticated() {
         return hasLoginCookie() && sessionIdExistsInSessionDB();
+    }
+
+    public String getUserNameOfClient() throws NoSuchElementException {
+        String sessionId = getLoginCookieSessionId();
+        User user = SessionDatabase.findUserBySessionId(sessionId);
+        return user.getName();
     }
 
     public List<String> getValueOf(String headerName){
