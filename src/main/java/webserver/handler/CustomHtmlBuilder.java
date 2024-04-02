@@ -16,19 +16,20 @@ public abstract class CustomHtmlBuilder implements Handler {
     @Override
     public abstract HttpResponse handleRequest(HttpRequest httpRequest);
 
-    public byte[] loadCustomHtml(String targetCSS, String marker, String insertionContent, String path){
+    public String modifyHtmlBySelector(String origin, String marker, String insertionContent){
+        return origin.replaceFirst(marker, insertionContent);
+    }
+
+    public String loadHtml(String path){
         try (InputStream inputStream = this.getClass().getResourceAsStream(STATIC_DIR_PATH + path)) {
             checkInputStreamNull(inputStream);
             BufferedInputStream bis = new BufferedInputStream(inputStream);
             StringBuilder builder = new StringBuilder();
             String line;
             while(!(line = Reader.readLineFrom(bis)).isEmpty()) {
-                if (line.contains(targetCSS)) {
-                    line = line.replaceFirst(marker, insertionContent);
-                }
                 builder.append(line);
             }
-            return builder.toString().getBytes();
+            return builder.toString();
         } catch (IOException e) {
             throw new NoSuchElementException();
         }

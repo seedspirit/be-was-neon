@@ -15,7 +15,6 @@ import static webserver.httpMessage.HttpStatus.FOUND;
 import static webserver.httpMessage.HttpStatus.OK;
 
 public class LoginUserMainPageHandler extends CustomHtmlBuilder {
-    private final String USER_NAME_BUTTON_CSS_ID = "authenticated-userNameButton";
     private final String USER_NAME_INSERTION_MARKER = "userNameText";
 
     @Override
@@ -25,14 +24,11 @@ public class LoginUserMainPageHandler extends CustomHtmlBuilder {
         String sessionId = requestHeaders.getLoginCookieSessionId();
         try{
             User user = SessionDatabase.findUserBySessionId(sessionId);
-            byte[] body = loadCustomHtml(
-                    USER_NAME_BUTTON_CSS_ID,
-                    USER_NAME_INSERTION_MARKER,
-                    user.getUserId(),
-                    requestLine.getRequestTarget());
+            String basicHtml = loadHtml(requestLine.getRequestTarget());
+            String customizedHtml = modifyHtmlBySelector(basicHtml, USER_NAME_INSERTION_MARKER, user.getUserId());
             return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
                     .contentType(ContentType.findContentTypeByExtension(requestLine.getRequestTarget()))
-                    .body(body)
+                    .body(customizedHtml.getBytes())
                     .build();
         } catch (NullPointerException e) {
             return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
