@@ -19,13 +19,15 @@ public class POSTRouter implements Router {
         handlers.put("/create", new UserCreateHandler());
         handlers.put("/login", new LoginHandler());
         handlers.put("/logout", new LogoutHandler());
+        handlers.put("/article/create", new ArticleCreationHandler());
         this.exceptionHandler = new ExceptionHandler();
     }
 
     public HttpResponse route(HttpRequest httpRequest) {
         try {
             RequestLine requestLine = httpRequest.getRequestLine();
-            String targetHandler = requestLine.getInitialPathSegment();
+            String targetHandler = requestLine.getRequestTarget();
+            // String targetHandler = requestLine.getInitialPathSegment();
             checkRequestCanBeHandle(targetHandler);
             Handler handler = handlers.get(targetHandler);
             return handler.handleRequest(httpRequest);
