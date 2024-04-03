@@ -19,7 +19,6 @@ import static webserver.httpMessage.HttpStatus.NOT_FOUND;
 
 public class LoginUserMainPageHandler extends CustomHtmlBuilder {
     private final String USER_NAME_INSERTION_MARKER = "userNameText";
-    private final String ARTICLE_INFO_INSERTION_MARKER = "articleListTableBody";
 
     @Override
     public HttpResponse handleRequest(HttpRequest httpRequest){
@@ -30,7 +29,6 @@ public class LoginUserMainPageHandler extends CustomHtmlBuilder {
             User user = SessionDatabase.findUserBySessionId(sessionId);
             String basicHtml = loadHtml(requestLine.getRequestTarget());
             String customizedHtml = modifyHtmlBySelector(basicHtml, USER_NAME_INSERTION_MARKER, user.getUserId());
-            customizedHtml = modifyHtmlBySelector(customizedHtml, ARTICLE_INFO_INSERTION_MARKER, ArticleDatabase.generateArticleListHTML());
             return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
                     .contentType(ContentType.findContentTypeByExtension(requestLine.getRequestTarget()))
                     .body(customizedHtml.getBytes())
