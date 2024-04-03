@@ -28,7 +28,7 @@ public class GETRouter implements Router {
         try {
             RequestLine requestLine = httpRequest.getRequestLine();
             editMainPath(requestLine);
-            Handler handler = handlers.getOrDefault(requestLine.getRequestTarget(), new ResourceLoadHandler());
+            Handler handler = handlers.getOrDefault(requestLine.getRequestTarget(), new StaticResourceHandler());
             return  handler.handleRequest(httpRequest);
         } catch (Exception exception) {
             return exceptionHandler.handleException(exception);

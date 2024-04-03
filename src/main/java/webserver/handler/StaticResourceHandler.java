@@ -10,7 +10,7 @@ import webserver.httpMessage.httpRequest.RequestLine;
 import static webserver.httpMessage.HttpStatus.NOT_FOUND;
 import static webserver.httpMessage.HttpStatus.OK;
 
-public class ResourceLoadHandler extends ResourceLoader implements Handler {
+public class StaticResourceHandler extends ResourceLoader implements Handler {
 
     public HttpResponse handleRequest(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();

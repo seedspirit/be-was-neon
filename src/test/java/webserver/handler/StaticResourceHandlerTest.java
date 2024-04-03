@@ -14,7 +14,7 @@ import java.io.InputStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static webserver.httpMessage.HttpStatus.NOT_FOUND;
 
-class ResourceLoadHandlerTest {
+class StaticResourceHandlerTest {
 
     @DisplayName("요청한 경로에 리소스가 없는 경우 404 응답을 반환한다")
     @Test
@@ -32,7 +32,7 @@ class ResourceLoadHandlerTest {
         InputStream is = new ByteArrayInputStream(requestExample.getBytes());
         RequestFactory requestFactory = new RequestFactory(is);
         HttpRequest httpRequest = requestFactory.createHttpRequest();
-        HttpResponse actualResponse = new ResourceLoadHandler().handleRequest(httpRequest);
+        HttpResponse actualResponse = new StaticResourceHandler().handleRequest(httpRequest);
         assertThat(actualResponse.getStatusCode()).isEqualTo(NOT_FOUND.getStatusCode());
         assertThat(actualResponse.getReasonPhrase()).isEqualTo(NOT_FOUND.getReasonPhrase());
     }
