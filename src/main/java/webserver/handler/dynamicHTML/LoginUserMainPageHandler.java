@@ -5,7 +5,8 @@ import db.SessionDatabase;
 import model.User;
 
 import webserver.URLConstants;
-import webserver.handler.dynamicHTML.CustomHtmlBuilder;
+import webserver.exceptions.ResourceNotFoundException;
+import webserver.exceptions.html.ExceptionHTMLGenerator;
 import webserver.httpMessage.ContentType;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpRequest.RequestHeaders;
@@ -13,8 +14,8 @@ import webserver.httpMessage.httpRequest.RequestLine;
 import webserver.httpMessage.httpResponse.HttpResponse;
 
 import static webserver.httpMessage.HttpConstants.LOCATION;
-import static webserver.httpMessage.HttpStatus.FOUND;
-import static webserver.httpMessage.HttpStatus.OK;
+import static webserver.httpMessage.HttpStatus.*;
+import static webserver.httpMessage.HttpStatus.NOT_FOUND;
 
 public class LoginUserMainPageHandler extends CustomHtmlBuilder {
     private final String USER_NAME_INSERTION_MARKER = "userNameText";
@@ -37,6 +38,12 @@ public class LoginUserMainPageHandler extends CustomHtmlBuilder {
         } catch (NullPointerException e) {
             return new HttpResponse.Builder(FOUND.getStatusCode(), FOUND.getReasonPhrase())
                     .addHeaderComponent(LOCATION, URLConstants.LOGIN_INDEX_PAGE)
+                    .build();
+        } catch (ResourceNotFoundException e) {
+            byte[] body = ExceptionHTMLGenerator.getHtml(NOT_FOUND).getBytes();
+            return new HttpResponse.Builder(NOT_FOUND.getStatusCode(), NOT_FOUND.getReasonPhrase())
+                    .contentType(ContentType.HTML)
+                    .body(body)
                     .build();
         }
     }

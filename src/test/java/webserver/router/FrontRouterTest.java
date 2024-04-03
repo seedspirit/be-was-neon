@@ -33,7 +33,7 @@ class FrontRouterTest {
             "/index.html, 200, OK",
             "/index.html, 200, OK",
             "/registration, 200, OK",
-            "/mission, 404, Not Found: 요청한 리소스를 찾을 수 없습니다",
+            "/mission, 404, Not Found",
             "\\dkjwn.dj, 400, Bad Request"
     })
     void routeTest(String requestPath, int expectedStatusCode, String expectedReasonPhrase) throws ParsingException {

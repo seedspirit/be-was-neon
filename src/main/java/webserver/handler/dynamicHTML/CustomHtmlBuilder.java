@@ -1,18 +1,16 @@
 package webserver.handler.dynamicHTML;
 
-import util.Reader;
+import webserver.exceptions.ResourceNotFoundException;
 import webserver.handler.Handler;
+import webserver.handler.ResourceLoader;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.NoSuchElementException;
 
-import static webserver.URLConstants.STATIC_DIR_PATH;
+import java.nio.charset.StandardCharsets;
 
-public abstract class CustomHtmlBuilder implements Handler {
+
+public abstract class CustomHtmlBuilder extends ResourceLoader implements Handler {
 
     @Override
     public abstract HttpResponse handleRequest(HttpRequest httpRequest);
@@ -21,24 +19,8 @@ public abstract class CustomHtmlBuilder implements Handler {
         return origin.replaceFirst(marker, insertionContent);
     }
 
-    public String loadHtml(String path){
-        try (InputStream inputStream = this.getClass().getResourceAsStream(STATIC_DIR_PATH + path)) {
-            checkInputStreamNull(inputStream);
-            BufferedInputStream bis = new BufferedInputStream(inputStream);
-            StringBuilder builder = new StringBuilder();
-            String line;
-            while(!(line = Reader.readLineFrom(bis)).isEmpty()) {
-                builder.append(line);
-            }
-            return builder.toString();
-        } catch (IOException e) {
-            throw new NoSuchElementException();
-        }
-    }
-
-    private void checkInputStreamNull(InputStream inputStream) throws NoSuchElementException {
-        if (inputStream == null) {
-            throw new NoSuchElementException();
-        }
+    public String loadHtml(String path) throws ResourceNotFoundException {
+        byte[] contentBytes = load(path);
+        return new String(contentBytes, StandardCharsets.UTF_8);
     }
 }

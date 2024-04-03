@@ -34,6 +34,6 @@ class ResourceLoadHandlerTest {
         HttpRequest httpRequest = requestFactory.createHttpRequest();
         HttpResponse actualResponse = new ResourceLoadHandler().handleRequest(httpRequest);
         assertThat(actualResponse.getStatusCode()).isEqualTo(NOT_FOUND.getStatusCode());
-        assertThat(actualResponse.getReasonPhrase()).isEqualTo(NOT_FOUND.getReasonPhrase() + ": 요청한 리소스를 찾을 수 없습니다");
+        assertThat(actualResponse.getReasonPhrase()).isEqualTo(NOT_FOUND.getReasonPhrase());
     }
 }
