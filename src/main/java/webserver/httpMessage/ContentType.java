@@ -41,6 +41,13 @@ public enum ContentType {
                 .orElse(NONE);
     }
 
+    public static ContentType findContentTypeByMimeType(String mimeType){
+        return Arrays.stream(values())
+                .filter(v -> mimeType.equals(v.mimeType))
+                .findFirst()
+                .orElse(NONE);
+    }
+
     public static String generateHttpContentTypeHeaderOf(String mimeType) {
         return Arrays.stream(ContentType.values())
                 .filter(ct -> ct.getMimetype().equals(mimeType))
