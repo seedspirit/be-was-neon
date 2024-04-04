@@ -30,8 +30,17 @@ public class RequestHeaders {
         return Integer.parseInt(requestHeaders.get(CONTENT_LENGTH).get(0));
     }
 
+    public String getMultiFormBoundary(){
+        String boundaryString = requestHeaders.get(CONTENT_TYPE).get(1);
+        return boundaryString.substring(10);
+    }
+
     public boolean contentTypeEqualsFormURLEncoded(){
         return requestHeaders.get(CONTENT_TYPE).get(0).equals(ContentType.FORM_URL_ENCODED.getMimetype());
+    }
+
+    public boolean contentTypeEqualsMultipartForm(){
+        return requestHeaders.get(CONTENT_TYPE).get(0).equals(ContentType.MULTIPART_FORM_DATA.getMimetype());
     }
 
     public boolean hasLoginCookie(){

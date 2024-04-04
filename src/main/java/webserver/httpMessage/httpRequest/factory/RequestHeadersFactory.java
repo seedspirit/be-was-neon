@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import static util.constants.Delimiter.*;
+import static webserver.httpMessage.HttpConstants.CONTENT_TYPE;
 import static webserver.httpMessage.HttpConstants.COOKIE;
 
 public class RequestHeadersFactory {
@@ -30,6 +31,8 @@ public class RequestHeadersFactory {
                 List<String> values;
                 if (key.equals(COOKIE)){
                     values = parseCookie(headerParts[1]);
+                } else if (key.equals(CONTENT_TYPE)) {
+                    values = parseContentType(headerParts[1]);
                 } else {
                     values = Arrays.stream(headerParts[1].split(COMMA)).map(String::trim).toList();
                 }
@@ -44,5 +47,12 @@ public class RequestHeadersFactory {
 
     private List<String> parseCookie(String values) {
         return Arrays.stream(values.split(SEMICOLON)).map(String::trim).toList();
+    }
+
+    private List<String> parseContentType(String values) {
+        if (values.contains(SEMICOLON)){
+            return Arrays.stream(values.split(SEMICOLON)).map(String::trim).toList();
+        }
+        return List.of(values.trim());
     }
 }

@@ -6,14 +6,14 @@ public class Article {
     private final Long articleNumber;
     private final String writer;
     private final String title;
-    private byte[] contentByte;
     private String contentString;
+    private ImageFile imageFile;
 
-    public Article(Long articleNumber, String writer, String title, byte[] content){
+    public Article(Long articleNumber, String writer, String title, ImageFile imageFile){
         this.articleNumber = articleNumber;
         this.writer = writer;
         this.title = title;
-        this.contentByte = content;
+        this.imageFile = imageFile;
         this.contentString = EMPTY;
     }
 
@@ -22,7 +22,7 @@ public class Article {
         this.writer = writer;
         this.title = title;
         this.contentString = content;
-        this.contentByte = new byte[0];
+        this.imageFile = null;
     }
 
     public Long getArticleNumber() {
@@ -33,8 +33,8 @@ public class Article {
         return title;
     }
 
-    public byte[] getContentByte() {
-        return contentByte;
+    public ImageFile getImageFile() {
+        return imageFile;
     }
     public String getContentString(){
         return contentString;
