@@ -14,8 +14,8 @@ public class URLConstants {
     public static final String ARTICLE_DIRECTORY = "/article.*";
     public static final String COMMENT_DIRECTORY = "/comment.*";
     public static final String USER_DIRECTORY = "/user/.*";
+    public static final String IMAGE_DIRECTORY_FULL_PATH = "./src/main/resources/static/img/";
     public static final String USER_LIST_PAGE = "/user/list.html";
-
     public enum AccessLevel {
         PRIVATE(List.of(MAIN_DIRECTORY, ARTICLE_DIRECTORY, COMMENT_DIRECTORY, USER_DIRECTORY));
 
