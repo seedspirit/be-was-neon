@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.MainRequestHandler;
 import webserver.httpMessage.ContentType;
-import webserver.httpMessage.httpRequest.body.FormBody;
+import webserver.httpMessage.httpRequest.body.URLEncodedFormBody;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
 import webserver.httpMessage.httpRequest.body.RequestBody;
@@ -37,15 +37,15 @@ public class LoginHandler implements Handler {
     }
 
     private boolean isLoginSucceed(RequestBody body) {
-        FormBody formBody = (FormBody) body;
+        URLEncodedFormBody URLEncodedFormBody = (URLEncodedFormBody) body;
         // 유저 ID가 DB에 존재하는지 검증
-        if(!formBody.userIdExistsInDB()){
+        if(!URLEncodedFormBody.userIdExistsInDB()){
             return false;
         }
 
         // 입력한 비밀번호와 로그인하고자 하는 User 객체의 비밀번호가 일치하는지 검증
-        User user = UserDatabase.findUserById(formBody.getUserId());
-        if (!formBody.passwordInputCorrespondPasswordOf(user)){
+        User user = UserDatabase.findUserById(URLEncodedFormBody.getUserId());
+        if (!URLEncodedFormBody.passwordInputCorrespondPasswordOf(user)){
             return false;
         }
 

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 import static util.constants.Delimiter.*;
 
-public class MultipartBody implements FormRequestBody {
+public class MultipartFormBody implements FormBody {
     private final String NAME_EXTRACTION_REGEX = "name=\"(.+?)\"";
     private final String FILENAME_EXTRACTION_REGEX = "filename=\"(.+?)\"";
 
@@ -27,7 +27,7 @@ public class MultipartBody implements FormRequestBody {
     private ImageFile imageFile;
 
 
-    public MultipartBody(byte[] rawBytes, String boundary){
+    public MultipartFormBody(byte[] rawBytes, String boundary){
         this.rawBytes = rawBytes;
         this.boundary = boundary;
         this.multipartFormatParser = new MultipartFormatParser();

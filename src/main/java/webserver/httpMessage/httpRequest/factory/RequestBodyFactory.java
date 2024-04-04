@@ -20,9 +20,9 @@ public class RequestBodyFactory {
             int contentLength = headers.getContentLength();
             if(headers.contentTypeEqualsFormURLEncoded()){
                 // Content Type이 Form URL Encoded의 경우 body의 값을 form 형태로 파싱하여 가지고 있는 Body 객체 생성
-                return new FormBody(getBytesFrom(bis, contentLength));
+                return new URLEncodedFormBody(getBytesFrom(bis, contentLength));
             } else if (headers.contentTypeEqualsMultipartForm()) {
-                return new MultipartBody(getBytesFrom(bis, contentLength), headers.getMultiFormBoundary());
+                return new MultipartFormBody(getBytesFrom(bis, contentLength), headers.getMultiFormBoundary());
             }
             // 기본적으로 byte[] 형태의 body를 가지고 있는 Body 객체 생성
             return new BinaryBody(getBytesFrom(bis, contentLength));

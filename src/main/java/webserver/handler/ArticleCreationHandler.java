@@ -10,8 +10,6 @@ import webserver.httpMessage.ContentType;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpRequest.RequestHeaders;
 import webserver.httpMessage.httpRequest.body.FormBody;
-import webserver.httpMessage.httpRequest.body.FormRequestBody;
-import webserver.httpMessage.httpRequest.body.MultipartBody;
 import webserver.httpMessage.httpRequest.body.RequestBody;
 import webserver.httpMessage.httpResponse.HttpResponse;
 
@@ -36,7 +34,7 @@ public class ArticleCreationHandler implements Handler {
     }
 
     private void addArticleInDB(RequestHeaders headers, RequestBody requestBody){
-        FormRequestBody body = (FormRequestBody) requestBody;
+        FormBody body = (FormBody) requestBody;
         Long seq = sequence.getAndIncrement();
         Article article;
         if (headers.contentTypeEqualsMultipartForm()){

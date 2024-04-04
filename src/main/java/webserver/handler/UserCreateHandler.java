@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.MainRequestHandler;
 import webserver.httpMessage.ContentType;
-import webserver.httpMessage.httpRequest.body.FormBody;
+import webserver.httpMessage.httpRequest.body.URLEncodedFormBody;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpResponse.HttpResponse;
 import webserver.httpMessage.httpRequest.body.RequestBody;
@@ -35,13 +35,13 @@ public class UserCreateHandler implements Handler {
 
     // Body에서 아이디 중복, 아이디와 비밀번호 형식 검증 후 User 객체를 생성, DB에 저장하는 회원가입 절차 진행
     private void addUserInDatabase(RequestBody body) throws IllegalArgumentException {
-        FormBody formBody = (FormBody) body;
+        URLEncodedFormBody URLEncodedFormBody = (URLEncodedFormBody) body;
 
-        formBody.checkUserIdDuplicated();
-        formBody.checkUserNameFormatValid();
-        formBody.checkUserEmailFormatValid();
+        URLEncodedFormBody.checkUserIdDuplicated();
+        URLEncodedFormBody.checkUserNameFormatValid();
+        URLEncodedFormBody.checkUserEmailFormatValid();
 
-        User user = formBody.createUserByFormData();
+        User user = URLEncodedFormBody.createUserByFormData();
         UserDatabase.addUser(user);
         logger.debug("회원가입 성공! ID: {}, Name: {}", user.getUserId(), user.getName());
     }
