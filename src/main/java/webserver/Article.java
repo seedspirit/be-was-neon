@@ -1,7 +1,5 @@
 package webserver;
 
-import static util.constants.Delimiter.EMPTY;
-
 public class Article {
     private final Long articleNumber;
     private final String writer;
@@ -9,12 +7,12 @@ public class Article {
     private String contentString;
     private ImageFile imageFile;
 
-    public Article(Long articleNumber, String writer, String title, ImageFile imageFile){
+    public Article(Long articleNumber, String writer, String title, String content, ImageFile imageFile){
         this.articleNumber = articleNumber;
         this.writer = writer;
         this.title = title;
+        this.contentString = content;
         this.imageFile = imageFile;
-        this.contentString = EMPTY;
     }
 
     public Article(Long articleNumber, String writer, String title, String content){

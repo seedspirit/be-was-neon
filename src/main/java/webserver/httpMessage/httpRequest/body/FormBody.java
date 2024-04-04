@@ -2,15 +2,17 @@ package webserver.httpMessage.httpRequest.body;
 
 import db.UserDatabase;
 import model.User;
+import webserver.ImageFile;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static util.constants.Delimiter.*;
 
-public class FormBody implements RequestBody {
+public class FormBody implements FormRequestBody {
     private final byte[] rawBytes;
     private final Map<String, String> formParsedBytes;
     private final String NAME_VALIDATION_REGEX = "^[가-힣a-zA-Z\\s]+$";
@@ -84,12 +86,19 @@ public class FormBody implements RequestBody {
         return user.getPassword().equals(getPassword());
     }
 
+    @Override
     public String getArticleTitle(){
         return formParsedBytes.get(ARTICLE_TITLE_PARAM);
     }
 
+    @Override
     public String getArticleContent(){
         return formParsedBytes.get(ARTICLE_CONTENT_PARAM);
+    }
+
+    @Override
+    public ImageFile getArticleImageFile(){
+        throw new NoSuchElementException();
     }
 
     public String getUserId(){

@@ -4,11 +4,14 @@ import db.ArticleDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.Article;
+import webserver.ImageFile;
 import webserver.MainRequestHandler;
 import webserver.httpMessage.ContentType;
 import webserver.httpMessage.httpRequest.HttpRequest;
 import webserver.httpMessage.httpRequest.RequestHeaders;
 import webserver.httpMessage.httpRequest.body.FormBody;
+import webserver.httpMessage.httpRequest.body.FormRequestBody;
+import webserver.httpMessage.httpRequest.body.MultipartBody;
 import webserver.httpMessage.httpRequest.body.RequestBody;
 import webserver.httpMessage.httpResponse.HttpResponse;
 
@@ -32,11 +35,19 @@ public class ArticleCreationHandler implements Handler {
                 .build();
     }
 
-    private void addArticleInDB(RequestHeaders headers, RequestBody body){
-        FormBody formBody = (FormBody) body;
+    private void addArticleInDB(RequestHeaders headers, RequestBody requestBody){
+        FormRequestBody body = (FormRequestBody) requestBody;
         Long seq = sequence.getAndIncrement();
-        Article article = new Article(seq, headers.getUserNameOfClient(),
-                formBody.getArticleTitle(), formBody.getArticleContent());
+        Article article;
+        if (headers.contentTypeEqualsMultipartForm()){
+            ImageFile imageFile = body.getArticleImageFile();
+           article = new Article(seq, headers.getUserNameOfClient(),
+                    body.getArticleTitle(),body.getArticleContent(), imageFile);
+           imageFile.saveFileInServer();
+        } else {
+            article = new Article(seq, headers.getUserNameOfClient(),
+                    body.getArticleTitle(),body.getArticleContent());
+        }
         ArticleDatabase.addRecord(seq, article);
 
         logger.debug("게시글 저장 성공! UserId: {}, 게시글 넘버: {}, 게시글 제목: {}"
