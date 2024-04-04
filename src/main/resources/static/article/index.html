@@ -23,7 +23,7 @@
       </header>
       <div class="page">
         <h2 class="page-title">게시글 작성</h2>
-        <form class="form" action="/article/create" method="post">
+        <form class="form" action="/article/create" method="post" enctype="multipart/form-data">
           <div class="textfield textfield_size_tile">
             <p class="title_textfield">제목</p>
             <textarea name="title"
@@ -31,6 +31,9 @@
               placeholder="제목을 입력하세요"
               ></textarea>
           </div>
+          <div class = "addImage" id="image-show">
+          </div>
+          <input type="file" name="file" accept="image/*" onchange="loadFile(this)">
           <div class="textfield textfield_size_m">
             <p class="title_textfield">내용</p>
             <textarea name="content"
@@ -51,4 +54,18 @@
       </div>
     </div>
   </body>
+  <script>
+    function loadFile(input) {
+      let file = input.files[0];
+      let newImage = document.createElement("img");
+
+      newImage.src = URL.createObjectURL(file);
+      newImage.style.width = "100%";
+      newImage.style.height = "100%";
+      newImage.style.objectFit = "cover";
+
+      let container = document.getElementById('image-show');
+      container.appendChild(newImage);
+    }
+  </script>
 </html>
