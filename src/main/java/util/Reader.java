@@ -25,7 +25,7 @@ public class Reader {
     public static byte[] readBodyFrom(BufferedInputStream bufferedInputStream, int contentLength) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        final int BUFFER_SIZE = 8192;
+        final int BUFFER_SIZE = 1024;
         byte[] buffer = new byte[BUFFER_SIZE];
         int totalReadBytes = 0;
 
