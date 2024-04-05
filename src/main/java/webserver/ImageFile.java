@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import webserver.httpMessage.ContentType;
 
 import java.io.*;
+import java.util.Base64;
 
 import static webserver.URLConstants.IMAGE_DIRECTORY_FULL_PATH;
 
@@ -31,6 +32,14 @@ public class ImageFile {
             logger.error("파일 생성 중 오류가 발생했습니다: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public String toBase64(){
+        return Base64.getEncoder().encodeToString(fileBinary);
+    }
+
+    public String getMimeType() {
+        return contentType.getMimetype();
     }
 
     public String getFileName() {
