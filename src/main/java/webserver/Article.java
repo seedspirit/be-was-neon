@@ -59,7 +59,7 @@ public class Article {
     private final String HTMLFormat = """
             <div class="post">
             <div class="post__account">
-                        <img class="post__account__img" />
+                        <img class="post__account__img" src="../img/default_profile.png" />
                         <p class="post__account__nickname">articleWriter</p>
                       </div>
                       <img class="post__img" articleImage />

@@ -71,6 +71,14 @@
   font-weight: 700;
   font-size: 14px;
   line-height: 14px;
+  background: transparent;
+  color: black;
+}
+
+.btn_logout {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 14px;
   background: #ff6666;
   color: #ffffff;
 }
