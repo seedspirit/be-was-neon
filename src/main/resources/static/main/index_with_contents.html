@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../css/reset.css" rel="stylesheet" />
+    <link href="../css/global.css" rel="stylesheet" />
+    <link href="../css/main.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <a href="/main"><img src="../img/signiture.svg" /></a>
+        <ul class="header__menu">
+            <li class="header__menu__item">
+                <a class="btn btn_userName btn_size_s" id="authenticated-userNameButton" href="/user/list">userNameText</a>
+            </li>
+            <li class="header__menu__item">
+                <a class="btn btn_contained btn_size_s" href="/article">글쓰기</a>
+            </li>
+            <li class="header__menu__item">
+                <form action="/logout" method="POST">
+                    <button id="logout-btn" type="submit" class="btn btn_ghost btn_size_s">
+                        로그아웃
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </header>
+    <div class="wrapper">
+            articlePosts
+        <nav class="nav">
+            <ul class="nav__menu">
+                <li class="nav__menu__item">
+                    <a class="nav__menu__item__btn" href="">
+                        <img
+                                class="nav__menu__item__img"
+                                src="../img/ci_chevron-left.svg"
+                        />
+                        이전 글
+                    </a>
+                </li>
+                <li class="nav__menu__item">
+                    <a class="btn btn_ghost btn_size_m" href="/article/list">전체 글 보기</a>
+                    <a class="btn btn_ghost btn_size_m" href="/comment">댓글 작성</a>
+                    <a class="btn btn_write btn_size_s" href="/article">글쓰기</a>
+                </li>
+                <li class="nav__menu__item">
+                    <a class="nav__menu__item__btn" href="">
+                        다음 글
+                        <img
+                                class="nav__menu__item__img"
+                                src="../img/ci_chevron-right.svg"
+                        />
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</body>
+</html>

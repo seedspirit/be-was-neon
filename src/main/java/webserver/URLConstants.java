@@ -7,6 +7,7 @@ public class URLConstants {
     public static final String DEFAULT_INDEX_PAGE = "/index.html";
     public static final String LOGIN_USER_DEFAULT_INDEX_PAGE = "/main/index.html";
     public static final String MAIN_DIRECTORY = "/main/.*";
+    public static final String LOGIN_USER_DEFAULT_INDEX_PAGE_WITH_CONTENT = "/main/index_with_contents.html";
     public static final String LOGIN_INDEX_PAGE = "/login/index.html";
     public static final String LOGIN_FAILED_PAGE = "/login/login_failed.html";
     public static final String STATIC_DIR_PATH = "/static";
