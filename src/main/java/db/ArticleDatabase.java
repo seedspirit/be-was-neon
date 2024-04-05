@@ -41,8 +41,9 @@ public class ArticleDatabase {
 
     public static String generateArticlePostHTML() {
         StringBuilder builder = new StringBuilder();
-        for (Article article : articleDatabase.values()){
-            builder.append(article.generatePostHTML());
+        List<Article> articles = new ArrayList<>(articleDatabase.values());
+        for (int i = articles.size() - 1; i >= 0; i--) {
+            builder.append(articles.get(i).generatePostHTML());
         }
         return builder.toString();
     }
