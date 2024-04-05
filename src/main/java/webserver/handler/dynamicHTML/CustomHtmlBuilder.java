@@ -11,6 +11,8 @@ import webserver.httpMessage.httpResponse.HttpResponse;
 
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 import static webserver.httpMessage.HttpConstants.LOCATION;
 import static webserver.httpMessage.HttpStatus.*;
@@ -22,10 +24,12 @@ public abstract class CustomHtmlBuilder extends ResourceLoader implements Handle
     @Override
     public abstract HttpResponse handleRequest(HttpRequest httpRequest);
 
-    public HttpResponse generateCustomHTML(String path, String marker, String insertionContent){
+    public HttpResponse generateCustomHTML(String path, Map<String, String> contentReplacements) {
         try {
-            String basicHtml = loadHtml(path);
-            String customizedHtml = modifyHtmlBySelector(basicHtml, marker, insertionContent);
+            String customizedHtml = loadHtml(path);
+            for (Map.Entry<String, String> entry : contentReplacements.entrySet()) {
+                customizedHtml = modifyHtmlBySelector(customizedHtml, entry.getKey(), entry.getValue());
+            }
             return new HttpResponse.Builder(OK.getStatusCode(), OK.getReasonPhrase())
                     .contentType(ContentType.HTML)
                     .body(customizedHtml.getBytes())
@@ -43,6 +47,12 @@ public abstract class CustomHtmlBuilder extends ResourceLoader implements Handle
                     .body(body)
                     .build();
         }
+    }
+
+    public HttpResponse generateCustomHTML(String path, String marker, String insertionContent) {
+        Map<String, String> contentReplacements = new HashMap<>();
+        contentReplacements.put(marker, insertionContent);
+        return generateCustomHTML(path, contentReplacements); // Reuse the Map-based method
     }
 
     private String modifyHtmlBySelector(String origin, String marker, String insertionContent){
