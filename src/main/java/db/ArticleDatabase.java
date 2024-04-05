@@ -19,6 +19,10 @@ public class ArticleDatabase {
         articleDatabase.remove(seq);
     }
 
+    public static boolean isAnyArticleExists(){
+        return !articleDatabase.isEmpty();
+    }
+
     public static String generateArticleListHTML() {
         final String TABLE_HTML_FORMAT = """
                 <tbody>
@@ -33,5 +37,13 @@ public class ArticleDatabase {
                     .append("</tr>\n");
         }
         return String.format(TABLE_HTML_FORMAT, result.toString());
+    }
+
+    public static String generateArticlePostHTML() {
+        StringBuilder builder = new StringBuilder();
+        for (Article article : articleDatabase.values()){
+            builder.append(article.generatePostHTML());
+        }
+        return builder.toString();
     }
 }
